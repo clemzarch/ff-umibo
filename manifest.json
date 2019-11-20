@@ -1,0 +1,31 @@
+{
+	"name": "Unrivaled Measure in Bookmarks Operation",
+	"short_name": "UMiBO",
+	"description": "Turns your new tab into a virtual desktop to manage bookmarks",
+	"homepage_url": "https://github.com/Tsugumatsu",
+	"manifest_version": 2,
+	"version": "1.2",
+	"icons": {
+		"64": "icons/umibo-64.png",
+		"32": "icons/umibo-32.png",
+		"16": "icons/umibo-16.png"
+	},
+	"chrome_url_overrides" : {
+		"newtab": "newTab.html"
+	},
+	"chrome_settings_overrides" : {
+		"homepage": "newTab.html"
+	},
+	"permissions": [
+		"bookmarks",
+		"storage"
+	],
+	"options_ui": {
+		"page": "options.html"
+	},
+	"applications": {
+		"gecko": {
+			"id": "clessili@gmail.com"
+		}
+	}
+}

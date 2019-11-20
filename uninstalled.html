@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<title>Uninstalled UMiBO</title>
+<style>
+@font-face {
+	font-family: 'FiraBook';
+	src: url('woff/FiraSans-Book.woff') format('woff');
+}
+@font-face {
+	font-family: 'FiraLight';
+	src: url('woff/FiraSans-Light.woff') format('woff');
+}
+html{
+	background: #f5f6f7;
+}
+body{
+	font-family: FiraLight;
+	font-size: 15pt;
+	color:#333;
+}
+h2{
+	padding-left:30pt;
+}
+h1{
+	padding-left: 20pt;
+}
+label{
+	user-select: none;
+	display: block;
+	padding: 13pt;
+	font-size:24pt;
+}
+label:hover{
+	background: #fff;
+}
+textarea{
+	font-family: FiraBook;
+	margin: 0 20pt;
+	margin: 17pt 0 0 17pt;
+	border: 1px solid
+	#9d9d9d;
+	padding: 5px;
+	border-radius: 4px;
+}
+label div{
+	display: none;
+	position: fixed;
+	top:0;
+	bottom:0;
+	right:0;
+	width: 50vw;
+	background:#fff;
+	box-sizing: border-box;
+	padding: 20pt;
+	color:#333;
+}
+
+label:hover div{
+	display: block;
+}
+@media (prefers-color-scheme: dark) {
+	html{
+		background: #333;
+	}
+}
+</style>
+</head>
+<body>
+<h2>I just need 5 seconds</h2>
+<h1>Why did you uninstall?</h1>
+<form>
+<label><input type="checkbox"></input>It's Slow<div>UMiBO is smaller than the default New tab page. What kind of computer are you using?</div></label>
+<label><input type="checkbox"></input>It's Ugly<div>You can change the background picture and the color scheme independently if your custom theme looks like puke</div></label>
+<label><input type="checkbox"></input>It's Useless<div>Have you tried bookmarks folders, weather, synchronized notes and recently closed tabs list?<br> The default New Tab page shows randomly selected sites that you visited, and there is no place to correctly access bookmarks</div></label>
+<label><input type="checkbox"></input>It's Racist<div>UMiBO isn't translated in your language? Help me!</div></label>
+<textarea placeholder="Something Else"></textarea>
+</form>
+</body>
+</html>
