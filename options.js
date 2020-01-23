@@ -1,5 +1,12 @@
 browser.storage.local.get().then(function(options) {
-	console.log(options);
+	if (Object.entries(options).length === 0) { // if no options yet
+		browser.storage.local.set({
+			bg: "follow_theme",
+			categories_toolbar: true,
+			show_search_tips: true
+		});
+		location.reload();
+	}
 	
 	Inputs = document.getElementsByTagName('input');
 	

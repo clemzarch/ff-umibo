@@ -54,9 +54,9 @@
 	<label>
 		<input name="bg" id="follow_theme" value="follow_theme" type="radio"></input>Same as the current theme
 	</label>
-	<label>
-		<input name="bg" id="fetch_unsplash" value="fetch_unsplash" type="radio"></input>Fetch from Unsplash
-	</label>
+	<!-- <label> -->
+		<!-- <input name="bg" id="fetch_unsplash" value="fetch_unsplash" type="radio"></input>Fetch from Unsplash (Experimental) -->
+	<!-- </label> -->
 
 <!-- <details> -->
 	<!-- <h1>Folder Behaviour</h1> -->
@@ -88,11 +88,27 @@
 </form>
 <script src="options.js"></script>
 <style>
+:root {
+	--bg: #202023;
+	--color: rgb(249, 249, 250);
+	--faded-line: #404040;
+}
+
+@media (prefers-color-scheme: light) {
+	:root {
+		--bg: #fff;
+		--color: #333;
+		--faded-line: #eaeaea;
+	}
+}
+
 hr{
 	border-top:1px solid #fff;
 	border-bottom:1px solid #bbb;
 }
 body {
+	background: var(--bg);
+	color: var(--color);
 	font-size:15px;
 	font-weight:100;
 	margin-top: 5px;
@@ -104,7 +120,7 @@ label {
 	padding: 7px;
 }
 label:hover {
-	background: #0001;
+	background: var(--faded-line);
 }
 h1 {
 	padding: 10px;

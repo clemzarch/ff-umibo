@@ -3,206 +3,10 @@
 <meta charset="utf-8">
 <link rel="icon" type="image/png" href="chrome://branding/content/icon32.png"/>
 <title>New Tab</title>
-<!-- <link rel="stylesheet" type="text/css" href="newTab.css"/> -->
-<style>
-:root {
-	--bg: #323234;
-	--color: #f9f9fa;
-	--tab-line: #0a84ff;
-	--faded-line: #0a84ff33;
-	--field: #474749;
-	--border: #f9f9fa33;
-}
-
-@media (prefers-color-scheme: light) {
-	:root {
-		--bg: #eee;
-		--color: #333;
-		--tab-line: #0a84ff;
-		--faded-line: #0a84ff33;
-		--field: #fff;
-		--border: #bbb;
-	}
-}
-
-@font-face {
-	font-family: 'FiraBook';
-	src: url('woff/FiraSans-Book.woff') format('woff');
-}
-@font-face {
-	font-family: 'FiraLight';
-	src: url('woff/FiraSans-Light.woff') format('woff');
-}
-html{
-	background: var(--bg);
-	height: 100%;
-}
-body{
-	margin: 15px;
-	overflow: hidden;
-	font-family: FiraBook;
-	font-size: 15px;
-	user-select: none;
-}
-#tip_container {
-	display: none;
-	text-align: center;
-	background: inherit;
-	/* filter: brightness(0.8) invert() contrast(6) grayscale(1); */
-	/* background-clip: text; */
-	/* -webkit-background-clip: text; */
-	/* color: transparent; */
-}
-#search_tip {
-	text-align: left;
-	font-family: FiraLight;
-	font-size:32px;
-	width: max-content;
-	margin: auto;
-}
-#search_tip > span {
-	font-family: FiraBook;
-	width: 32px;
-	display: inline-block;
-	text-align: center;
-}
-#search_tip > span#etoile {
-	position: relative;
-	top: 7px;
-}
-
-.window {
-	background: var(--bg);
-	width:350pt;
-	position:absolute;
-	border-radius: 0 0 5px 5px;
-	border: 1px solid var(--border);
-	/* box-shadow: 0 2px 5px #0007; */
-}
-.firstWindow {
-	/* box-shadow: 0 2px 15px #0008; */
-}
-.window .border{
-	color: var(--color);
-	font-family: FiraLight;
-	text-align:center;
-	line-height:32px;
-	font-size:14px;
-	/* cursor:move; */
-	border-bottom: 1px solid var(--border);
-	border-top: 3px solid var(--bg);
-}
-.firstWindow .border {
-    border-top: 3px solid var(--tab-line);
-}
-.firstWindow .resize {
-	height: 15px;
-	position: relative;
-	top: 11px;
-	margin-top: -15px;
-	cursor: n-resize;
-}
-.window .border span {
-    width: 20px;
-    height: 20px;
-	float: right;
-	margin: 6px 8px 0 -32px;
-	-moz-context-properties: fill, fill-opacity;
-	background: url("chrome://global/skin/icons/close.svg");
-	fill: var(--color);
-	fill-opacity: 0;
-}
-.window .border span:hover {
-	cursor: initial;
-	fill-opacity: 0.1;
-}
-
-.window main {
-	overflow: auto;
-	max-height: 250px;
-	display: grid;
-	grid-template-columns: repeat(auto-fill, minmax(125px, 1fr));
-	font-size: 12px;
-}
-.window main article {
-	margin: 8px 12px;
-	padding: 10px;
-	background: var(--field);
-	color: var(--color);
-	border-radius: 4px;
-	border: 1px solid var(--border);
-}
-.window main a {
-	color: var(--color);
-	padding: 10px;
-	text-decoration: none;
-	word-break: break-word;
-	text-align: center;
-}
-.window main a img {
-	margin-right: 2px;
-	vertical-align: middle;
-}
-.window main a:hover {
-	outline: 1px solid var(--tab-line);
-	background: var(--faded-line);
-}
-.window main article:hover {
-	box-shadow: 0 0 0 5px var(--border);
-}
-.desktopFolder {
-	background: var(--field);
-	color: var(--color);
-	display: inline-block;
-	vertical-align: bottom;
-	font-family: FiraLight;
-	min-width: 35px;
-	padding: 10px;
-	margin: 15px;
-	border-radius: 4px;
-	border: 1px solid var(--border);
-	line-height: 15px;
-	text-align: center;
-}
-a.desktopFolder {
-	text-decoration: none;
-	background: none;
-	border:none;
-	border-radius: 0;
-	color: var(--color);
-}
-a.desktopFolder img {
-	margin-right: 10px;
-	vertical-align: middle;
-}
-div.desktopFolder:hover {
-    box-shadow: 0 0 0 5px var(--border);
-}
-a.desktopFolder:hover {
-	outline: 1px solid var(--tab-line);
-	background: var(--faded-line);
-}
-hr {
-	border: none;
-	border-top: 1px dotted var(--border);
-}
-
-#options {
-	position: fixed;
-	bottom: 0;
-	right: 0;
-	display: block;
-	margin: 20px;
-	padding: 20px;
-	text-decoration: none;
-}
-#options:hover {
-	text-decoration: underline;
-}
-</style>
+<link rel="stylesheet" type="text/css" href="newTab.css"/>
 </head>
 <body>
-<a id="options" href="options.html">Options</a>
+<a id="options" href="options.html"></a>
 <div id="tip_container">
 	<div id="search_tip">
 		<span>#</span> to search in History<br>
@@ -211,6 +15,19 @@ hr {
 		<span>@</span> to see search engines
 	</div>
 </div>
+<div style="color:var(--color)">
+This is a beta. Upcoming fixes:
+<ul>
+<li>drag-n-drop correctly in windows</li>
+<li>save/restore windows order on z-axis</li>
+<li>creating folders</li>
+<li>deleting bookmarks</li>
+<li>renaming bookmarks</li>
+<li>custom backgrounds</li>
+<li>find a way to drag-n-drop on "desktop"</li>
+</ul>
+</div>
+<img>
 </body>
 <script type="text/javascript" src="newTab.js"></script>
 </html>

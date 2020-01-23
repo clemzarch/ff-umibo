@@ -1,10 +1,12 @@
-browser.storage.local.get().then(function(options) {
-	if(options.bg === 'fetch_unsplash') {
-		// document.documentElement.style.background = 'url(https://source.unsplash.com/collection/540518/3840x2160)  repeat scroll 100% 0% / cover';
-		// document.documentElement.style.background = 'url(https://source.unsplash.com/collection/573009/1920x1080)  center / cover';
-		document.documentElement.style.background = 'url(https://source.unsplash.com/collection/789734/3840x2160)  center / cover';
-	}
+browser.theme.getCurrent().then(function(theme){
+	console.log(theme);
+});
 
+browser.storage.local.get().then(function(options) {
+	console.log(options);
+	if (options.bg === 'fetch_unsplash') {
+		document.documentElement.style.background = 'url('+options.image+')  center / cover';
+	}
 	if(!options.separate_categories) {
 		if(options.categories_toolbar) {
 			browser.bookmarks.getChildren('toolbar_____').then(function(root) {
@@ -57,7 +59,7 @@ browser.storage.local.get().then(function(options) {
 		}
 	}
 	
-	if(options.windows) {
+	if(options.windows) { // restore windows
 		keys = Object.keys(options.windows);
 		
 		for (let key of keys) {
@@ -75,64 +77,98 @@ browser.storage.local.get().then(function(options) {
 				w.x = window.innerWidth - 200;
 			}
 
-			document.body.insertAdjacentHTML('beforeend', '<div window_id="'+w.id+'" style="left:'+w.x+'px;top:'+w.y+'px" class="window"><div class="border" id="'+w.id+'" title="'+w.title+'">'+w.title+'<span id="close_button" title="Close"></span></div><main></main><div class="resize"></div></div>');
+			document.body.insertAdjacentHTML('beforeend', '<div id="win_'+w.id+'" index="'+w.id+'"  style="left:'+w.x+'px;top:'+w.y+'px" class="window"><div class="border" title="'+w.title+'">'+w.title+'<span id="close_button" title="Close"></span></div><main style="height:'+w.h+'px;width:'+w.w+'px"></main><div class="resize"></div></div>');
 			
-			registerWindow(w.id);
-			populateWindow(w.id);
+			if (w.id != null) {
+				registerWindow('win_'+w.id);
+				populateWindow(w.id);				
+			}
 		}
 	}
 
 	if(options.show_search_tips) {
 		document.getElementById('tip_container').style.display = 'block';
 	}
+	
+	// 540518 573009 789734
+	if (options.bg === 'fetch_unsplash') {
+		var url = 'https://source.unsplash.com/collection/573009/3840x2160';
+		var options = { method: 'GET', mode: 'cors', cache: 'default'};
+		var request = new Request(url);
+
+		fetch(request, options).then((response) => {
+			response.arrayBuffer().then((buffer) => {
+				var base64Flag = 'data:image/jpeg;base64,';
+				var imageStr = arrayBufferToBase64(buffer);
+				browser.storage.local.set({'image': base64Flag + imageStr});
+			});
+		});
+
+		function arrayBufferToBase64(buffer) {
+		  var binary = '';
+		  var bytes = [].slice.call(new Uint8Array(buffer));
+		  bytes.forEach((b) => binary += String.fromCharCode(b));
+		  return window.btoa(binary);
+		};
+	}
+	
+	if (Object.entries(options).length === 0) { // if no options yet
+		browser.runtime.setUninstallURL('http://zarch.info/UMiBO/uninstalled.html');
+		browser.storage.local.set({
+			bg: "follow_theme",
+			categories_toolbar: true,
+			show_search_tips: true
+		});
+		location.reload();
+	}
 });
 
-var cible,closing;
-var offsetX,offsetY;
+var move_target,resize_target,dragon_target;
+var closing = false;
 
 function registerFolder(folder) {
-	document.getElementById('folder_'+folder.id).addEventListener('click', function(folder) {
-		folderId = folder.target.getAttribute('href');
+	document.getElementById(folder).addEventListener('click', function(folder) {
+		folderId = folder.target.id;
 		folderTitle = folder.target.innerHTML;
 
-		if (document.getElementById(folderId) == null) {
+		if (document.getElementById('win_'+folderId) == null) {
 			len = document.getElementsByClassName('window').length;
-			
-			document.body.insertAdjacentHTML('beforeend', '<div window_id="'+folderId+'" style="z-index:'+len+'; top: '+(folder.clientY+50)+'px; left:'+(folder.clientX-200)+'px" class="window"><div class="border" id="'+folderId+'" title="'+folderTitle+'">'+folderTitle+'<span id="close_button" title="Close"></span></div><main></main><div class="resize"></div></div>');
+			document.body.insertAdjacentHTML('beforeend', '<div id="win_'+folderId+'" index="'+folderId+'" style="z-index:'+len+'; top:'+(folder.clientY+50)+'px; left:'+(folder.clientX-200)+'px" class="window"><div class="border" title="'+folderTitle+'">'+folderTitle+'<span id="close_button" title="Close"></span></div><main style="height:300px;width:400px"></main><div class="resize"></div></div>');
 			
 			// save in local storage
 			browser.storage.local.get().then(function(o) {
-				if(o.windows) {
-					arr_windows = o.windows;			
-				} else {
-					arr_windows = [];
-				}
+				o.windows ? arr_windows = o.windows : arr_windows = [];
+				
 				arr_windows[folderId] = {
 					id: folderId,
 					title: folderTitle,
 					y: folder.clientY+50,
-					x: folder.clientX-200
+					x: folder.clientX-200,
+					h: 300,
+					w: 400,
 				};
 				browser.storage.local.set({'windows': arr_windows});
 			});
 			
-			registerWindow(folderId);
-			populateWindow(folderId);
+			if (folderId != null) {
+				registerWindow('win_'+folderId);
+				populateWindow(folderId);				
+			}
 		}
 	});
 }
 	
-function registerWindow(id) {
+function registerWindow(id) {	
 // move
-	document.getElementById(id).addEventListener('mousedown', function(e) {
+	document.getElementById(id).childNodes[0].addEventListener('mousedown', function(e) {
 		offsetX = e.pageX - e.currentTarget.parentNode.offsetLeft;
 		offsetY = e.pageY - e.currentTarget.parentNode.offsetTop;
-		cible = e.currentTarget.parentNode;
-		document.body.insertAdjacentHTML('beforeend','<div id="secureDrag" style="z-index:10;position:absolute;top:0;bottom:0;left:0;right:0;background:#f000;"></div>');
+		move_target = e.currentTarget.parentNode;
+		document.body.insertAdjacentHTML('beforeend','<div id="secureDrag"></div>');
 	});
 
 // raise
-	document.getElementById(id).parentNode.addEventListener('mousedown', function(e) {
+	document.getElementById(id).addEventListener('mousedown', function(e) {
 		allWindows = document.getElementsByClassName('window');
 		for(var i = 0; i < allWindows.length; i++) {
 			if(allWindows[i].style.zIndex > 0 && e.currentTarget.style.zIndex != allWindows.length){
@@ -145,22 +181,59 @@ function registerWindow(id) {
 	});
 
 // close
-	document.getElementById(id).childNodes[1].addEventListener('mousedown', function(e) {
+	document.getElementById(id).childNodes[0].childNodes[1].addEventListener('mousedown', function(e) {
 		e.target.parentNode.parentNode.remove();
-		id = e.target.parentNode.id;
+		id = e.target.parentNode.parentNode.getAttribute('index');
 
 		browser.storage.local.get().then(function(o) {
 			arr_windows = o.windows;
 			delete arr_windows[id]; // si tout explose c'est de sa faute
 			browser.storage.local.set({'windows': arr_windows });
 		});
-		closing = true;			
+		closing = true;
+	});
+	
+// resize
+	document.getElementById(id).childNodes[2].addEventListener('mousedown', function(e) {
+		pX = e.pageX;
+		pY = e.pageY;
+		wH = e.currentTarget.parentNode.childNodes[1].offsetHeight; //current height
+		wW = e.currentTarget.parentNode.childNodes[1].offsetWidth; //current width
+		resize_target = e.currentTarget.parentNode;
+		document.body.insertAdjacentHTML('beforeend','<div id="secureDrag"></div>');
+	});
+	
+// dragenter
+	document.getElementById(id).childNodes[1].addEventListener('dragenter',function(e) { // TODO target all dropzones
+		if (dragon_target != null) {
+			drop_target = e.target.parentNode.getAttribute('index');
+		}
+	});
+	
+// drop
+	document.addEventListener('dragend', function() {
+		if (dragon_target && drop_target) {
+			browser.bookmarks.move(dragon_target, {parentId: drop_target}); // TODO catch errors
+
+			lien = document.getElementById(dragon_target);
+			document.getElementById('win_'+drop_target).childNodes[1].insertAdjacentHTML('beforeend', lien.outerHTML);
+			lien.remove();
+			
+			dragonPrepare(dragon_target);
+			if (lien.tagName === "ARTICLE") {
+				registerFolder(dragon_target);	
+			}
+		}
+		
 	});
 }
 
 function populateWindow(id) {
+	if (id == null) {
+		exit;
+	}
 	browser.bookmarks.getChildren(id).then(function(e) {
-		WindowMain = document.getElementById(id).parentNode.getElementsByTagName("main")[0];
+		WindowMain = document.getElementById('win_'+id).childNodes[1];
 		WindowElementsLength = e.length;
 		
 		for (var i = 0; i < WindowElementsLength; ++i) {
@@ -170,61 +243,72 @@ function populateWindow(id) {
 				if (el.title == '') {
 					el.title = el.url;
 				}
-				
 				// OPTIMISER FETCH ICONS, TROP LENT QUAND OUVERTURE DE FENETRE
-				WindowMain.insertAdjacentHTML('beforeend', '<a title="'+el.url+'" href="'+el.url+'"><img width="16px" height="16px" src="https://s2.googleusercontent.com/s2/favicons?domain_url='+el.url+'"/>'+el.title.substring(0, 60)+'</a>');			
-				// WindowMain.insertAdjacentHTML('beforeend', '<a title="'+el.url+'" href="'+el.url+'">'+el.title.substring(0, 60)+'</a>');			
-				
+				WindowMain.insertAdjacentHTML('beforeend', '<a id="'+el.id+'" title="'+el.url+'" href="'+el.url+'"><img width="16px" height="16px" src="https://s2.googleusercontent.com/s2/favicons?domain_url='+el.url+'"/>'+el.title.substring(0, 52)+'</a>');
+				// dragonPrepare(el.id);
 			} else if (el.type == 'folder') {
-				WindowMain.insertAdjacentHTML('beforeend', '<article id="folder_'+el.id+'" href="'+el.id+'">'+el.title.substring(0, 150)+'</article>');
-				registerFolder(el);
+				WindowMain.insertAdjacentHTML('beforeend', '<article id="'+el.id+'" href="'+el.id+'" draggable="true">'+el.title.substring(0, 52)+'</article>');
+				registerFolder(el.id);
 			} else {
 				WindowMain.insertAdjacentHTML('beforeend', '<div></div>');
-			}		
+			}
+			dragonPrepare(el.id);
 		}
 	});
 }
 
 document.body.addEventListener('mousemove',function(e) {
-	if(cible) {
-		cible.style.left = e.pageX - offsetX+'px';
-		cible.style.top = e.pageY - offsetY+'px';
+	if (move_target) {
+		move_target.style.left = e.pageX - offsetX+'px';
+		move_target.style.top = e.pageY - offsetY+'px';
+	} else if (resize_target) {
+		resize_target.childNodes[1].style.height = wH + e.pageY - pY+'px';
+		resize_target.childNodes[1].style.width = wW + e.pageX - pX+'px';
 	}
 });
-document.body.addEventListener('mouseup',function(e) {
-	if (cible && closing == null) {
-		browser.storage.local.get().then(function(o) {
-			if(o.windows) {
-				arr_windows = o.windows;			
-			} else {
-				arr_windows = [];
-			}
-			
-			arr_windows[cible.getAttribute('window_id')] = {
-				id: cible.getAttribute('window_id'),
-				title: cible.childNodes[0].title,
-				x: cible.offsetLeft,
-				y: cible.offsetTop
-			};
-			
-			browser.storage.local.set({'windows': arr_windows });
-			cible = null;
-		});
+document.body.addEventListener('mouseup', function(e) {
+	if (move_target || resize_target) {
+		win = resize_target ? resize_target : move_target;
+		
+		if (closing == false) {
+			browser.storage.local.get().then(function(o) {
+				o.windows ? arr_windows = o.windows : arr_windows = [];
+				arr_windows[win.getAttribute('index')] = {
+					id:		win.getAttribute('index'),
+					title:	win.childNodes[0].title,
+					x:		win.offsetLeft,
+					y:		win.offsetTop,
+					w:		win.childNodes[1].offsetWidth, // 0 is <border>, 1 is <main>, 2 is <resize>
+					h:		win.childNodes[1].offsetHeight,
+				};
+				browser.storage.local.set({'windows': arr_windows });
+			});			
+		}
+		move_target = null;
+		resize_target = null;
 	}
-	closing = null;
+	
+	closing = false;
 	if(document.getElementById('secureDrag') !== null) {
 		document.getElementById('secureDrag').outerHTML = '';
 	}
 });
 
-function fetchFolder(sub) {
+function fetchFolder(sub) { // desktop icons
 	if (sub.type === 'bookmark') {
-		document.body.insertAdjacentHTML('beforeend', '<a title="'+sub.url+'" class="desktopFolder" href="'+sub.url+'"><img width="16px" height="16px" src="https://s2.googleusercontent.com/s2/favicons?domain_url='+sub.url+'"/>'+sub.title.substring(0, 20)+'</a>');
-		// document.body.insertAdjacentHTML('beforeend', '<a title="'+sub.url+'" class="desktopFolder" href="'+sub.url+'">'+sub.title+'</a>');
+		document.body.insertAdjacentHTML('beforeend', '<a id="'+sub.id+'" title="'+sub.url+'" class="desktopFolder" href="'+sub.url+'"><img width="16px" height="16px" src="https://s2.googleusercontent.com/s2/favicons?domain_url='+sub.url+'"/>'+sub.title.substring(0, 30)+'</a>');
 	} else if (sub.type === 'folder') {
-		document.body.insertAdjacentHTML('beforeend', '<div class="desktopFolder" id="folder_'+sub.id+'" href="'+sub.id+'">'+sub.title.substring(0, 20)+'</div>');
-		registerFolder(sub);		
+		document.body.insertAdjacentHTML('beforeend', '<div class="desktopFolder" id="'+sub.id+'" href="'+sub.id+'" draggable="true">'+sub.title.substring(0, 30)+'</div>');
+		registerFolder(sub.id);
 	} else {
 		document.body.insertAdjacentHTML('beforeend', '<hr>');
 	}
+	
+	dragonPrepare(sub.id);
+}
+
+function dragonPrepare(id) {
+	document.getElementById(id).addEventListener('dragstart',function(e){
+		dragon_target = e.currentTarget.id;
+	});
 }

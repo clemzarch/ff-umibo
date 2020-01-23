@@ -5,8 +5,8 @@
 	--faded-line: #0a84ff33;
 	--field: #474749;
 	--border: #f9f9fa33;
+	--faded-text: #8f8f8f; 
 }
-
 @media (prefers-color-scheme: light) {
 	:root {
 		--bg: #eee;
@@ -15,17 +15,10 @@
 		--faded-line: #0a84ff33;
 		--field: #fff;
 		--border: #bbb;
+		--faded-text: #626262;
 	}
 }
 
-@font-face {
-	font-family: 'FiraBook';
-	src: url('woff/FiraSans-Book.woff') format('woff');
-}
-@font-face {
-	font-family: 'FiraLight';
-	src: url('woff/FiraSans-Light.woff') format('woff');
-}
 html{
 	background: var(--bg);
 	height: 100%;
@@ -33,28 +26,21 @@ html{
 body{
 	margin: 15px;
 	overflow: hidden;
-	font-family: FiraBook;
-	font-size: 15px;
+	font-family: Segoe UI, Helvetica, Arial;
+	font-size: 12px;
 	user-select: none;
 }
 #tip_container {
-	display: none;
-	text-align: center;
-	background: inherit;
-	/* filter: brightness(0.8) invert() contrast(6) grayscale(1); */
-	/* background-clip: text; */
-	/* -webkit-background-clip: text; */
-	/* color: transparent; */
+	display:none;
 }
 #search_tip {
 	text-align: left;
-	font-family: FiraLight;
-	font-size:32px;
+	font-size:22px;
 	width: max-content;
-	margin: auto;
+	margin: 15px auto;
+	color: var(--faded-text);
 }
 #search_tip > span {
-	font-family: FiraBook;
 	width: 32px;
 	display: inline-block;
 	text-align: center;
@@ -66,40 +52,35 @@ body{
 
 .window {
 	background: var(--bg);
-	width:350pt;
 	position:absolute;
 	border-radius: 0 0 5px 5px;
 	border: 1px solid var(--border);
-	/* box-shadow: 0 2px 5px #0007; */
+	/*! box-shadow: 0 2px 10px #0007; */
 }
 .firstWindow {
-	/* box-shadow: 0 2px 15px #0008; */
+	/* box-shadow: 0 2px 15px #0003; */
 }
 .window .border{
 	color: var(--color);
-	font-family: FiraLight;
 	text-align:center;
 	line-height:32px;
-	font-size:14px;
-	/* cursor:move; */
 	border-bottom: 1px solid var(--border);
 	border-top: 3px solid var(--bg);
 }
-.firstWindow .border {
-    border-top: 3px solid var(--tab-line);
+.window .border:active {
+	border-top: 3px solid var(--tab-line);
 }
-.firstWindow .resize {
-	height: 15px;
-	position: relative;
-	top: 11px;
-	margin-top: -15px;
-	cursor: n-resize;
+
+.window .resize {
+	height: 20px;
+	cursor: nwse-resize;
+	border-top: 1px solid var(--border);
 }
 .window .border span {
-    width: 20px;
-    height: 20px;
+	width: 20px;
+	height: 20px;
 	float: right;
-	margin: 6px 8px 0 -32px;
+	margin: 5px 8px 0 -32px;
 	-moz-context-properties: fill, fill-opacity;
 	background: url("chrome://global/skin/icons/close.svg");
 	fill: var(--color);
@@ -112,10 +93,10 @@ body{
 
 .window main {
 	overflow: auto;
-	max-height: 250px;
 	display: grid;
-	grid-template-columns: repeat(auto-fill, minmax(125px, 1fr));
-	font-size: 12px;
+	grid-template-columns: repeat(auto-fill, minmax(100px, max-content));
+	grid-template-rows: repeat(auto-fill, 80px);
+	grid-gap: 10px;
 }
 .window main article {
 	margin: 8px 12px;
@@ -124,38 +105,44 @@ body{
 	color: var(--color);
 	border-radius: 4px;
 	border: 1px solid var(--border);
+	transition-duration: 0.5s;
 }
 .window main a {
 	color: var(--color);
-	padding: 10px;
 	text-decoration: none;
 	word-break: break-word;
 	text-align: center;
+	transition-duration: 0.5s;
 }
 .window main a img {
-	margin-right: 2px;
+	display: block;
+	margin: auto;
+}
+.window main article img {
+	margin-right: 4px;
 	vertical-align: middle;
 }
+
 .window main a:hover {
 	outline: 1px solid var(--tab-line);
 	background: var(--faded-line);
+	transition-duration: 0s;
 }
 .window main article:hover {
 	box-shadow: 0 0 0 5px var(--border);
+	transition-duration: 0s;
 }
 .desktopFolder {
 	background: var(--field);
 	color: var(--color);
 	display: inline-block;
-	vertical-align: bottom;
-	font-family: FiraLight;
 	min-width: 35px;
 	padding: 10px;
 	margin: 15px;
 	border-radius: 4px;
 	border: 1px solid var(--border);
 	line-height: 15px;
-	text-align: center;
+	transition-duration: 0.5s;
 }
 a.desktopFolder {
 	text-decoration: none;
@@ -163,32 +150,47 @@ a.desktopFolder {
 	border:none;
 	border-radius: 0;
 	color: var(--color);
+	padding: 15px;
+	margin: 0;
+	text-align: center;
 }
-a.desktopFolder img {
-	margin-right: 10px;
+.desktopFolder img {
+	margin-right: 4px;
 	vertical-align: middle;
 }
 div.desktopFolder:hover {
-    box-shadow: 0 0 0 5px var(--border);
+	box-shadow: 0 0 0 5px var(--border);
+	transition-duration: 0s;
 }
 a.desktopFolder:hover {
 	outline: 1px solid var(--tab-line);
 	background: var(--faded-line);
+	transition-duration: 0s;
 }
 hr {
 	border: none;
 	border-top: 1px dotted var(--border);
 }
-
+#secureDrag {
+	z-index:10;
+	position:absolute;
+	top:0;
+	bottom:0;
+	left:0;
+	right:0;
+}
 #options {
 	position: fixed;
-	bottom: 0;
-	right: 0;
-	display: block;
-	margin: 20px;
-	padding: 20px;
-	text-decoration: none;
+	top: 15px;
+	right: 15px;
+	padding: 15px;
+	background: url(chrome://browser/skin/settings.svg);
+	-moz-context-properties: fill;
+	fill: var(--faded-text);
+	background-repeat: no-repeat;
+	background-position: center;
+	cursor: default;
 }
 #options:hover {
-	text-decoration: underline;
+	background-color: var(--faded-line);
 }
