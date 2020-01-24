@@ -1,9 +1,4 @@
-browser.theme.getCurrent().then(function(theme){
-	console.log(theme);
-});
-
 browser.storage.local.get().then(function(options) {
-	console.log(options);
 	if (options.bg === 'fetch_unsplash') {
 		document.documentElement.style.background = 'url('+options.image+')  center / cover';
 	}
@@ -58,13 +53,13 @@ browser.storage.local.get().then(function(options) {
 			});
 		}
 	}
-	
+
 	if(options.windows) { // restore windows
 		keys = Object.keys(options.windows);
-		
+		var i = 1;
 		for (let key of keys) {
 			w = options.windows[key];
-			
+
 			// check if window stuck
 			if (w.y < 10) {
 				w.y = 10;
@@ -77,11 +72,11 @@ browser.storage.local.get().then(function(options) {
 				w.x = window.innerWidth - 200;
 			}
 
-			document.body.insertAdjacentHTML('beforeend', '<div id="win_'+w.id+'" index="'+w.id+'"  style="left:'+w.x+'px;top:'+w.y+'px" class="window"><div class="border" title="'+w.title+'">'+w.title+'<span id="close_button" title="Close"></span></div><main style="height:'+w.h+'px;width:'+w.w+'px"></main><div class="resize"></div></div>');
-			
+			document.body.insertAdjacentHTML('beforeend', '<div id="win_'+w.id+'" index="'+w.id+'"  style="left:'+w.x+'px;top:'+w.y+'px;z-index:'+(i++)+'" class="window"><div class="border" title="'+w.title+'">'+w.title+'<span id="close_button" title="Close"></span></div><main style="height:'+w.h+'px;width:'+w.w+'px"></main><div class="resize"></div></div>');
+
 			if (w.id != null) {
 				registerWindow('win_'+w.id);
-				populateWindow(w.id);				
+				populateWindow(w.id);
 			}
 		}
 	}
@@ -89,7 +84,7 @@ browser.storage.local.get().then(function(options) {
 	if(options.show_search_tips) {
 		document.getElementById('tip_container').style.display = 'block';
 	}
-	
+
 	// 540518 573009 789734
 	if (options.bg === 'fetch_unsplash') {
 		var url = 'https://source.unsplash.com/collection/573009/3840x2160';
@@ -111,7 +106,6 @@ browser.storage.local.get().then(function(options) {
 		  return window.btoa(binary);
 		};
 	}
-	
 	if (Object.entries(options).length === 0) { // if no options yet
 		browser.runtime.setUninstallURL('http://zarch.info/UMiBO/uninstalled.html');
 		browser.storage.local.set({
@@ -125,20 +119,23 @@ browser.storage.local.get().then(function(options) {
 
 var move_target,resize_target,dragon_target;
 var closing = false;
+var drop_target = false;
+var delete_drop_target = false;
 
 function registerFolder(folder) {
 	document.getElementById(folder).addEventListener('click', function(folder) {
 		folderId = folder.target.id;
-		folderTitle = folder.target.innerHTML;
 
 		if (document.getElementById('win_'+folderId) == null) {
+			folderTitle = folder.target.innerHTML;
 			len = document.getElementsByClassName('window').length;
+
 			document.body.insertAdjacentHTML('beforeend', '<div id="win_'+folderId+'" index="'+folderId+'" style="z-index:'+len+'; top:'+(folder.clientY+50)+'px; left:'+(folder.clientX-200)+'px" class="window"><div class="border" title="'+folderTitle+'">'+folderTitle+'<span id="close_button" title="Close"></span></div><main style="height:300px;width:400px"></main><div class="resize"></div></div>');
-			
+
 			// save in local storage
 			browser.storage.local.get().then(function(o) {
 				o.windows ? arr_windows = o.windows : arr_windows = [];
-				
+
 				arr_windows[folderId] = {
 					id: folderId,
 					title: folderTitle,
@@ -146,19 +143,20 @@ function registerFolder(folder) {
 					x: folder.clientX-200,
 					h: 300,
 					w: 400,
+					z: len,
 				};
 				browser.storage.local.set({'windows': arr_windows});
 			});
-			
+
 			if (folderId != null) {
 				registerWindow('win_'+folderId);
-				populateWindow(folderId);				
+				populateWindow(folderId);
 			}
 		}
 	});
 }
-	
-function registerWindow(id) {	
+
+function registerWindow(id) {
 // move
 	document.getElementById(id).childNodes[0].addEventListener('mousedown', function(e) {
 		offsetX = e.pageX - e.currentTarget.parentNode.offsetLeft;
@@ -170,8 +168,9 @@ function registerWindow(id) {
 // raise
 	document.getElementById(id).addEventListener('mousedown', function(e) {
 		allWindows = document.getElementsByClassName('window');
-		for(var i = 0; i < allWindows.length; i++) {
-			if(allWindows[i].style.zIndex > 0 && e.currentTarget.style.zIndex != allWindows.length){
+		for (var i = 0; i < allWindows.length; i++) {
+			
+			if(allWindows[i].style.zIndex > 0 && e.currentTarget.style.zIndex != allWindows.length) {
 				allWindows[i].style.zIndex--;
 				allWindows[i].classList.remove('firstWindow');
 			}
@@ -192,7 +191,7 @@ function registerWindow(id) {
 		});
 		closing = true;
 	});
-	
+
 // resize
 	document.getElementById(id).childNodes[2].addEventListener('mousedown', function(e) {
 		pX = e.pageX;
@@ -202,43 +201,23 @@ function registerWindow(id) {
 		resize_target = e.currentTarget.parentNode;
 		document.body.insertAdjacentHTML('beforeend','<div id="secureDrag"></div>');
 	});
-	
+
 // dragenter
 	document.getElementById(id).childNodes[1].addEventListener('dragenter',function(e) { // TODO target all dropzones
 		if (dragon_target != null) {
 			drop_target = e.target.parentNode.getAttribute('index');
 		}
 	});
-	
-// drop
-	document.addEventListener('dragend', function() {
-		if (dragon_target && drop_target) {
-			browser.bookmarks.move(dragon_target, {parentId: drop_target}); // TODO catch errors
-
-			lien = document.getElementById(dragon_target);
-			document.getElementById('win_'+drop_target).childNodes[1].insertAdjacentHTML('beforeend', lien.outerHTML);
-			lien.remove();
-			
-			dragonPrepare(dragon_target);
-			if (lien.tagName === "ARTICLE") {
-				registerFolder(dragon_target);	
-			}
-		}
-		
-	});
 }
 
 function populateWindow(id) {
-	if (id == null) {
-		exit;
-	}
 	browser.bookmarks.getChildren(id).then(function(e) {
 		WindowMain = document.getElementById('win_'+id).childNodes[1];
-		WindowElementsLength = e.length;
-		
-		for (var i = 0; i < WindowElementsLength; ++i) {
+		BookmarksLength = e.length;
+
+		for (var i = 0; i < BookmarksLength; ++i) {
 			var el = e[i];
-			
+
 			if (el.type == 'bookmark') {
 				if (el.title == '') {
 					el.title = el.url;
@@ -249,11 +228,29 @@ function populateWindow(id) {
 			} else if (el.type == 'folder') {
 				WindowMain.insertAdjacentHTML('beforeend', '<article id="'+el.id+'" href="'+el.id+'" draggable="true">'+el.title.substring(0, 52)+'</article>');
 				registerFolder(el.id);
-			} else {
-				WindowMain.insertAdjacentHTML('beforeend', '<div></div>');
 			}
 			dragonPrepare(el.id);
 		}
+	});
+}
+
+function fetchFolder(sub) { // desktop icons
+	if (sub.type === 'bookmark') {
+		document.body.insertAdjacentHTML('beforeend', '<a id="'+sub.id+'" title="'+sub.url+'" class="desktopFolder" href="'+sub.url+'"><img width="16px" height="16px" src="https://s2.googleusercontent.com/s2/favicons?domain_url='+sub.url+'"/>'+sub.title.substring(0, 30)+'</a>');
+	} else if (sub.type === 'folder') {
+		document.body.insertAdjacentHTML('beforeend', '<div class="desktopFolder" id="'+sub.id+'" href="'+sub.id+'" draggable="true">'+sub.title.substring(0, 30)+'</div>');
+		registerFolder(sub.id);
+	} else {
+		document.body.insertAdjacentHTML('beforeend', '<hr>');
+	}
+	dragonPrepare(sub.id);
+}
+
+function dragonPrepare(id) {
+	document.getElementById(id).addEventListener('dragstart',function(e){
+		dragon_target = e.currentTarget.id;
+		
+		document.getElementById('delete_vortex').style.display = 'block';
 	});
 }
 
@@ -269,10 +266,11 @@ document.body.addEventListener('mousemove',function(e) {
 document.body.addEventListener('mouseup', function(e) {
 	if (move_target || resize_target) {
 		win = resize_target ? resize_target : move_target;
-		
+
 		if (closing == false) {
 			browser.storage.local.get().then(function(o) {
 				o.windows ? arr_windows = o.windows : arr_windows = [];
+
 				arr_windows[win.getAttribute('index')] = {
 					id:		win.getAttribute('index'),
 					title:	win.childNodes[0].title,
@@ -280,35 +278,51 @@ document.body.addEventListener('mouseup', function(e) {
 					y:		win.offsetTop,
 					w:		win.childNodes[1].offsetWidth, // 0 is <border>, 1 is <main>, 2 is <resize>
 					h:		win.childNodes[1].offsetHeight,
+					// z:		win.style.zIndex,
 				};
 				browser.storage.local.set({'windows': arr_windows });
-			});			
+			});
 		}
 		move_target = null;
 		resize_target = null;
 	}
-	
+
 	closing = false;
 	if(document.getElementById('secureDrag') !== null) {
 		document.getElementById('secureDrag').outerHTML = '';
 	}
 });
 
-function fetchFolder(sub) { // desktop icons
-	if (sub.type === 'bookmark') {
-		document.body.insertAdjacentHTML('beforeend', '<a id="'+sub.id+'" title="'+sub.url+'" class="desktopFolder" href="'+sub.url+'"><img width="16px" height="16px" src="https://s2.googleusercontent.com/s2/favicons?domain_url='+sub.url+'"/>'+sub.title.substring(0, 30)+'</a>');
-	} else if (sub.type === 'folder') {
-		document.body.insertAdjacentHTML('beforeend', '<div class="desktopFolder" id="'+sub.id+'" href="'+sub.id+'" draggable="true">'+sub.title.substring(0, 30)+'</div>');
-		registerFolder(sub.id);
-	} else {
-		document.body.insertAdjacentHTML('beforeend', '<hr>');
+// watching for delete vortex
+document.getElementById('delete_vortex').addEventListener('dragenter',function(e) { // TODO target all dropzones
+console.log('going to remove');
+	if (dragon_target != null) {
+		delete_drop_target = true;
+		drop_target = null;
+	}
+});
+
+// drop
+document.addEventListener('dragend', function(e) {
+	if (dragon_target && drop_target) { // moving between windows
+		browser.bookmarks.move(dragon_target, {parentId: drop_target}); // TODO catch errors
+
+		lien = document.getElementById(dragon_target);
+		document.getElementById('win_'+drop_target).childNodes[1].insertAdjacentHTML('beforeend', lien.outerHTML);
+		lien.remove();
+
+		dragonPrepare(dragon_target);
+		if (lien.tagName === "ARTICLE") {
+			registerFolder(dragon_target);
+		}
+	} else if (dragon_target && delete_drop_target === true) { // dropping in vortex
+		browser.bookmarks.remove(dragon_target).then(function(){
+			lien = document.getElementById(dragon_target);
+			lien.remove();
+		});
 	}
 	
-	dragonPrepare(sub.id);
-}
-
-function dragonPrepare(id) {
-	document.getElementById(id).addEventListener('dragstart',function(e){
-		dragon_target = e.currentTarget.id;
-	});
-}
+	delete_drop_target = false;
+	drop_target = null;
+	document.getElementById('delete_vortex').style.display = 'none';
+});

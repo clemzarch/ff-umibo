@@ -5,7 +5,6 @@ This is a beta. Upcoming fixes:
 - drag-n-drop correctly in windows
 - save/restore windows order on z-axis
 - creating folders
-- deleting bookmarks
 - renaming bookmarks
 - custom backgrounds
 - find a way to drag-n-drop on "desktop"
