@@ -1,6 +1,6 @@
 browser.storage.local.get().then(function(options) {
 	if (options.bg === 'fetch_unsplash') {
-		document.documentElement.style.background = 'url('+options.image+')  center / cover';
+		document.documentElement.style.background = 'url('+options.image+') center / cover';
 	}
 	if(!options.separate_categories) {
 		if(options.categories_toolbar) {
@@ -72,7 +72,7 @@ browser.storage.local.get().then(function(options) {
 				w.x = window.innerWidth - 200;
 			}
 
-			document.body.insertAdjacentHTML('beforeend', '<div id="win_'+w.id+'" index="'+w.id+'"  style="left:'+w.x+'px;top:'+w.y+'px;z-index:'+(i++)+'" class="window"><div class="border" title="'+w.title+'">'+w.title+'<span id="close_button" title="Close"></span></div><main style="height:'+w.h+'px;width:'+w.w+'px"></main><div class="resize"></div></div>');
+			document.body.insertAdjacentHTML('beforeend', '<div id="win_'+w.id+'" index="'+w.id+'" style="left:'+w.x+'px;top:'+w.y+'px;z-index:'+(i++)+'" class="window"><div class="border" title="'+w.title+'">'+w.title+'<span id="close_button" title="Close"></span></div><main style="height:'+w.h+'px;width:'+w.w+'px"></main><div class="resize"></div></div>');
 
 			if (w.id != null) {
 				registerWindow('win_'+w.id);
@@ -224,12 +224,14 @@ function populateWindow(id) {
 				}
 				// OPTIMISER FETCH ICONS, TROP LENT QUAND OUVERTURE DE FENETRE
 				WindowMain.insertAdjacentHTML('beforeend', '<a id="'+el.id+'" title="'+el.url+'" href="'+el.url+'"><img width="16px" height="16px" src="https://s2.googleusercontent.com/s2/favicons?domain_url='+el.url+'"/>'+el.title.substring(0, 52)+'</a>');
-				// dragonPrepare(el.id);
+				dragonPrepare(el.id);
 			} else if (el.type == 'folder') {
 				WindowMain.insertAdjacentHTML('beforeend', '<article id="'+el.id+'" href="'+el.id+'" draggable="true">'+el.title.substring(0, 52)+'</article>');
 				registerFolder(el.id);
+				dragonPrepare(el.id);
+			} else {
+				WindowMain.insertAdjacentHTML('beforeend', '<hr>');
 			}
-			dragonPrepare(el.id);
 		}
 	});
 }
@@ -237,13 +239,14 @@ function populateWindow(id) {
 function fetchFolder(sub) { // desktop icons
 	if (sub.type === 'bookmark') {
 		document.body.insertAdjacentHTML('beforeend', '<a id="'+sub.id+'" title="'+sub.url+'" class="desktopFolder" href="'+sub.url+'"><img width="16px" height="16px" src="https://s2.googleusercontent.com/s2/favicons?domain_url='+sub.url+'"/>'+sub.title.substring(0, 30)+'</a>');
+		dragonPrepare(sub.id);
 	} else if (sub.type === 'folder') {
 		document.body.insertAdjacentHTML('beforeend', '<div class="desktopFolder" id="'+sub.id+'" href="'+sub.id+'" draggable="true">'+sub.title.substring(0, 30)+'</div>');
 		registerFolder(sub.id);
+		dragonPrepare(sub.id);
 	} else {
 		document.body.insertAdjacentHTML('beforeend', '<hr>');
 	}
-	dragonPrepare(sub.id);
 }
 
 function dragonPrepare(id) {
@@ -295,7 +298,6 @@ document.body.addEventListener('mouseup', function(e) {
 
 // watching for delete vortex
 document.getElementById('delete_vortex').addEventListener('dragenter',function(e) { // TODO target all dropzones
-console.log('going to remove');
 	if (dragon_target != null) {
 		delete_drop_target = true;
 		drop_target = null;
