@@ -1,127 +1,25 @@
-<form>
-	<label>
-		<input name="show_search_tips" type="checkbox"></input>
-		Show search tips.
-	</label>
-	</br>
-	<label>
-		<input name="separate_categories" type="checkbox"></input>
-		Separate each categories in its own folder.
-	</label>
-
-	<h1>Categories</h1>
-	<label>
-		<input name="categories_toolbar" type="checkbox"></input>
-		Bookmarks Toolbar
-	</label>
-	<label>
-		<input name="categories_menu" type="checkbox"></input>
-		Bookmarks Menu
-	</label>
-	<br>
-	<label>
-		<input name="categories_other" type="checkbox"></input>
-		Other Bookmarks
-	</label>
-	<label>
-		<input name="categories_mobile" type="checkbox"></input>
-		Mobile Bookmarks
-	</label>
-
-	<!-- <h1>Shortcuts</h1> -->
-	<!-- <label> -->
-		<!-- <input type="checkbox"></input> -->
-		<!-- Weather -->
-	<!-- </label> -->
-	<!-- <label> -->
-		<!-- <input type="checkbox"></input> -->
-		<!-- Notes -->
-	<!-- </label> -->
-	<!-- <label> -->
-		<!-- <input type="checkbox"></input> -->
-		<!-- Firefox Send -->
-	<!-- </label><br> -->
-	<!-- <label> -->
-		<!-- <input type="checkbox"></input> -->
-		<!-- Recently Closed Tabs -->
-	<!-- </label> -->
-	<!-- <label> -->
-		<!-- <input type="checkbox"></input> -->
-		<!-- Recently Closed Windows -->
-	<!-- </label> -->
-
-	<h1>Background</h1>
-	<label>
-		<input name="bg" id="follow_theme" value="follow_theme" type="radio"></input>Same as the current theme
-	</label>
-	<!-- <label> -->
-		<!-- <input name="bg" id="fetch_unsplash" value="fetch_unsplash" type="radio"></input>Fetch from Unsplash (Experimental) -->
-	<!-- </label> -->
-
-<!-- <details> -->
-	<!-- <h1>Folder Behaviour</h1> -->
-	<!-- <span> -->
-	<!-- Shift+Click -->
-	<!-- <select> -->
-		<!-- <option value="open">Open</option> -->
-		<!-- <option value="new_tab">Open in New Tab</option> -->
-		<!-- <option value="new_window">Internal Window</option> -->
-	<!-- </select> -->
-	<!-- </span> -->
-	<!-- <span> -->
-	<!-- Alt+Click -->
-	<!-- <select> -->
-		<!-- <option value="open">Open</option> -->
-		<!-- <option value="new_tab">Open in New Tab</option> -->
-		<!-- <option value="new_window">Internal Window</option> -->
-	<!-- </select> -->
-	<!-- </span> -->
-	<!-- <span> -->
-	<!-- Click -->
-	<!-- <select> -->
-		<!-- <option value="open">Open</option> -->
-		<!-- <option value="new_tab">Open in New Tab</option> -->
-		<!-- <option value="new_window">Internal Window</option> -->
-	<!-- </select> -->
-	<!-- </span> -->
-<!-- </details> -->
-</form>
+<!DOCTYPE html>
 <script src="options.js"></script>
 <style>
-:root {
-	--bg: #202023;
-	--color: rgb(249, 249, 250);
-	--faded-line: #404040;
-}
-
-@media (prefers-color-scheme: light) {
-	:root {
-		--bg: #fff;
-		--color: #333;
-		--faded-line: #eaeaea;
-	}
-}
-
-hr{
-	border-top:1px solid #fff;
-	border-bottom:1px solid #bbb;
-}
 body {
-	background: var(--bg);
-	color: var(--color);
+	background: #202023;
+	color: #f9f9f9;
 	font-size:15px;
 	font-weight:100;
 	margin-top: 5px;
 	font-family: Tahoma, Helvetica, sans-serif;
 }
+
+label:hover {
+	background: #404040;
+}
+
 label {
 	line-height: 35px;
 	margin: 7px;
 	padding: 7px;
 }
-label:hover {
-	background: var(--faded-line);
-}
+
 h1 {
 	padding: 10px;
 	margin-top: 10px;
@@ -129,8 +27,51 @@ h1 {
 	font-size: 16px;
 	font-weight: 600;
 }
-span {
-	margin: 12px;
-	line-height: 40px;
+@media (prefers-color-scheme: light) {
+	body {
+		background: #ffffff;
+		color: #333333;
+	}
+	label:hover {
+		background: #eaeaea;
+	}
 }
 </style>
+<form>
+	<label>
+		<input name="show_search_tips" type="checkbox">
+		Show search tips.
+	</label>
+	<br>
+	<label>
+		<input name="separate_categories" type="checkbox">
+		Separate each categories in its own folder.
+	</label>
+
+	<h1>Categories</h1>
+	<label>
+		<input name="categories_toolbar" type="checkbox">
+		Bookmarks Toolbar
+	</label>
+	<label>
+		<input name="categories_menu" type="checkbox">
+		Bookmarks Menu
+	</label>
+	<br>
+	<label>
+		<input name="categories_other" type="checkbox">
+		Other Bookmarks
+	</label>
+	<label>
+		<input name="categories_mobile" type="checkbox">
+		Mobile Bookmarks
+	</label>
+	<h1>Background</h1>
+	<label>
+		<input name="bg" id="follow_theme" value="follow_theme" type="radio">Same as the current theme
+	</label>
+	<label>
+		<input name="bg" id="fetch_unsplash" value="fetch_unsplash" type="radio">Fetch from Unsplash (Experimental)
+	</label>
+</form>
+</html>

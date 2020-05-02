@@ -1,13 +1,12 @@
 {
 	"name": "UMiBO",
-	"description": "Turns your new tab into a virtual desktop to manage bookmarks",
+	"description": "Turns your new tab into a virtual desktop to manage bookmarks.",
 	"homepage_url": "https://github.com/Tsugumatsu/ff-umibo",
 	"manifest_version": 2,
-	"version": "0.4.1",
+	"version": "0.6",
 	"icons": {
-		"64": "icons/umibo-64.png",
-		"32": "icons/umibo-32.png",
-		"16": "icons/umibo-16.png"
+		"48": "umibo.svg",
+		"96": "umibo.svg"
 	},
 	"chrome_url_overrides" : {
 		"newtab": "newTab.html"

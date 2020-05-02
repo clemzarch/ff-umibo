@@ -1,38 +1,21 @@
 <!DOCTYPE html>
 <head>
 <meta charset="utf-8">
-<link rel="icon" type="image/png" href="chrome://branding/content/icon32.png"/>
 <title>New Tab</title>
+<link rel="icon" type="image/png" href="chrome://branding/content/icon32.png"/>
 <link rel="stylesheet" type="text/css" href="newTab.css"/>
 </head>
 <body>
+<div id="delete_vortex">Delete</div>
 <a id="options" href="options.html"></a>
 <div id="tip_container">
 	<div id="search_tip">
-		<span>#</span> to search in History<br>
-		<span id="etoile">*</span> to search in Bookmarks<br>
-		<span>%</span> to search in Tabs<br>
-		<span>@</span> to see search engines
+		<span>^</span>History<br>
+		<span>*</span>Bookmarks<br>
+		<span>%</span>Tabs<br>
+		<span>@</span>Search engines
 	</div>
 </div>
-<div style="color:var(--color)">
-	This is a beta. Upcoming fixes:
-	<ul>
-		<li>drag-n-drop correctly in windows</li>
-		<li>save/restore windows order on z-axis</li>
-		<li>creating folders</li>
-		<li>renaming bookmarks</li>
-		<li>custom backgrounds</li>
-		<li>find a way to drag-n-drop on "desktop"</li>
-	</ul>
-</div>
-<div id="rename_vortex">
-	Rename<br>
-	<input id="new_name" type="text" placeholder="Name"></input>
-	<input id="new_name" type="text" placeholder="URL"></input>
-	<input type="button" value="Save"></input>
-</div>
-<div id="delete_vortex">Delete</div>
-</body>
 <script type="text/javascript" src="newTab.js"></script>
+</body>
 </html>

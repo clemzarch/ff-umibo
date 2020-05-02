@@ -1,34 +1,35 @@
 browser.storage.local.get().then(function(options) {
-	if (options.bg === 'fetch_unsplash') {
-		document.documentElement.style.background = 'url('+options.image+') center / cover';
-	}
 	if(!options.separate_categories) {
 		if(options.categories_toolbar) {
-			browser.bookmarks.getChildren('toolbar_____').then(function(root) {
-				root.forEach(function(sub){
-					fetchFolder(sub);
-				});
+			browser.bookmarks.getChildren('toolbar_____').then(function(bms) {
+				l = bms.length;
+				for (i = 0 ; i < l ; ++i) {
+					fetchFolder(bms[i]);
+				}
 			});
 		}
 		if(options.categories_menu) {
-			browser.bookmarks.getChildren('menu________').then(function(root) {
-				root.forEach(function(sub){
-					fetchFolder(sub);
-				});
+			browser.bookmarks.getChildren('menu________').then(function(bms) {
+				l = bms.length;
+				for (i = 0 ; i < l ; ++i) {
+					fetchFolder(bms[i]);
+				}
 			});
 		}
 		if(options.categories_mobile) {
-			browser.bookmarks.getChildren('mobile______').then(function(root) {
-				root.forEach(function(sub){
-					fetchFolder(sub);
-				});
+			browser.bookmarks.getChildren('mobile______').then(function(bms) {
+				l = bms.length;
+				for (i = 0 ; i < l ; ++i) {
+					fetchFolder(bms[i]);
+				}
 			});
 		}
 		if(options.categories_other) {
-			browser.bookmarks.getChildren('unfiled_____').then(function(root) {
-				root.forEach(function(sub){
-					fetchFolder(sub);
-				});
+			browser.bookmarks.getChildren('unfiled_____').then(function(bms) {
+				l = bms.length;
+				for (i = 0 ; i < l ; ++i) {
+					fetchFolder(bms[i]);
+				}
 			});
 		}
 	} else {
@@ -72,7 +73,7 @@ browser.storage.local.get().then(function(options) {
 				w.x = window.innerWidth - 200;
 			}
 
-			document.body.insertAdjacentHTML('beforeend', '<div id="win_'+w.id+'" index="'+w.id+'" style="left:'+w.x+'px;top:'+w.y+'px;z-index:'+(i++)+'" class="window"><div class="border" title="'+w.title+'">'+w.title+'<span id="close_button" title="Close"></span></div><main style="height:'+w.h+'px;width:'+w.w+'px"></main><div class="resize"></div></div>');
+			drawWindow(w.id, w.title, w.x, w.y, w.w, w.h, i++)
 
 			if (w.id != null) {
 				registerWindow('win_'+w.id);
@@ -85,27 +86,6 @@ browser.storage.local.get().then(function(options) {
 		document.getElementById('tip_container').style.display = 'block';
 	}
 
-	// 540518 573009 789734
-	if (options.bg === 'fetch_unsplash') {
-		var url = 'https://source.unsplash.com/collection/573009/3840x2160';
-		var options = { method: 'GET', mode: 'cors', cache: 'default'};
-		var request = new Request(url);
-
-		fetch(request, options).then((response) => {
-			response.arrayBuffer().then((buffer) => {
-				var base64Flag = 'data:image/jpeg;base64,';
-				var imageStr = arrayBufferToBase64(buffer);
-				browser.storage.local.set({'image': base64Flag + imageStr});
-			});
-		});
-
-		function arrayBufferToBase64(buffer) {
-		  var binary = '';
-		  var bytes = [].slice.call(new Uint8Array(buffer));
-		  bytes.forEach((b) => binary += String.fromCharCode(b));
-		  return window.btoa(binary);
-		};
-	}
 	if (Object.entries(options).length === 0) { // if no options yet
 		browser.runtime.setUninstallURL('http://zarch.info/UMiBO/uninstalled.html');
 		browser.storage.local.set({
@@ -130,7 +110,7 @@ function registerFolder(folder) {
 			folderTitle = folder.target.innerHTML;
 			len = document.getElementsByClassName('window').length;
 
-			document.body.insertAdjacentHTML('beforeend', '<div id="win_'+folderId+'" index="'+folderId+'" style="z-index:'+len+'; top:'+(folder.clientY+50)+'px; left:'+(folder.clientX-200)+'px" class="window"><div class="border" title="'+folderTitle+'">'+folderTitle+'<span id="close_button" title="Close"></span></div><main style="height:300px;width:400px"></main><div class="resize"></div></div>');
+			drawWindow(folderId, folderTitle, folder.clientX-200, folder.clientY+50, 400, 300, len)
 
 			// save in local storage
 			browser.storage.local.get().then(function(o) {
@@ -201,13 +181,6 @@ function registerWindow(id) {
 		resize_target = e.currentTarget.parentNode;
 		document.body.insertAdjacentHTML('beforeend','<div id="secureDrag"></div>');
 	});
-
-// dragenter
-	document.getElementById(id).childNodes[1].addEventListener('dragenter',function(e) { // TODO target all dropzones
-		if (dragon_target != null) {
-			drop_target = e.target.parentNode.getAttribute('index');
-		}
-	});
 }
 
 function populateWindow(id) {
@@ -217,16 +190,15 @@ function populateWindow(id) {
 
 		for (var i = 0; i < BookmarksLength; ++i) {
 			var el = e[i];
-
 			if (el.type == 'bookmark') {
 				if (el.title == '') {
-					el.title = el.url;
+					el.title = el.url.substring(0, 50);
 				}
 				// OPTIMISER FETCH ICONS, TROP LENT QUAND OUVERTURE DE FENETRE
-				WindowMain.insertAdjacentHTML('beforeend', '<a id="'+el.id+'" title="'+el.url+'" href="'+el.url+'"><img width="16px" height="16px" src="https://s2.googleusercontent.com/s2/favicons?domain_url='+el.url+'"/>'+el.title.substring(0, 52)+'</a>');
+				WindowMain.insertAdjacentHTML('beforeend', '<a id="'+el.id+'" title="'+el.title+'" href="'+el.url+'"><img loading="lazy" width="16px" height="16px" src="https://s2.googleusercontent.com/s2/favicons?domain_url='+el.url+'"/>'+el.title+'</a>');
 				dragonPrepare(el.id);
 			} else if (el.type == 'folder') {
-				WindowMain.insertAdjacentHTML('beforeend', '<article id="'+el.id+'" href="'+el.id+'" draggable="true">'+el.title.substring(0, 52)+'</article>');
+				WindowMain.insertAdjacentHTML('beforeend', '<article id="'+el.id+'" title="'+el.title+'" href="'+el.id+'" draggable="true">'+el.title+'</article>');
 				registerFolder(el.id);
 				dragonPrepare(el.id);
 			} else {
@@ -238,10 +210,10 @@ function populateWindow(id) {
 
 function fetchFolder(sub) { // desktop icons
 	if (sub.type === 'bookmark') {
-		document.body.insertAdjacentHTML('beforeend', '<a id="'+sub.id+'" title="'+sub.url+'" class="desktopFolder" href="'+sub.url+'"><img width="16px" height="16px" src="https://s2.googleusercontent.com/s2/favicons?domain_url='+sub.url+'"/>'+sub.title.substring(0, 30)+'</a>');
+		document.body.insertAdjacentHTML('beforeend', '<a id="'+sub.id+'" title="'+sub.title+'" class="desktopFolder" href="'+sub.url+'"><img width="16px" height="16px" src="https://s2.googleusercontent.com/s2/favicons?domain_url='+sub.url+'"/>'+sub.title+'</a>');
 		dragonPrepare(sub.id);
 	} else if (sub.type === 'folder') {
-		document.body.insertAdjacentHTML('beforeend', '<div class="desktopFolder" id="'+sub.id+'" href="'+sub.id+'" draggable="true">'+sub.title.substring(0, 30)+'</div>');
+		document.body.insertAdjacentHTML('beforeend', '<div class="desktopFolder" id="'+sub.id+'" title="'+sub.title+'" href="'+sub.id+'" draggable="true">'+sub.title+'</div>');
 		registerFolder(sub.id);
 		dragonPrepare(sub.id);
 	} else {
@@ -253,6 +225,17 @@ function dragonPrepare(id) {
 	document.getElementById(id).addEventListener('dragstart',function(e){
 		dragon_target = e.currentTarget.id;
 		
+		// place dropzones
+		Dropzones = document.getElementsByClassName('dropzone');
+		for (i = 0; i < Dropzones.length; ++i) {
+			Dropzones[i].style.display = 'block';
+			
+			Dropzones[i].addEventListener('dragenter', function(e) {
+				drop_target = e.target.getAttribute('id');
+			});
+		}
+		
+		// place delete zone
 		document.getElementById('delete_vortex').style.display = 'block';
 	});
 }
@@ -281,7 +264,6 @@ document.body.addEventListener('mouseup', function(e) {
 					y:		win.offsetTop,
 					w:		win.childNodes[1].offsetWidth, // 0 is <border>, 1 is <main>, 2 is <resize>
 					h:		win.childNodes[1].offsetHeight,
-					// z:		win.style.zIndex,
 				};
 				browser.storage.local.set({'windows': arr_windows });
 			});
@@ -324,7 +306,17 @@ document.addEventListener('dragend', function(e) {
 		});
 	}
 	
+	Dropzones = document.getElementsByClassName('dropzone');
+	for (i = 0; i < Dropzones.length; ++i) {
+		Dropzones[i].style.display = 'none';
+	}
+	
 	delete_drop_target = false;
 	drop_target = null;
 	document.getElementById('delete_vortex').style.display = 'none';
 });
+
+function drawWindow(id, title, x, y, w, h, z)
+{
+	document.body.insertAdjacentHTML('beforeend', '<div id="win_'+id+'" index="'+id+'" style="top:'+y+'px; left:'+x+'px" class="window"><div class="border" title="'+title+'">'+title+'<span id="close_button" title="Close"></span></div><main style="height:'+h+'px;width:'+w+'px"></main><div class="resize"></div><div class="dropzone" id="'+id+'"></div></div>');
+}

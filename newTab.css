@@ -4,7 +4,7 @@
 	--tab-line: #0a84ff;
 	--faded-line: #0a84ff33;
 	--field: #474749;
-	--border: #f9f9fa33;
+	--border: #595959;
 	--faded-text: #8f8f8f; 
 }
 @media (prefers-color-scheme: light) {
@@ -26,8 +26,7 @@ html{
 body{
 	margin: 15px;
 	overflow: hidden;
-	font-family: Segoe UI, Helvetica, Arial;
-	font-size: 12px;
+	font: menu;
 	user-select: none;
 	color: var(--color);
 }
@@ -46,13 +45,13 @@ a {
 	color: var(--faded-text);
 }
 #search_tip > span {
-	width: 32px;
 	display: inline-block;
 	text-align: center;
-}
-#search_tip > span#etoile {
-	position: relative;
-	top: 7px;
+	background: var(--field);
+	padding: 1px;
+	margin: 3px 6px;
+	width: 30px;
+	border-radius: 3px;
 }
 
 .window {
@@ -69,16 +68,26 @@ a {
 	text-align:center;
 	line-height:32px;
 	border-bottom: 1px solid var(--border);
-	border-top: 3px solid var(--bg);
+	border-top: 2px solid var(--bg);
 }
 .window .border:active {
-	border-top: 3px solid var(--tab-line);
+	border-top: 2px solid var(--tab-line);
 }
 
 .window .resize {
 	height: 20px;
 	cursor: nwse-resize;
 	border-top: 1px solid var(--border);
+}
+.window .dropzone {
+	display: none;
+	background: var(--faded-line);
+	outline: 1px solid var(--tab-line);
+	position:absolute;
+	top:0;
+	left:0;
+	right:0;
+	bottom:0;
 }
 .window .border span {
 	width: 20px;
@@ -96,6 +105,7 @@ a {
 }
 
 .window main {
+	font: icon;
 	overflow: auto;
 	display: grid;
 	grid-template-columns: repeat(auto-fill, minmax(100px, max-content));
@@ -184,15 +194,14 @@ hr {
 	top: 15px;
 	right: 15px;
 	padding: 15px;
-	background: url(chrome://browser/skin/settings.svg);
+	background: url(chrome://global/skin/icons/settings.svg);
 	-moz-context-properties: fill;
 	fill: var(--faded-text);
 	background-repeat: no-repeat;
 	background-position: center;
-	cursor: default;
 }
 #options:hover {
-	background-color: var(--faded-line);
+	background-color: var(--border);
 }
 #rename_vortex {
 	position:fixed;
