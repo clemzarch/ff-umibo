@@ -2,32 +2,32 @@ browser.storage.local.get().then(function(options) {
 	if(!options.separate_categories) {
 		if(options.categories_toolbar) {
 			browser.bookmarks.getChildren('toolbar_____').then(function(bms) {
-				l = bms.length;
-				for (i = 0 ; i < l ; ++i) {
+				let l = bms.length;
+				for (let i = 0 ; i < l ; ++i) {
 					fetchFolder(bms[i]);
 				}
 			});
 		}
 		if(options.categories_menu) {
 			browser.bookmarks.getChildren('menu________').then(function(bms) {
-				l = bms.length;
-				for (i = 0 ; i < l ; ++i) {
+				let l = bms.length;
+				for (let i = 0 ; i < l ; ++i) {
 					fetchFolder(bms[i]);
 				}
 			});
 		}
 		if(options.categories_mobile) {
 			browser.bookmarks.getChildren('mobile______').then(function(bms) {
-				l = bms.length;
-				for (i = 0 ; i < l ; ++i) {
+				let l = bms.length;
+				for (let i = 0 ; i < l ; ++i) {
 					fetchFolder(bms[i]);
 				}
 			});
 		}
 		if(options.categories_other) {
 			browser.bookmarks.getChildren('unfiled_____').then(function(bms) {
-				l = bms.length;
-				for (i = 0 ; i < l ; ++i) {
+				let l = bms.length;
+				for (let i = 0 ; i < l ; ++i) {
 					fetchFolder(bms[i]);
 				}
 			});
@@ -56,29 +56,14 @@ browser.storage.local.get().then(function(options) {
 	}
 
 	if(options.windows) { // restore windows
-		keys = Object.keys(options.windows);
-		var i = 1;
+		let keys = Object.keys(options.windows);
+		let i = 1;
 		for (let key of keys) {
-			w = options.windows[key];
+			let w = options.windows[key];
 
-			// check if window stuck
-			if (w.y < 10) {
-				w.y = 10;
-			} else if (w.y > window.innerHeight - 20) {
-				w.y = window.innerHeight - 200;
-			}
-			if (w.x < -200) {
-				w.x = 10;
-			} else if (w.x > window.innerWidth - 50) {
-				w.x = window.innerWidth - 200;
-			}
-
-			drawWindow(w.id, w.title, w.x, w.y, w.w, w.h, i++)
-
-			if (w.id != null) {
-				registerWindow('win_'+w.id);
-				populateWindow(w.id);
-			}
+			drawWindow(w.id, w.title, w.x, w.y, w.w, w.h, i++);
+			registerWindow('win_'+w.id);
+			populateWindow(w.id);
 		}
 	}
 
@@ -97,10 +82,8 @@ browser.storage.local.get().then(function(options) {
 	}
 });
 
-var move_target,resize_target,dragon_target;
-var closing = false;
-var drop_target = false;
-var delete_drop_target = false;
+let move_target,resize_target;
+let closing = false;
 
 function registerFolder(folder) {
 	document.getElementById(folder).addEventListener('click', function(folder) {
@@ -110,7 +93,9 @@ function registerFolder(folder) {
 			folderTitle = folder.target.innerHTML;
 			len = document.getElementsByClassName('window').length;
 
-			drawWindow(folderId, folderTitle, folder.clientX-200, folder.clientY+50, 400, 300, len)
+			drawWindow(folderId, folderTitle, folder.clientX-200, folder.clientY+50, 400, 300, len);
+			registerWindow('win_'+folderId);
+			populateWindow(folderId);
 
 			// save in local storage
 			browser.storage.local.get().then(function(o) {
@@ -127,18 +112,14 @@ function registerFolder(folder) {
 				};
 				browser.storage.local.set({'windows': arr_windows});
 			});
-
-			if (folderId != null) {
-				registerWindow('win_'+folderId);
-				populateWindow(folderId);
-			}
 		}
 	});
 }
 
 function registerWindow(id) {
+	let window = document.getElementById(id);
 // move
-	document.getElementById(id).childNodes[0].addEventListener('mousedown', function(e) {
+	window.childNodes[0].addEventListener('mousedown', function(e) {
 		offsetX = e.pageX - e.currentTarget.parentNode.offsetLeft;
 		offsetY = e.pageY - e.currentTarget.parentNode.offsetTop;
 		move_target = e.currentTarget.parentNode;
@@ -146,11 +127,11 @@ function registerWindow(id) {
 	});
 
 // raise
-	document.getElementById(id).addEventListener('mousedown', function(e) {
-		allWindows = document.getElementsByClassName('window');
-		for (var i = 0; i < allWindows.length; i++) {
-			
-			if(allWindows[i].style.zIndex > 0 && e.currentTarget.style.zIndex != allWindows.length) {
+	window.addEventListener('mousedown', function(e) {
+		let allWindows = document.getElementsByClassName('window');
+		for (let i = 0; i < allWindows.length; i++) {
+
+			if(allWindows[i].style.zIndex > 0 && e.currentTarget.style.zIndex !== allWindows.length) {
 				allWindows[i].style.zIndex--;
 				allWindows[i].classList.remove('firstWindow');
 			}
@@ -160,12 +141,12 @@ function registerWindow(id) {
 	});
 
 // close
-	document.getElementById(id).childNodes[0].childNodes[1].addEventListener('mousedown', function(e) {
+	window.childNodes[0].childNodes[1].addEventListener('mousedown', function(e) {
 		e.target.parentNode.parentNode.remove();
 		id = e.target.parentNode.parentNode.getAttribute('index');
 
 		browser.storage.local.get().then(function(o) {
-			arr_windows = o.windows;
+			let arr_windows = o.windows;
 			delete arr_windows[id]; // si tout explose c'est de sa faute
 			browser.storage.local.set({'windows': arr_windows });
 		});
@@ -173,7 +154,7 @@ function registerWindow(id) {
 	});
 
 // resize
-	document.getElementById(id).childNodes[2].addEventListener('mousedown', function(e) {
+	window.childNodes[2].addEventListener('mousedown', function(e) {
 		pX = e.pageX;
 		pY = e.pageY;
 		wH = e.currentTarget.parentNode.childNodes[1].offsetHeight; //current height
@@ -185,19 +166,19 @@ function registerWindow(id) {
 
 function populateWindow(id) {
 	browser.bookmarks.getChildren(id).then(function(e) {
-		WindowMain = document.getElementById('win_'+id).childNodes[1];
-		BookmarksLength = e.length;
+		let WindowMain = document.getElementById('win_'+id).childNodes[1];
+		let BookmarksLength = e.length;
 
-		for (var i = 0; i < BookmarksLength; ++i) {
-			var el = e[i];
-			if (el.type == 'bookmark') {
-				if (el.title == '') {
+		for (let i = 0; i < BookmarksLength; ++i) {
+			let el = e[i];
+			if (el.type === 'bookmark') {
+				if (el.title === '') {
 					el.title = el.url.substring(0, 50);
 				}
 				// OPTIMISER FETCH ICONS, TROP LENT QUAND OUVERTURE DE FENETRE
 				WindowMain.insertAdjacentHTML('beforeend', '<a id="'+el.id+'" title="'+el.title+'" href="'+el.url+'"><img loading="lazy" width="16px" height="16px" src="https://s2.googleusercontent.com/s2/favicons?domain_url='+el.url+'"/>'+el.title+'</a>');
 				dragonPrepare(el.id);
-			} else if (el.type == 'folder') {
+			} else if (el.type === 'folder') {
 				WindowMain.insertAdjacentHTML('beforeend', '<article id="'+el.id+'" title="'+el.title+'" href="'+el.id+'" draggable="true">'+el.title+'</article>');
 				registerFolder(el.id);
 				dragonPrepare(el.id);
@@ -224,17 +205,17 @@ function fetchFolder(sub) { // desktop icons
 function dragonPrepare(id) {
 	document.getElementById(id).addEventListener('dragstart',function(e){
 		dragon_target = e.currentTarget.id;
-		
+
 		// place dropzones
 		Dropzones = document.getElementsByClassName('dropzone');
-		for (i = 0; i < Dropzones.length; ++i) {
+		for (let i = 0; i < Dropzones.length; ++i) {
 			Dropzones[i].style.display = 'block';
-			
+
 			Dropzones[i].addEventListener('dragenter', function(e) {
-				drop_target = e.target.getAttribute('id');
+				drop_target = e.target.getAttribute('id').replace('drop_','');
 			});
 		}
-		
+
 		// place delete zone
 		document.getElementById('delete_vortex').style.display = 'block';
 	});
@@ -249,11 +230,11 @@ document.body.addEventListener('mousemove',function(e) {
 		resize_target.childNodes[1].style.width = wW + e.pageX - pX+'px';
 	}
 });
-document.body.addEventListener('mouseup', function(e) {
+document.body.addEventListener('mouseup', function() {
 	if (move_target || resize_target) {
-		win = resize_target ? resize_target : move_target;
+		let win = resize_target ? resize_target : move_target;
 
-		if (closing == false) {
+		if (closing === false) {
 			browser.storage.local.get().then(function(o) {
 				o.windows ? arr_windows = o.windows : arr_windows = [];
 
@@ -279,7 +260,7 @@ document.body.addEventListener('mouseup', function(e) {
 });
 
 // watching for delete vortex
-document.getElementById('delete_vortex').addEventListener('dragenter',function(e) { // TODO target all dropzones
+document.getElementById('delete_vortex').addEventListener('dragenter',function() { // TODO target all dropzones
 	if (dragon_target != null) {
 		delete_drop_target = true;
 		drop_target = null;
@@ -287,11 +268,11 @@ document.getElementById('delete_vortex').addEventListener('dragenter',function(e
 });
 
 // drop
-document.addEventListener('dragend', function(e) {
+document.addEventListener('dragend', function() {
 	if (dragon_target && drop_target) { // moving between windows
 		browser.bookmarks.move(dragon_target, {parentId: drop_target}); // TODO catch errors
 
-		lien = document.getElementById(dragon_target);
+		let lien = document.getElementById(dragon_target);
 		document.getElementById('win_'+drop_target).childNodes[1].insertAdjacentHTML('beforeend', lien.outerHTML);
 		lien.remove();
 
@@ -301,16 +282,15 @@ document.addEventListener('dragend', function(e) {
 		}
 	} else if (dragon_target && delete_drop_target === true) { // dropping in vortex
 		browser.bookmarks.remove(dragon_target).then(function(){
-			lien = document.getElementById(dragon_target);
+			let lien = document.getElementById(dragon_target);
 			lien.remove();
 		});
 	}
-	
-	Dropzones = document.getElementsByClassName('dropzone');
-	for (i = 0; i < Dropzones.length; ++i) {
+
+	for (let i = 0; i < Dropzones.length; ++i) {
 		Dropzones[i].style.display = 'none';
 	}
-	
+
 	delete_drop_target = false;
 	drop_target = null;
 	document.getElementById('delete_vortex').style.display = 'none';
@@ -318,5 +298,21 @@ document.addEventListener('dragend', function(e) {
 
 function drawWindow(id, title, x, y, w, h, z)
 {
-	document.body.insertAdjacentHTML('beforeend', '<div id="win_'+id+'" index="'+id+'" style="top:'+y+'px; left:'+x+'px" class="window"><div class="border" title="'+title+'">'+title+'<span id="close_button" title="Close"></span></div><main style="height:'+h+'px;width:'+w+'px"></main><div class="resize"></div><div class="dropzone" id="'+id+'"></div></div>');
+	// check if window stuck
+	if (y < 0) {
+		y = 0;
+	}
+	if (y + h/2 > window.innerHeight) {
+		y = window.innerHeight - h;
+	}
+
+
+	if (x < 0) {
+		x = 0;
+	}
+	if (x + w/2 > window.innerWidth) {
+		x = window.innerWidth - w;
+	}
+
+	document.body.insertAdjacentHTML('beforeend', '<div id="win_'+id+'" index="'+id+'" style="top:'+y+'px; left:'+x+'px;z-index:'+z+'" class="window"><div class="border" title="'+title+'">'+title+'<span id="close_button" title="Close"></span></div><main style="height:'+h+'px;width:'+w+'px"></main><div class="resize"></div><div class="dropzone" id="drop_'+id+'"></div></div>');
 }

@@ -121,10 +121,12 @@ a {
 	transition-duration: 0.5s;
 }
 .window main a {
+	height: 80px;
 	text-decoration: none;
 	word-break: break-word;
 	text-align: center;
 	transition-duration: 0.5s;
+	overflow: hidden;
 }
 .window main a img {
 	display: block;
@@ -226,5 +228,5 @@ hr {
 	border-top: 1px solid var(--border);
 	border-right: 1px solid var(--border);
 	display: none;
-	background: var(--background);
+	background: var(--bg);
 }
