@@ -1,68 +1,66 @@
 <!DOCTYPE html>
-<html><head>
+<html lang="en">
+<head>
 <meta charset="utf-8">
 <meta http-equiv="content-type" content="text/html; charset=UTF-8">
 <title>Uninstalled UMiBO</title>
 <style>
-html{
-	background: #f5f6f7;
-	color:#333;
+html {
+    background: #f5f6f7;
+    color:#333;
 }
-body{
-	font-family: Arial, Helvetica;
-	font-size: 15pt;
+body {
+    font-family: Helvetica, Arial, sans-serif;
+    font-size: 15pt;
 }
-h2{
-	padding-left:30pt;
+h2 {
+    padding-left:30pt;
 }
-h1{
-	padding-left: 20pt;
+h1 {
+    padding-left: 20pt;
 }
-label{
-	user-select: none;
-	display: block;
-	padding: 13pt;
-	font-size:24pt;
+label {
+    user-select: none;
+    display: block;
+    padding: 13pt;
+    font-size:24pt;
+    line-height: 50px;
 }
-label:hover{
-	background: #fff;
+textarea {
+    margin: 17pt 0 0 17pt;
+    border: 1px solid #9d9d9d;
+    padding: 5px;
+    border-radius: 4px;
 }
-textarea{
-	margin: 0 20pt;
-	margin: 17pt 0 0 17pt;
-	border: 1px solid #9d9d9d;
-	padding: 5px;
-	border-radius: 4px;
-}
-label div{
-	display: none;
-	position: fixed;
-	top:0;
-	bottom:0;
-	right:0;
-	left: 530px;
-	background:#fff;
-	box-sizing: border-box;
-	padding: 3%;
+label div {
+    display: none;
+    position: fixed;
+    width: 300px;
+    background:#fff;
+    box-sizing: border-box;
+    padding: 5px 10px;
+    font-size: 15px;
+    line-height: 20px;
+    margin: 10px;
 }
 input {
-	margin-right: 12px;
+    margin-right: 12px;
 }
 
-label:hover div{
-	display: block;
+label:hover div {
+    display: inline-block;
 }
 @media (prefers-color-scheme: dark) {
-	html{
-		background: #222;
-		color: #fff;
-	}
-	label:hover{
-		background: #333;
-	}
-	label div{
-		background: #333;
-	}
+    html{
+        background: #222;
+        color: #fff;
+    }
+    label:hover{
+        background: #333;
+    }
+    label div{
+        background: #333;
+    }
 }
 </style>
 </head>
@@ -70,11 +68,26 @@ label:hover div{
 <h2>I just need 5 seconds</h2>
 <h1>Why did you uninstall?</h1>
 <form>
-<label><input type="checkbox" style="" checked="checked">It's Slow<div>UMiBO is smaller than the default New tab page. What kind of computer are you using?</div></label>
-<label><input type="checkbox">It's Ugly<div>You can change the background picture and the color scheme independently if your custom theme looks like puke</div></label>
-<label><input type="checkbox">It's Useless<div>Have you tried bookmarks folders, weather, synchronized notes and recently closed tabs list?<br> The default New Tab page shows randomly selected sites that you visited, and there is no place to correctly access bookmarks</div></label>
-<label><input type="checkbox">It's Racist<div>UMiBO isn't translated in your language? Help me!</div></label>
-<textarea placeholder="Something Else"></textarea>
+<label>
+    <input type="checkbox">It's Slow
+    <div>UMiBO is smaller and faster than the default New tab page. What kind of computer are you using?</div>
+</label>
+<label>
+    <input type="checkbox">It's Ugly
+    <div>You can change the background picture and the color scheme independently if your custom theme looks like puke</div>
+</label>
+<label>
+    <input type="checkbox">It's Useless
+    <div>The default New Tab page shows randomly selected sites that you visited, and there is no place to correctly access bookmarks</div>
+</label>
+<label>
+    <input type="checkbox">It's Racist
+    <div>UMiBO isn't translated in your language? Help me!</div>
+</label>
+    <label>
+        Something else
+        <textarea placeholder="Something Else"></textarea>
+    </label>
 </form>
 
 </body><style type="text/css"></style></html>
