@@ -5,7 +5,7 @@
 	--faded-line: #0a84ff33;
 	--field: #474749;
 	--border: #595959;
-	--faded-text: #8f8f8f; 
+	--faded-text: #8f8f8f;
 }
 @media (prefers-color-scheme: light) {
 	:root {
@@ -29,6 +29,7 @@ body{
 	font: menu;
 	user-select: none;
 	color: var(--color);
+	-moz-user-select: none;
 }
 a {
 	color: var(--color);
@@ -69,6 +70,7 @@ a {
 	line-height:32px;
 	border-bottom: 1px solid var(--border);
 	border-top: 2px solid var(--bg);
+	padding-left: 40px;
 }
 .window .border:active {
 	border-top: 2px solid var(--tab-line);
@@ -93,7 +95,7 @@ a {
 	width: 20px;
 	height: 20px;
 	float: right;
-	margin: 5px 8px 0 -32px;
+	margin: 5px 8px 0 10px;
 	-moz-context-properties: fill, fill-opacity;
 	background: url("chrome://global/skin/icons/close.svg");
 	fill: var(--color);
@@ -107,26 +109,34 @@ a {
 .window main {
 	font: icon;
 	overflow: auto;
-	display: grid;
-	grid-template-columns: repeat(auto-fill, minmax(100px, max-content));
-	grid-template-rows: repeat(auto-fill, 80px);
-	grid-gap: 10px;
+	min-width: -moz-available;
+	min-height: 100px;
 }
 .window main article {
-	margin: 8px 12px;
-	padding: 10px;
 	background: var(--field);
 	border-radius: 4px;
 	border: 1px solid var(--border);
 	transition-duration: 0.5s;
+	overflow: hidden;
+	display: inline-block;
+	height: 48px;
+	width: 83px;
+	vertical-align: top;
+	text-align: center;
+	margin: 10px;
+	padding: 10px;
 }
 .window main a {
-	height: 80px;
 	text-decoration: none;
 	word-break: break-word;
 	text-align: center;
 	transition-duration: 0.5s;
 	overflow: hidden;
+	display: inline-block;
+	height: 80px;
+	width: 115px;
+	vertical-align: top;
+	margin: 5px;
 }
 .window main a img {
 	display: block;

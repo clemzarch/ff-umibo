@@ -1,16 +1,16 @@
 browser.storage.local.get().then(function(options) {
 	if (Object.entries(options).length === 0) { // if no options yet
 		browser.storage.local.set({
-			bg: "follow_theme",
 			categories_toolbar: true,
-			show_search_tips: true
+			show_search_tips: true,
+			custom_css: null
 		});
 		location.reload();
 	}
 	
 	Inputs = document.getElementsByTagName('input');
 	
-	if (options['bg'] != null) {		
+	if (options['bg'] != null) {
 		document.getElementById(options['bg']).checked = true;
 	}
 
@@ -28,7 +28,15 @@ browser.storage.local.get().then(function(options) {
 		});
 
 		if (Inputs[i].type !== 'radio') {
-			Inputs[i].checked = options[Inputs[i].name];	
-		}		
+			Inputs[i].checked = options[Inputs[i].name];
+		}
 	}
+
+	document.getElementById('custom_css').value = options.custom_css;
+	document.getElementById('custom_css').addEventListener("keyup", function(e) {
+		browser.storage.local.set({
+			custom_css: e.target.value
+		});
+	});
+	
 });

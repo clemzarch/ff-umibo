@@ -66,6 +66,10 @@ browser.storage.local.get().then(function(options) {
 			populateWindow(w.id);
 		}
 	}
+	
+	if (options.custom_css) {
+		document.head.insertAdjacentHTML('beforeend', '<style>'+options.custom_css+'</style>')
+	}
 
 	if(options.show_search_tips) {
 		document.getElementById('tip_container').style.display = 'block';
@@ -74,9 +78,9 @@ browser.storage.local.get().then(function(options) {
 	if (Object.entries(options).length === 0) { // if no options yet
 		browser.runtime.setUninstallURL('http://zarch.info/UMiBO/uninstalled.html');
 		browser.storage.local.set({
-			bg: "follow_theme",
 			categories_toolbar: true,
-			show_search_tips: true
+			show_search_tips: true,
+			custom_css: null
 		});
 		location.reload();
 	}
@@ -173,7 +177,7 @@ function populateWindow(id) {
 			let el = e[i];
 			if (el.type === 'bookmark') {
 				if (el.title === '') {
-					el.title = el.url.substring(0, 50);
+					el.title = el.url;
 				}
 				// OPTIMISER FETCH ICONS, TROP LENT QUAND OUVERTURE DE FENETRE
 				WindowMain.insertAdjacentHTML('beforeend', '<a id="'+el.id+'" title="'+el.title+'" href="'+el.url+'"><img loading="lazy" width="16px" height="16px" src="https://s2.googleusercontent.com/s2/favicons?domain_url='+el.url+'"/>'+el.title+'</a>');

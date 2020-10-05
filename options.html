@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<meta charset="utf-8">
 <script src="options.js"></script>
 <style>
 body {
@@ -19,6 +20,14 @@ label {
 	margin: 7px;
 	padding: 7px;
 }
+textarea {
+	color: #fff;
+	background: #000;
+	font-family: Consolas, monospace;
+	letter-spacing: 2px;
+	border: none;
+	padding: 5px;
+}
 
 h1 {
 	padding: 10px;
@@ -28,6 +37,10 @@ h1 {
 	font-weight: 600;
 }
 @media (prefers-color-scheme: light) {
+	textarea{
+		color: #000;
+		background: #eee;
+	}
 	body {
 		background: #ffffff;
 		color: #333333;
@@ -66,12 +79,8 @@ h1 {
 		<input name="categories_mobile" type="checkbox">
 		Mobile Bookmarks
 	</label>
-	<h1>Background</h1>
-	<label>
-		<input name="bg" id="follow_theme" value="follow_theme" type="radio">Same as the current theme
-	</label>
-	<label>
-		<input name="bg" id="fetch_unsplash" value="fetch_unsplash" type="radio">Fetch from Unsplash (Experimental)
-	</label>
+	
+	<h1>Custom CSS</h1>
+	<textarea id="custom_css" wrap="false" spellcheck="false" rows="8" cols="50"></textarea>
 </form>
 </html>
