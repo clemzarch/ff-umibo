@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<head>
 <meta charset="utf-8">
 <script src="options.js"></script>
 <style>
@@ -10,11 +11,9 @@ body {
 	margin-top: 5px;
 	font-family: Tahoma, Helvetica, sans-serif;
 }
-
 label:hover {
 	background: #404040;
 }
-
 label {
 	line-height: 35px;
 	margin: 7px;
@@ -28,7 +27,6 @@ textarea {
 	border: none;
 	padding: 5px;
 }
-
 h1 {
 	padding: 10px;
 	margin-top: 10px;
@@ -50,37 +48,39 @@ h1 {
 	}
 }
 </style>
-<form>
-	<label>
-		<input name="show_search_tips" type="checkbox">
-		Show search tips.
-	</label>
-	<br>
-	<label>
-		<input name="separate_categories" type="checkbox">
-		Separate each categories in its own folder.
-	</label>
+</head>
+<body>
+	<form>
+		<label>
+			<input name="show_search_tips" type="checkbox">
+			Show search tips.
+		</label>
+		<br>
+		<label>
+			<input name="separate_categories" type="checkbox">
+			Separate each categories in its own folder.
+		</label>
 
-	<h1>Categories</h1>
-	<label>
-		<input name="categories_toolbar" type="checkbox">
-		Bookmarks Toolbar
-	</label>
-	<label>
-		<input name="categories_menu" type="checkbox">
-		Bookmarks Menu
-	</label>
-	<br>
-	<label>
-		<input name="categories_other" type="checkbox">
-		Other Bookmarks
-	</label>
-	<label>
-		<input name="categories_mobile" type="checkbox">
-		Mobile Bookmarks
-	</label>
-	
-	<h1>Custom CSS</h1>
-	<textarea id="custom_css" wrap="false" spellcheck="false" rows="8" cols="50"></textarea>
-</form>
+		<h1>Categories</h1>
+		<label>
+			<input name="categories_toolbar" type="checkbox">
+			Bookmarks Toolbar
+		</label>
+		<label>
+			<input name="categories_menu" type="checkbox">
+			Bookmarks Menu
+		</label>
+		<br>
+		<label>
+			<input name="categories_mobile" type="checkbox">
+			Mobile Bookmarks
+		</label>
+		<label>
+			<input name="categories_other" type="checkbox">
+			Other Bookmarks
+		</label>
+		<h1>Custom CSS</h1>
+		<textarea id="custom_css" spellcheck="false" rows="8" cols="50"></textarea>
+	</form>
+</body>
 </html>

@@ -25,7 +25,7 @@ html{
 }
 body{
 	margin: 15px;
-	overflow: hidden;
+	overflow: auto;
 	font: menu;
 	user-select: none;
 	color: var(--color);
@@ -192,6 +192,10 @@ a.desktopFolder:hover {
 hr {
 	border: none;
 	border-top: 1px dotted var(--border);
+}
+.desktop {
+    margin: 20px 0;
+    min-height: 40px;
 }
 #secureDrag {
 	z-index:10;

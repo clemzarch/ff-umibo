@@ -2,55 +2,64 @@ browser.storage.local.get().then(function(options) {
 	if(!options.separate_categories) {
 		if(options.categories_toolbar) {
 			browser.bookmarks.getChildren('toolbar_____').then(function(bms) {
+			    console.log(bms);
 				let l = bms.length;
+				document.body.insertAdjacentHTML('beforeend', '<div id="drop_toolbar_____" class="desktop dropzone"></div>');
+				let zone = document.getElementById('drop_toolbar_____');
 				for (let i = 0 ; i < l ; ++i) {
-					fetchFolder(bms[i]);
+					fetchFolder(bms[i], zone);
 				}
 			});
 		}
 		if(options.categories_menu) {
 			browser.bookmarks.getChildren('menu________').then(function(bms) {
 				let l = bms.length;
+                document.body.insertAdjacentHTML('beforeend', '<div id="drop_menu________" class="desktop dropzone"></div>');
+                let zone = document.getElementById('drop_menu________');
 				for (let i = 0 ; i < l ; ++i) {
-					fetchFolder(bms[i]);
+					fetchFolder(bms[i], zone);
 				}
 			});
 		}
 		if(options.categories_mobile) {
 			browser.bookmarks.getChildren('mobile______').then(function(bms) {
 				let l = bms.length;
+                document.body.insertAdjacentHTML('beforeend', '<div id="drop_mobile______" class="desktop dropzone"></div>');
+                let zone = document.getElementById('drop_mobile______');
 				for (let i = 0 ; i < l ; ++i) {
-					fetchFolder(bms[i]);
+					fetchFolder(bms[i], zone);
 				}
 			});
 		}
 		if(options.categories_other) {
 			browser.bookmarks.getChildren('unfiled_____').then(function(bms) {
 				let l = bms.length;
+                document.body.insertAdjacentHTML('beforeend', '<div id="drop_unfiled_____" class="desktop dropzone"></div>');
+                let zone = document.getElementById('drop_unfiled_____');
 				for (let i = 0 ; i < l ; ++i) {
-					fetchFolder(bms[i]);
+					fetchFolder(bms[i], zone);
 				}
 			});
 		}
 	} else {
 		if(options.categories_toolbar) {
 			browser.bookmarks.get('toolbar_____').then(function(sub) {
-				fetchFolder(sub[0]);
+				fetchFolder(sub[0], document.body);
 			});
 		}
 		if(options.categories_menu) {
 			browser.bookmarks.get('menu________').then(function(sub) {
-				fetchFolder(sub[0]);
+				fetchFolder(sub[0], document.body);
 			});
 		}
 		if(options.categories_mobile) {
 			browser.bookmarks.get('mobile______').then(function(sub) {
-				fetchFolder(sub[0]);
+				fetchFolder(sub[0], document.body);
 			});
 		}
 		if(options.categories_other) {
 			browser.bookmarks.get('unfiled_____').then(function(sub) {
-				fetchFolder(sub[0]);
+				fetchFolder(sub[0], document.body);
 			});
 		}
 	}
@@ -66,7 +75,7 @@ browser.storage.local.get().then(function(options) {
 			populateWindow(w.id);
 		}
 	}
-	
+
 	if (options.custom_css) {
 		document.head.insertAdjacentHTML('beforeend', '<style>'+options.custom_css+'</style>')
 	}
@@ -186,23 +195,19 @@ function populateWindow(id) {
 				WindowMain.insertAdjacentHTML('beforeend', '<article id="'+el.id+'" title="'+el.title+'" href="'+el.id+'" draggable="true">'+el.title+'</article>');
 				registerFolder(el.id);
 				dragonPrepare(el.id);
-			} else {
-				WindowMain.insertAdjacentHTML('beforeend', '<hr>');
 			}
 		}
 	});
 }
 
-function fetchFolder(sub) { // desktop icons
+function fetchFolder(sub, zone) { // desktop icons
 	if (sub.type === 'bookmark') {
-		document.body.insertAdjacentHTML('beforeend', '<a id="'+sub.id+'" title="'+sub.title+'" class="desktopFolder" href="'+sub.url+'"><img width="16px" height="16px" src="https://s2.googleusercontent.com/s2/favicons?domain_url='+sub.url+'"/>'+sub.title+'</a>');
+		zone.insertAdjacentHTML('beforeend', '<a id="'+sub.id+'" title="'+sub.title+'" class="desktopFolder" href="'+sub.url+'"><img width="16px" height="16px" src="https://s2.googleusercontent.com/s2/favicons?domain_url='+sub.url+'"/>'+sub.title+'</a>');
 		dragonPrepare(sub.id);
 	} else if (sub.type === 'folder') {
-		document.body.insertAdjacentHTML('beforeend', '<div class="desktopFolder" id="'+sub.id+'" title="'+sub.title+'" href="'+sub.id+'" draggable="true">'+sub.title+'</div>');
+		zone.insertAdjacentHTML('beforeend', '<div class="desktopFolder" id="'+sub.id+'" title="'+sub.title+'" href="'+sub.id+'" draggable="true">'+sub.title+'</div>');
 		registerFolder(sub.id);
 		dragonPrepare(sub.id);
-	} else {
-		document.body.insertAdjacentHTML('beforeend', '<hr>');
 	}
 }
 
@@ -214,9 +219,14 @@ function dragonPrepare(id) {
 		Dropzones = document.getElementsByClassName('dropzone');
 		for (let i = 0; i < Dropzones.length; ++i) {
 			Dropzones[i].style.display = 'block';
+			Dropzones[i].style.background = 'var(--faded-line)';
+			Dropzones[i].style.outline = '1px solid var(--tab-line)';
 
 			Dropzones[i].addEventListener('dragenter', function(e) {
-				drop_target = e.target.getAttribute('id').replace('drop_','');
+                if (e.target.id && e.target.classList.contains('dropzone')) {
+			        console.log(e.target);
+                    drop_target = e.target.id.replace('drop_','');
+                }
 			});
 		}
 
@@ -258,7 +268,7 @@ document.body.addEventListener('mouseup', function() {
 	}
 
 	closing = false;
-	if(document.getElementById('secureDrag') !== null) {
+	if (document.getElementById('secureDrag')) {
 		document.getElementById('secureDrag').outerHTML = '';
 	}
 });
@@ -273,31 +283,15 @@ document.getElementById('delete_vortex').addEventListener('dragenter',function()
 
 // drop
 document.addEventListener('dragend', function() {
-	if (dragon_target && drop_target) { // moving between windows
-		browser.bookmarks.move(dragon_target, {parentId: drop_target}); // TODO catch errors
-
-		let lien = document.getElementById(dragon_target);
-		document.getElementById('win_'+drop_target).childNodes[1].insertAdjacentHTML('beforeend', lien.outerHTML);
-		lien.remove();
-
-		dragonPrepare(dragon_target);
-		if (lien.tagName === "ARTICLE") {
-			registerFolder(dragon_target);
-		}
-	} else if (dragon_target && delete_drop_target === true) { // dropping in vortex
-		browser.bookmarks.remove(dragon_target).then(function(){
-			let lien = document.getElementById(dragon_target);
-			lien.remove();
-		});
+	if (
+	    (dragon_target && drop_target) &&
+	    (dragon_target !== drop_target) //had to check that
+	) {
+		browser.bookmarks.move(dragon_target, {parentId: drop_target}); // moving between zones
+	} else if (dragon_target && delete_drop_target) { // dropping in vortex
+		browser.bookmarks.remove(dragon_target);
 	}
-
-	for (let i = 0; i < Dropzones.length; ++i) {
-		Dropzones[i].style.display = 'none';
-	}
-
-	delete_drop_target = false;
-	drop_target = null;
-	document.getElementById('delete_vortex').style.display = 'none';
+	location.reload();
 });
 
 function drawWindow(id, title, x, y, w, h, z)
@@ -306,17 +300,14 @@ function drawWindow(id, title, x, y, w, h, z)
 	if (y < 0) {
 		y = 0;
 	}
-	if (y + h/2 > window.innerHeight) {
-		y = window.innerHeight - h;
-	}
-
 
 	if (x < 0) {
 		x = 0;
 	}
-	if (x + w/2 > window.innerWidth) {
-		x = window.innerWidth - w;
-	}
 
-	document.body.insertAdjacentHTML('beforeend', '<div id="win_'+id+'" index="'+id+'" style="top:'+y+'px; left:'+x+'px;z-index:'+z+'" class="window"><div class="border" title="'+title+'">'+title+'<span id="close_button" title="Close"></span></div><main style="height:'+h+'px;width:'+w+'px"></main><div class="resize"></div><div class="dropzone" id="drop_'+id+'"></div></div>');
+	let data = '<div id="win_'+id+'" index="'+id+'" style="top:'+y+'px; left:'+x+'px;z-index:'+z+'" class="window">'
+	+'<div class="border" title="'+title+'">'+title+'<span id="close_button" title="Close"></span></div>'
+	+'<main style="height:'+h+'px;width:'+w+'px"></main><div class="resize"></div>'
+	+'<div class="dropzone" id="drop_'+id+'"></div></div>';
+	document.body.insertAdjacentHTML('beforeend', data);
 }
