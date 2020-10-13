@@ -3,7 +3,7 @@
 	"description": "Turns your new tab into a virtual desktop to manage bookmarks.",
 	"homepage_url": "https://github.com/Tsugumatsu/ff-umibo",
 	"manifest_version": 2,
-	"version": "0.8",
+	"version": "0.85",
 	"icons": {
 		"48": "umibo.svg",
 		"96": "umibo.svg"

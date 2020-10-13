@@ -2,7 +2,6 @@ browser.storage.local.get().then(function(options) {
 	if(!options.separate_categories) {
 		if(options.categories_toolbar) {
 			browser.bookmarks.getChildren('toolbar_____').then(function(bms) {
-			    console.log(bms);
 				let l = bms.length;
 				document.body.insertAdjacentHTML('beforeend', '<div id="drop_toolbar_____" class="desktop dropzone"></div>');
 				let zone = document.getElementById('drop_toolbar_____');
@@ -95,7 +94,7 @@ browser.storage.local.get().then(function(options) {
 	}
 });
 
-let move_target,resize_target;
+let move_target,resize_target, delete_drop_target;
 let closing = false;
 
 function registerFolder(folder) {
@@ -189,10 +188,10 @@ function populateWindow(id) {
 					el.title = el.url;
 				}
 				// OPTIMISER FETCH ICONS, TROP LENT QUAND OUVERTURE DE FENETRE
-				WindowMain.insertAdjacentHTML('beforeend', '<a id="'+el.id+'" title="'+el.title+'" href="'+el.url+'"><img loading="lazy" width="16px" height="16px" src="https://s2.googleusercontent.com/s2/favicons?domain_url='+el.url+'"/>'+el.title+'</a>');
+				WindowMain.insertAdjacentHTML('beforeend', '<a class="desktopLink" id="'+el.id+'" title="'+el.title+'" href="'+el.url+'"><img loading="lazy" width="16px" height="16px" src="https://s2.googleusercontent.com/s2/favicons?domain_url='+el.url+'"/>'+el.title+'</a>');
 				dragonPrepare(el.id);
 			} else if (el.type === 'folder') {
-				WindowMain.insertAdjacentHTML('beforeend', '<article id="'+el.id+'" title="'+el.title+'" href="'+el.id+'" draggable="true">'+el.title+'</article>');
+				WindowMain.insertAdjacentHTML('beforeend', '<div class="desktopFolder" id="'+el.id+'" title="'+el.title+'" href="'+el.id+'" draggable="true">'+el.title+'</div>');
 				registerFolder(el.id);
 				dragonPrepare(el.id);
 			}
@@ -202,7 +201,7 @@ function populateWindow(id) {
 
 function fetchFolder(sub, zone) { // desktop icons
 	if (sub.type === 'bookmark') {
-		zone.insertAdjacentHTML('beforeend', '<a id="'+sub.id+'" title="'+sub.title+'" class="desktopFolder" href="'+sub.url+'"><img width="16px" height="16px" src="https://s2.googleusercontent.com/s2/favicons?domain_url='+sub.url+'"/>'+sub.title+'</a>');
+		zone.insertAdjacentHTML('beforeend', '<a class="desktopLink" id="'+sub.id+'" title="'+sub.title+'" href="'+sub.url+'"><img width="16px" height="16px" src="https://s2.googleusercontent.com/s2/favicons?domain_url='+sub.url+'"/>'+sub.title+'</a>');
 		dragonPrepare(sub.id);
 	} else if (sub.type === 'folder') {
 		zone.insertAdjacentHTML('beforeend', '<div class="desktopFolder" id="'+sub.id+'" title="'+sub.title+'" href="'+sub.id+'" draggable="true">'+sub.title+'</div>');
@@ -223,8 +222,10 @@ function dragonPrepare(id) {
 			Dropzones[i].style.outline = '1px solid var(--tab-line)';
 
 			Dropzones[i].addEventListener('dragenter', function(e) {
-                if (e.target.id && e.target.classList.contains('dropzone')) {
-			        console.log(e.target);
+                if (
+                    e.target.id &&
+                    (e.target.classList.contains('dropzone') || e.target.classList.contains('desktopFolder'))
+                ) {
                     drop_target = e.target.id.replace('drop_','');
                 }
 			});
@@ -287,11 +288,16 @@ document.addEventListener('dragend', function() {
 	    (dragon_target && drop_target) &&
 	    (dragon_target !== drop_target) //had to check that
 	) {
-		browser.bookmarks.move(dragon_target, {parentId: drop_target}); // moving between zones
+		browser.bookmarks.move(dragon_target, {parentId: drop_target}).then(function(){
+		    location.reload();
+		}); // moving between zones
 	} else if (dragon_target && delete_drop_target) { // dropping in vortex
-		browser.bookmarks.remove(dragon_target);
+		browser.bookmarks.remove(dragon_target).then(function(){
+		    location.reload();
+		});
+	} else {
+	    location.reload();
 	}
-	location.reload();
 });
 
 function drawWindow(id, title, x, y, w, h, z)

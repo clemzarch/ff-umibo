@@ -112,50 +112,6 @@ a {
 	min-width: -moz-available;
 	min-height: 100px;
 }
-.window main article {
-	background: var(--field);
-	border-radius: 4px;
-	border: 1px solid var(--border);
-	transition-duration: 0.5s;
-	overflow: hidden;
-	display: inline-block;
-	height: 48px;
-	width: 83px;
-	vertical-align: top;
-	text-align: center;
-	margin: 10px;
-	padding: 10px;
-}
-.window main a {
-	text-decoration: none;
-	word-break: break-word;
-	text-align: center;
-	transition-duration: 0.5s;
-	overflow: hidden;
-	display: inline-block;
-	height: 80px;
-	width: 115px;
-	vertical-align: top;
-	margin: 5px;
-}
-.window main a img {
-	display: block;
-	margin: auto;
-}
-.window main article img {
-	margin-right: 4px;
-	vertical-align: middle;
-}
-
-.window main a:hover {
-	outline: 1px solid var(--tab-line);
-	background: var(--faded-line);
-	transition-duration: 0s;
-}
-.window main article:hover {
-	box-shadow: 0 0 0 5px var(--border);
-	transition-duration: 0s;
-}
 .desktopFolder {
 	background: var(--field);
 	display: inline-block;
@@ -164,31 +120,52 @@ a {
 	margin: 15px;
 	border-radius: 4px;
 	border: 1px solid var(--border);
-	line-height: 15px;
 	transition-duration: 0.5s;
 }
-a.desktopFolder {
-	text-decoration: none;
-	background: none;
-	border:none;
-	border-radius: 0;
-	padding: 15px;
-	margin: 0;
-	text-align: center;
+.window main .desktopFolder {
+    overflow: hidden;
 }
-.desktopFolder img {
+
+.desktopLink {
+    display: inline-block;
+	text-decoration: none;
+	padding: 15px;
+}
+.window main .desktopLink {
+    overflow: hidden;
+}
+.desktopLink img {
 	margin-right: 4px;
 	vertical-align: middle;
 }
-div.desktopFolder:hover {
+.desktopFolder:hover {
 	box-shadow: 0 0 0 5px var(--border);
 	transition-duration: 0s;
 }
-a.desktopFolder:hover {
+.desktopLink:hover {
 	outline: 1px solid var(--tab-line);
 	background: var(--faded-line);
-	transition-duration: 0s;
 }
+
+.window main .desktopFolder {
+	height: 48px;
+	width: 83px;
+	vertical-align: top;
+	text-align: center;
+	margin: 10px;
+	padding: 10px;
+}
+.window main .desktopLink {
+	word-break: break-word;
+	text-align: center;
+	overflow: hidden;
+	display: inline-block;
+	height: 50px;
+	width: 95px;
+	vertical-align: top;
+	padding: 15px;
+}
+
 hr {
 	border: none;
 	border-top: 1px dotted var(--border);
