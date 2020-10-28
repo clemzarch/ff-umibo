@@ -70,7 +70,6 @@ a {
 	line-height:32px;
 	border-bottom: 1px solid var(--border);
 	border-top: 2px solid var(--bg);
-	padding-left: 40px;
 }
 .window .border:active {
 	border-top: 2px solid var(--tab-line);
@@ -94,14 +93,25 @@ a {
 .window .border span {
 	width: 20px;
 	height: 20px;
-	float: right;
-	margin: 5px 8px 0 10px;
-	-moz-context-properties: fill, fill-opacity;
-	background: url("chrome://global/skin/icons/close.svg");
 	fill: var(--color);
+	-moz-context-properties: fill, fill-opacity;
+}
+.window .border .create_button {
+	float: left;
+	padding: 10px 0 0 15px;
+	background: url("chrome://global/skin/icons/more.svg") no-repeat center;
+	fill-opacity: 0.7;
+}
+.window .border .create_button:hover {
+    fill-opacity: 1;
+}
+.window .border #close_button {
+	float: right;
+	margin: 5px 8px 0 0;
+	background: url("chrome://global/skin/icons/close.svg");
 	fill-opacity: 0;
 }
-.window .border span:hover {
+.window .border #close_button:hover {
 	cursor: initial;
 	fill-opacity: 0.1;
 }
@@ -111,6 +121,9 @@ a {
 	overflow: auto;
 	min-width: -moz-available;
 	min-height: 100px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(100px, max-content));
+    grid-template-rows: repeat(auto-fit, 85px);
 }
 .desktopFolder {
 	background: var(--field);
@@ -122,17 +135,11 @@ a {
 	border: 1px solid var(--border);
 	transition-duration: 0.5s;
 }
-.window main .desktopFolder {
-    overflow: hidden;
-}
 
 .desktopLink {
     display: inline-block;
 	text-decoration: none;
 	padding: 15px;
-}
-.window main .desktopLink {
-    overflow: hidden;
 }
 .desktopLink img {
 	margin-right: 4px;
@@ -148,22 +155,15 @@ a {
 }
 
 .window main .desktopFolder {
-	height: 48px;
-	width: 83px;
-	vertical-align: top;
-	text-align: center;
-	margin: 10px;
-	padding: 10px;
+    overflow: hidden;
 }
 .window main .desktopLink {
+    overflow: hidden;
 	word-break: break-word;
 	text-align: center;
 	overflow: hidden;
-	display: inline-block;
-	height: 50px;
-	width: 95px;
-	vertical-align: top;
-	padding: 15px;
+	height: 60px;
+	padding: 10px;
 }
 
 hr {
@@ -220,4 +220,12 @@ hr {
 	border-right: 1px solid var(--border);
 	display: none;
 	background: var(--bg);
+}
+#createFolderForm {
+    position: absolute;
+    top: 34px;
+    left: 15px;
+    background: var(--bg);
+    padding: 10px;
+    border: 1px solid var(--border);
 }

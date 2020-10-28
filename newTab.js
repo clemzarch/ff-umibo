@@ -153,7 +153,7 @@ function registerWindow(id) {
 	});
 
 // close
-	window.childNodes[0].childNodes[1].addEventListener('mousedown', function(e) {
+	window.childNodes[0].childNodes[2].addEventListener('mousedown', function(e) {
 		e.target.parentNode.parentNode.remove();
 		id = e.target.parentNode.parentNode.getAttribute('index');
 
@@ -174,6 +174,29 @@ function registerWindow(id) {
 		resize_target = e.currentTarget.parentNode;
 		document.body.insertAdjacentHTML('beforeend','<div id="secureDrag"></div>');
 	});
+
+// create folder
+    window.childNodes[0].childNodes[0].addEventListener('mousedown', function(e) {
+        let id = e.target.parentNode.parentNode.getAttribute('index');
+
+       var content = '<form id="createFolderForm">'
+       + '<label>New folder <input name="folderName" placeholder="Name" type="text" required></label>'
+       + '<input name="origin" type="hidden" value="'+id+'">'
+       + '<input type="submit" value="Create"></form>';
+        window.insertAdjacentHTML('beforeend', content);
+
+        document.getElementById('createFolderForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            formData = new FormData(e.target);
+
+            browser.bookmarks.create({
+                parentId: formData.get('origin'),
+                title: formData.get('folderName')
+            }).then(function() {
+                location.reload();
+            });
+        });
+    });
 }
 
 function populateWindow(id) {
@@ -211,7 +234,7 @@ function fetchFolder(sub, zone) { // desktop icons
 }
 
 function dragonPrepare(id) {
-	document.getElementById(id).addEventListener('dragstart',function(e){
+	document.getElementById(id).addEventListener('dragstart',function(e) {
 		dragon_target = e.currentTarget.id;
 
 		// place dropzones
@@ -275,7 +298,7 @@ document.body.addEventListener('mouseup', function() {
 });
 
 // watching for delete vortex
-document.getElementById('delete_vortex').addEventListener('dragenter',function() { // TODO target all dropzones
+document.getElementById('delete_vortex').addEventListener('dragenter', function() {
 	if (dragon_target != null) {
 		delete_drop_target = true;
 		drop_target = null;
@@ -288,11 +311,11 @@ document.addEventListener('dragend', function() {
 	    (dragon_target && drop_target) &&
 	    (dragon_target !== drop_target) //had to check that
 	) {
-		browser.bookmarks.move(dragon_target, {parentId: drop_target}).then(function(){
+		browser.bookmarks.move(dragon_target, {parentId: drop_target}).then(function() {
 		    location.reload();
 		}); // moving between zones
 	} else if (dragon_target && delete_drop_target) { // dropping in vortex
-		browser.bookmarks.remove(dragon_target).then(function(){
+		browser.bookmarks.remove(dragon_target).then(function() {
 		    location.reload();
 		});
 	} else {
@@ -300,8 +323,7 @@ document.addEventListener('dragend', function() {
 	}
 });
 
-function drawWindow(id, title, x, y, w, h, z)
-{
+function drawWindow(id, title, x, y, w, h, z) {
 	// check if window stuck
 	if (y < 0) {
 		y = 0;
@@ -312,7 +334,8 @@ function drawWindow(id, title, x, y, w, h, z)
 	}
 
 	let data = '<div id="win_'+id+'" index="'+id+'" style="top:'+y+'px; left:'+x+'px;z-index:'+z+'" class="window">'
-	+'<div class="border" title="'+title+'">'+title+'<span id="close_button" title="Close"></span></div>'
+	+'<div class="border" title="'+title+'">'
+	+'<span class="create_button" title="Create"></span>'+title+'<span id="close_button" title="Close"></span></div>'
 	+'<main style="height:'+h+'px;width:'+w+'px"></main><div class="resize"></div>'
 	+'<div class="dropzone" id="drop_'+id+'"></div></div>';
 	document.body.insertAdjacentHTML('beforeend', data);
