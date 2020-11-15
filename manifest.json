@@ -1,6 +1,11 @@
 {
 	"name": "UMiBO",
-	"description": "Turns your new tab into a virtual desktop to manage bookmarks.",
+	"developer": {
+		"name": "Clément Zarch",
+		"url": "http://zarch.info"
+	},
+	"default_locale": "en",
+	"description": "__MSG_extensionDescription__",
 	"homepage_url": "https://github.com/Tsugumatsu/ff-umibo",
 	"manifest_version": 2,
 	"version": "0.85",

@@ -24,7 +24,7 @@ html{
 	height: 100%;
 }
 body{
-	margin: 15px;
+	margin: 0;
 	overflow: auto;
 	font: menu;
 	user-select: none;
@@ -36,23 +36,27 @@ a {
 }
 
 #tip_container {
-	display:none;
-}
-#search_tip {
-	text-align: left;
-	font-size:22px;
-	width: max-content;
-	margin: 15px auto;
+	visibility: hidden;
+	position: fixed;
+	bottom: 10px;
+	font-size: 17px;
+	width: 100%;
 	color: var(--faded-text);
-}
-#search_tip > span {
-	display: inline-block;
 	text-align: center;
+	z-index: -1;
+}
+#tip_container > div {
+	display: inline-block;
+	margin: 10px 20px;
+}
+#tip_container > div > span {
+	display: inline-block;
 	background: var(--field);
 	padding: 1px;
-	margin: 3px 6px;
-	width: 30px;
+	margin: 0 6px 0 0;
+	width: 27px;
 	border-radius: 3px;
+	font-size: 20px;
 }
 
 .window {
@@ -60,7 +64,7 @@ a {
 	position:absolute;
 	border-radius: 0 0 5px 5px;
 	border: 1px solid var(--border);
-	/*! box-shadow: 0 2px 10px #0007; */
+	transform-origin: center -50px;
 }
 .firstWindow {
 	/* box-shadow: 0 2px 15px #0003; */
@@ -119,11 +123,15 @@ a {
 .window main {
 	font: icon;
 	overflow: auto;
-	min-width: -moz-available;
+	min-width: 100%;
 	min-height: 100px;
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(100px, max-content));
+    grid-template-columns: repeat(auto-fill, minmax(120px, max-content));
     grid-template-rows: repeat(auto-fit, 85px);
+}
+.window main .desktopLink img {
+	display: block;
+	margin: auto;
 }
 .desktopFolder {
 	background: var(--field);
@@ -156,13 +164,13 @@ a {
 
 .window main .desktopFolder {
     overflow: hidden;
+	height: 40px;
 }
 .window main .desktopLink {
-    overflow: hidden;
-	word-break: break-word;
-	text-align: center;
 	overflow: hidden;
 	height: 60px;
+	word-break: break-word;
+	text-align: center;
 	padding: 10px;
 }
 
@@ -209,17 +217,17 @@ hr {
 	display: none;
 }
 #delete_vortex {
-	position:fixed;
-	left: 0;
+	position: fixed;
 	bottom: 0;
 	text-align: center;
 	padding: 10px;
-	height: 200px;
-	width: 200px;
-	border-top: 1px solid var(--border);
-	border-right: 1px solid var(--border);
-	display: none;
+	width: 100%;
+	font-size: 50px;
 	background: var(--bg);
+	color: var(--faded-text);
+	border-top: 1px solid;
+	line-height: 150px;
+	visibility: hidden;
 }
 #createFolderForm {
     position: absolute;

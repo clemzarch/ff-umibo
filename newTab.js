@@ -1,6 +1,6 @@
 browser.storage.local.get().then(function(options) {
-	if(!options.separate_categories) {
-		if(options.categories_toolbar) {
+	if (!options.separate_categories) {
+		if (options.categories_toolbar) {
 			browser.bookmarks.getChildren('toolbar_____').then(function(bms) {
 				let l = bms.length;
 				document.body.insertAdjacentHTML('beforeend', '<div id="drop_toolbar_____" class="desktop dropzone"></div>');
@@ -10,7 +10,7 @@ browser.storage.local.get().then(function(options) {
 				}
 			});
 		}
-		if(options.categories_menu) {
+		if (options.categories_menu) {
 			browser.bookmarks.getChildren('menu________').then(function(bms) {
 				let l = bms.length;
                 document.body.insertAdjacentHTML('beforeend', '<div id="drop_menu________" class="desktop dropzone"></div>');
@@ -20,7 +20,7 @@ browser.storage.local.get().then(function(options) {
 				}
 			});
 		}
-		if(options.categories_mobile) {
+		if (options.categories_mobile) {
 			browser.bookmarks.getChildren('mobile______').then(function(bms) {
 				let l = bms.length;
                 document.body.insertAdjacentHTML('beforeend', '<div id="drop_mobile______" class="desktop dropzone"></div>');
@@ -30,7 +30,7 @@ browser.storage.local.get().then(function(options) {
 				}
 			});
 		}
-		if(options.categories_other) {
+		if (options.categories_other) {
 			browser.bookmarks.getChildren('unfiled_____').then(function(bms) {
 				let l = bms.length;
                 document.body.insertAdjacentHTML('beforeend', '<div id="drop_unfiled_____" class="desktop dropzone"></div>');
@@ -41,29 +41,29 @@ browser.storage.local.get().then(function(options) {
 			});
 		}
 	} else {
-		if(options.categories_toolbar) {
+		if (options.categories_toolbar) {
 			browser.bookmarks.get('toolbar_____').then(function(sub) {
 				fetchFolder(sub[0], document.body);
 			});
 		}
-		if(options.categories_menu) {
+		if (options.categories_menu) {
 			browser.bookmarks.get('menu________').then(function(sub) {
 				fetchFolder(sub[0], document.body);
 			});
 		}
-		if(options.categories_mobile) {
+		if (options.categories_mobile) {
 			browser.bookmarks.get('mobile______').then(function(sub) {
 				fetchFolder(sub[0], document.body);
 			});
 		}
-		if(options.categories_other) {
+		if (options.categories_other) {
 			browser.bookmarks.get('unfiled_____').then(function(sub) {
 				fetchFolder(sub[0], document.body);
 			});
 		}
 	}
 
-	if(options.windows) { // restore windows
+	if (options.windows) { // restore windows
 		let keys = Object.keys(options.windows);
 		let i = 1;
 		for (let key of keys) {
@@ -79,14 +79,18 @@ browser.storage.local.get().then(function(options) {
 		document.head.insertAdjacentHTML('beforeend', '<style>'+options.custom_css+'</style>')
 	}
 
-	if(options.show_search_tips) {
-		document.getElementById('tip_container').style.display = 'block';
+	if (options.show_search_tips) {
+		document.getElementById('tip_container').style.visibility = 'visible';
 	}
 
 	if (Object.entries(options).length === 0) { // if no options yet
 		browser.runtime.setUninstallURL('http://zarch.info/UMiBO/uninstalled.html');
 		browser.storage.local.set({
+			separate_categories: true,
 			categories_toolbar: true,
+			categories_menu: true,
+			categories_mobile: true,
+			categories_other: true,
 			show_search_tips: true,
 			custom_css: null
 		});
@@ -94,24 +98,29 @@ browser.storage.local.get().then(function(options) {
 	}
 });
 
-let move_target,resize_target, delete_drop_target;
+let move_target, drop_target, resize_target, delete_drop_target, offsetX, offsetY;
 let closing = false;
 
 function registerFolder(folder) {
 	document.getElementById(folder).addEventListener('click', function(folder) {
-		folderId = folder.target.id;
+		let folderId = folder.target.id;
+		let existingWindow = document.getElementById('win_'+folderId);
 
-		if (document.getElementById('win_'+folderId) == null) {
-			folderTitle = folder.target.innerHTML;
-			len = document.getElementsByClassName('window').length;
+		if (existingWindow === null) {
+			let folderTitle = folder.target.innerHTML;
+			let len = document.getElementsByClassName('window').length;
 
 			drawWindow(folderId, folderTitle, folder.clientX-200, folder.clientY+50, 400, 300, len);
+			document.getElementById('win_'+folderId).animate(
+				[{ transform: 'scale(0)' }, { transform: 'scale(1)' }],
+				{ duration: 200 }
+			);
 			registerWindow('win_'+folderId);
 			populateWindow(folderId);
 
 			// save in local storage
 			browser.storage.local.get().then(function(o) {
-				o.windows ? arr_windows = o.windows : arr_windows = [];
+				let arr_windows = o.windows ? o.windows : [];
 
 				arr_windows[folderId] = {
 					id: folderId,
@@ -124,42 +133,51 @@ function registerFolder(folder) {
 				};
 				browser.storage.local.set({'windows': arr_windows});
 			});
+		} else {
+			existingWindow.animate(
+				[{ boxShadow: '0 0 0 5px var(--tab-line)' }, { boxShadow: 'none' }],
+				{ duration: 500 }
+			);
 		}
 	});
 }
 
 function registerWindow(id) {
 	let window = document.getElementById(id);
+	let realIndex = window.getAttribute('index');
 // move
 	window.childNodes[0].addEventListener('mousedown', function(e) {
-		offsetX = e.pageX - e.currentTarget.parentNode.offsetLeft;
-		offsetY = e.pageY - e.currentTarget.parentNode.offsetTop;
-		move_target = e.currentTarget.parentNode;
+		if (!e.target.classList.contains('border')) {
+			return;
+		}
+
+		offsetX = e.pageX - window.offsetLeft;
+		offsetY = e.pageY - window.offsetTop;
+		move_target = window;
 		document.body.insertAdjacentHTML('beforeend','<div id="secureDrag"></div>');
 	});
 
 // raise
-	window.addEventListener('mousedown', function(e) {
+	window.addEventListener('mousedown', function() {
 		let allWindows = document.getElementsByClassName('window');
 		for (let i = 0; i < allWindows.length; i++) {
 
-			if(allWindows[i].style.zIndex > 0 && e.currentTarget.style.zIndex !== allWindows.length) {
+			if (allWindows[i].style.zIndex > 0 && window.style.zIndex !== allWindows.length) {
 				allWindows[i].style.zIndex--;
 				allWindows[i].classList.remove('firstWindow');
 			}
 		}
-		e.currentTarget.style.zIndex = allWindows.length;
-		e.currentTarget.classList.add('firstWindow');
+		window.style.zIndex = allWindows.length.toString();
+		window.classList.add('firstWindow');
 	});
 
 // close
-	window.childNodes[0].childNodes[2].addEventListener('mousedown', function(e) {
-		e.target.parentNode.parentNode.remove();
-		id = e.target.parentNode.parentNode.getAttribute('index');
+	window.childNodes[0].childNodes[2].addEventListener('mousedown', function() {
+		window.remove();
 
 		browser.storage.local.get().then(function(o) {
 			let arr_windows = o.windows;
-			delete arr_windows[id]; // si tout explose c'est de sa faute
+			delete arr_windows[realIndex]; // si tout explose c'est de sa faute
 			browser.storage.local.set({'windows': arr_windows });
 		});
 		closing = true;
@@ -169,25 +187,32 @@ function registerWindow(id) {
 	window.childNodes[2].addEventListener('mousedown', function(e) {
 		pX = e.pageX;
 		pY = e.pageY;
-		wH = e.currentTarget.parentNode.childNodes[1].offsetHeight; //current height
-		wW = e.currentTarget.parentNode.childNodes[1].offsetWidth; //current width
-		resize_target = e.currentTarget.parentNode;
+		wH = window.childNodes[1].offsetHeight; //current height
+		wW = window.childNodes[1].offsetWidth; //current width
+		resize_target = window;
 		document.body.insertAdjacentHTML('beforeend','<div id="secureDrag"></div>');
 	});
 
 // create folder
-    window.childNodes[0].childNodes[0].addEventListener('mousedown', function(e) {
-        let id = e.target.parentNode.parentNode.getAttribute('index');
+    window.childNodes[0].childNodes[0].addEventListener('mousedown', function() {
+    	if (document.getElementById('createFolderForm')) {
+			document.getElementById('createFolderForm').remove();
+			return;
+		}
 
-       var content = '<form id="createFolderForm">'
-       + '<label>New folder <input name="folderName" placeholder="Name" type="text" required></label>'
-       + '<input name="origin" type="hidden" value="'+id+'">'
-       + '<input type="submit" value="Create"></form>';
+    	let label = browser.i18n.getMessage("newFolderLabel");
+    	let submit = browser.i18n.getMessage("newFolderSubmit");
+    	let placeholder = browser.i18n.getMessage("newFolderPlaceholder");
+
+		let content = '<form id="createFolderForm">'
+        + '<label>'+label+'<input name="folderName" placeholder="'+placeholder+'" type="text" required></label>'
+        + '<input name="origin" type="hidden" value="'+realIndex+'">'
+        + '<input type="submit" value="'+submit+'"></form>';
         window.insertAdjacentHTML('beforeend', content);
 
         document.getElementById('createFolderForm').addEventListener('submit', function(e) {
             e.preventDefault();
-            formData = new FormData(e.target);
+            let formData = new FormData(e.target);
 
             browser.bookmarks.create({
                 parentId: formData.get('origin'),
@@ -238,7 +263,7 @@ function dragonPrepare(id) {
 		dragon_target = e.currentTarget.id;
 
 		// place dropzones
-		Dropzones = document.getElementsByClassName('dropzone');
+		let Dropzones = document.getElementsByClassName('dropzone');
 		for (let i = 0; i < Dropzones.length; ++i) {
 			Dropzones[i].style.display = 'block';
 			Dropzones[i].style.background = 'var(--faded-line)';
@@ -255,7 +280,7 @@ function dragonPrepare(id) {
 		}
 
 		// place delete zone
-		document.getElementById('delete_vortex').style.display = 'block';
+		document.getElementById('delete_vortex').style.visibility = 'visible';
 	});
 }
 
@@ -274,7 +299,7 @@ document.body.addEventListener('mouseup', function() {
 
 		if (closing === false) {
 			browser.storage.local.get().then(function(o) {
-				o.windows ? arr_windows = o.windows : arr_windows = [];
+				let arr_windows = o.windows ? o.windows : [];
 
 				arr_windows[win.getAttribute('index')] = {
 					id:		win.getAttribute('index'),
@@ -340,3 +365,14 @@ function drawWindow(id, title, x, y, w, h, z) {
 	+'<div class="dropzone" id="drop_'+id+'"></div></div>';
 	document.body.insertAdjacentHTML('beforeend', data);
 }
+
+document.getElementById('options').addEventListener("click", function() {
+	browser.runtime.openOptionsPage();
+});
+
+// translations
+ToTranslate = document.getElementsByTagName('data');
+for (let i = 0; i < ToTranslate.length; ++i) {
+	ToTranslate[i].innerHTML = browser.i18n.getMessage(ToTranslate[i].value);
+}
+document.title = browser.i18n.getMessage('pageTitle');

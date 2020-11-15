@@ -1,15 +1,12 @@
 <!DOCTYPE html>
 <head>
 <meta charset="utf-8">
-<script src="options.js"></script>
 <style>
 body {
 	background: #202023;
 	color: #f9f9f9;
 	font-size:15px;
-	font-weight:100;
 	margin-top: 5px;
-	font-family: Tahoma, Helvetica, sans-serif;
 }
 label:hover {
 	background: #404040;
@@ -23,7 +20,7 @@ textarea {
 	color: #fff;
 	background: #000;
 	font-family: Consolas, monospace;
-	letter-spacing: 2px;
+	line-height: 25px;
 	border: none;
 	padding: 5px;
 	margin-bottom: 10px;
@@ -54,34 +51,35 @@ h1 {
 	<form>
 		<label>
 			<input name="show_search_tips" type="checkbox">
-			Show search tips.
+			<data value="optionShowTip"></data>
 		</label>
 		<br>
 		<label>
 			<input name="separate_categories" type="checkbox">
-			Separate each categories in its own folder.
+			<data value="optionSeparate"></data>
 		</label>
 
-		<h1>Categories</h1>
+		<h1><data value="optionTitleCategories"></data></h1>
 		<label>
 			<input name="categories_toolbar" type="checkbox">
-			Bookmarks Toolbar
+			<data value="optionBookmarksToolbar"></data>
 		</label>
 		<label>
 			<input name="categories_menu" type="checkbox">
-			Bookmarks Menu
+			<data value="optionBookmarksMenu"></data>
 		</label>
 		<br>
 		<label>
 			<input name="categories_mobile" type="checkbox">
-			Mobile Bookmarks
+			<data value="optionMobileBookmarks"></data>
 		</label>
 		<label>
 			<input name="categories_other" type="checkbox">
-			Other Bookmarks
+			<data value="optionOtherBookmarks"></data>
 		</label>
-		<h1>Custom CSS</h1>
-		<textarea id="custom_css" spellcheck="false" rows="8" cols="50"></textarea>
+		<h1><data value="optionTitleCustomCSS"></data></h1>
+		<textarea id="custom_css" spellcheck="false" rows="10" cols="64"></textarea>
 	</form>
+	<script src="options.js"></script>
 </body>
 </html>

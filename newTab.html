@@ -2,24 +2,18 @@
 <html lang="en">
 <head>
 	<meta charset="utf-8">
-	<title>New Tab</title>
-	<link href="chrome://branding/content/icon32.png" rel="icon" type="image/png">
 	<link href="newTab.css" rel="stylesheet" type="text/css">
+	<link href="chrome://branding/content/icon32.png" rel="icon" type="image/png">
 </head>
 <body>
-<div id="delete_vortex">
-	Delete
-</div>
-<a href="options.html" id="options"></a>
+<a id="options"></a>
 <div id="tip_container">
-	<div id="search_tip">
-		<span>^</span>History<br>
-		<span>*</span>Bookmarks<br>
-		<span>%</span>Tabs<br>
-		<span>@</span>Search engines
-	</div>
+	<div><span>^</span><data value="tipHistory"></data></div>
+	<div><span>*</span><data value="tipBookmarks"></data></div>
+	<div><span>%</span><data value="tipTabs"></data></div>
+	<div><span>@</span><data value="tipSearch"></data></div>
 </div>
-<script src="newTab.js" type="text/javascript">
-</script>
+<div id="delete_vortex"><data value="deleteVortex"></data></div>
+<script src="newTab.js" type="text/javascript"></script>
 </body>
 </html>

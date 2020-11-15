@@ -1,0 +1,56 @@
+{
+    "pageTitle": {
+        "message": "New Tab"
+    },
+    "extensionDescription": {
+        "message": "Turns your new tab into a virtual desktop to manage bookmarks."
+    },
+    "optionShowTip": {
+        "message": "Show search tips."
+    },
+    "optionSeparate": {
+        "message": "Display categories as folders."
+    },
+    "optionTitleCategories": {
+        "message": "Categories"
+    },
+    "optionTitleCustomCSS": {
+        "message": "Custom CSS"
+    },
+    "optionBookmarksToolbar": {
+        "message": "Bookmarks Toolbar"
+    },
+    "optionBookmarksMenu": {
+        "message": "Bookmarks Menu"
+    },
+    "optionMobileBookmarks": {
+        "message": "Mobile Bookmarks"
+    },
+    "optionOtherBookmarks": {
+        "message": "Other Bookmarks"
+    },
+    "tipHistory": {
+        "message": "History"
+    },
+    "tipBookmarks": {
+        "message": "Bookmarks"
+    },
+    "tipTabs": {
+        "message": "Tabs"
+    },
+    "tipSearch": {
+        "message": "Search engines"
+    },
+    "newFolderLabel": {
+        "message": "New folder"
+    },
+    "newFolderPlaceholder": {
+        "message": "Name"
+    },
+    "newFolderSubmit": {
+        "message": "Create"
+    },
+    "deleteVortex": {
+        "message": "Delete"
+    }
+}

@@ -1,0 +1,56 @@
+{
+    "pageTitle": {
+        "message": "Nouvel Onglet"
+    },
+    "extensionDescription": {
+        "message": "Transforme le nouvel onglet en bureau virtuel pour gérer les marque-pages."
+    },
+    "optionShowTip": {
+        "message": "Afficher les raccourcis."
+    },
+    "optionSeparate": {
+        "message": "Afficher les catégories sous forme de dossiers."
+    },
+    "optionTitleCategories": {
+        "message": "Catégories"
+    },
+    "optionTitleCustomCSS": {
+        "message": "CSS Custom"
+    },
+    "optionBookmarksToolbar": {
+        "message": "Barre personnelle"
+    },
+    "optionBookmarksMenu": {
+        "message": "Menu des marque-pages"
+    },
+    "optionMobileBookmarks": {
+        "message": "Marque-pages de l'appareil mobile"
+    },
+    "optionOtherBookmarks": {
+        "message": "Autres marque-pages"
+    },
+    "tipHistory": {
+        "message": "Historique"
+    },
+    "tipBookmarks": {
+        "message": "Marque-pages"
+    },
+    "tipTabs": {
+        "message": "Onglets"
+    },
+    "tipSearch": {
+        "message": "Moteurs de recherche"
+    },
+    "newFolderLabel": {
+        "message": "Nouveau dossier"
+    },
+    "newFolderPlaceholder": {
+        "message": "Nom"
+    },
+    "newFolderSubmit": {
+        "message": "Créer"
+    },
+    "deleteVortex": {
+        "message": "Supprimer"
+    }
+}
