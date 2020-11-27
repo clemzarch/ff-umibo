@@ -19,17 +19,12 @@
 	}
 }
 
-html{
-	background: var(--bg);
-	height: 100%;
-}
 body{
-	margin: 0;
-	overflow: auto;
 	font: menu;
 	user-select: none;
-	color: var(--color);
 	-moz-user-select: none;
+	background: var(--bg);
+	color: var(--color);
 }
 a {
 	color: var(--color);
@@ -65,9 +60,6 @@ a {
 	border-radius: 0 0 5px 5px;
 	border: 1px solid var(--border);
 	transform-origin: center -50px;
-}
-.firstWindow {
-	/* box-shadow: 0 2px 15px #0003; */
 }
 .window .border{
 	text-align:center;
@@ -109,13 +101,13 @@ a {
 .window .border .create_button:hover {
     fill-opacity: 1;
 }
-.window .border #close_button {
+.window .border .close_button {
 	float: right;
 	margin: 5px 8px 0 0;
 	background: url("chrome://global/skin/icons/close.svg");
 	fill-opacity: 0;
 }
-.window .border #close_button:hover {
+.window .border .close_button:hover {
 	cursor: initial;
 	fill-opacity: 0.1;
 }
@@ -234,6 +226,13 @@ hr {
     top: 34px;
     left: 15px;
     background: var(--bg);
-    padding: 10px;
     border: 1px solid var(--border);
+}
+#createFolderForm label {
+	padding: 10px;
+}
+#createFolderForm label input {
+	padding: 5px;
+	margin: 5px 0 5px 10px;
+	border: none;
 }

@@ -1,66 +1,21 @@
 browser.storage.local.get().then(function(options) {
-	if (!options.separate_categories) {
-		if (options.categories_toolbar) {
-			browser.bookmarks.getChildren('toolbar_____').then(function(bms) {
-				let l = bms.length;
-				document.body.insertAdjacentHTML('beforeend', '<div id="drop_toolbar_____" class="desktop dropzone"></div>');
-				let zone = document.getElementById('drop_toolbar_____');
-				for (let i = 0 ; i < l ; ++i) {
-					fetchFolder(bms[i], zone);
-				}
-			});
-		}
-		if (options.categories_menu) {
-			browser.bookmarks.getChildren('menu________').then(function(bms) {
-				let l = bms.length;
-                document.body.insertAdjacentHTML('beforeend', '<div id="drop_menu________" class="desktop dropzone"></div>');
-                let zone = document.getElementById('drop_menu________');
-				for (let i = 0 ; i < l ; ++i) {
-					fetchFolder(bms[i], zone);
-				}
-			});
-		}
-		if (options.categories_mobile) {
-			browser.bookmarks.getChildren('mobile______').then(function(bms) {
-				let l = bms.length;
-                document.body.insertAdjacentHTML('beforeend', '<div id="drop_mobile______" class="desktop dropzone"></div>');
-                let zone = document.getElementById('drop_mobile______');
-				for (let i = 0 ; i < l ; ++i) {
-					fetchFolder(bms[i], zone);
-				}
-			});
-		}
-		if (options.categories_other) {
-			browser.bookmarks.getChildren('unfiled_____').then(function(bms) {
-				let l = bms.length;
-                document.body.insertAdjacentHTML('beforeend', '<div id="drop_unfiled_____" class="desktop dropzone"></div>');
-                let zone = document.getElementById('drop_unfiled_____');
-				for (let i = 0 ; i < l ; ++i) {
-					fetchFolder(bms[i], zone);
-				}
-			});
-		}
+	if (options.toolbar_as_folder) {
+		title = browser.i18n.getMessage("BookmarksToolbar");
+		document.body.insertAdjacentHTML('beforeend', '<div class="desktopFolder" id="toolbar_____">'+title+'</div>');
+		registerFolder('toolbar_____');
 	} else {
-		if (options.categories_toolbar) {
-			browser.bookmarks.get('toolbar_____').then(function(sub) {
-				fetchFolder(sub[0], document.body);
-			});
-		}
-		if (options.categories_menu) {
-			browser.bookmarks.get('menu________').then(function(sub) {
-				fetchFolder(sub[0], document.body);
-			});
-		}
-		if (options.categories_mobile) {
-			browser.bookmarks.get('mobile______').then(function(sub) {
-				fetchFolder(sub[0], document.body);
-			});
-		}
-		if (options.categories_other) {
-			browser.bookmarks.get('unfiled_____').then(function(sub) {
-				fetchFolder(sub[0], document.body);
-			});
-		}
+		browser.bookmarks.getChildren('toolbar_____').then(function(bms) {
+			for (let i = 0 ; i < bms.length ; ++i) {
+				if (bms[i].type === 'bookmark') {
+					document.body.insertAdjacentHTML('beforeend', '<a class="desktopLink" id="'+bms[i].id+'" title="'+bms[i].title+'" href="'+bms[i].url+'"><img width="16px" height="16px" src="https://s2.googleusercontent.com/s2/favicons?domain_url='+bms[i].url+'"/>'+bms[i].title+'</a>');
+					dragonPrepare(bms[i].id);
+				} if (bms[i].type === 'folder') {
+					document.body.insertAdjacentHTML('beforeend', '<div class="desktopFolder" id="'+bms[i].id+'" draggable="true">'+bms[i].title+'</div>');
+					registerFolder(bms[i].id);
+					dragonPrepare(bms[i].id);
+				}
+			}
+		});
 	}
 
 	if (options.windows) { // restore windows
@@ -70,13 +25,19 @@ browser.storage.local.get().then(function(options) {
 			let w = options.windows[key];
 
 			drawWindow(w.id, w.title, w.x, w.y, w.w, w.h, i++);
-			registerWindow('win_'+w.id);
 			populateWindow(w.id);
+			registerWindow('win_'+w.id);
 		}
 	}
 
 	if (options.custom_css) {
 		document.head.insertAdjacentHTML('beforeend', '<style>'+options.custom_css+'</style>')
+	}
+
+	if (options.background === 'image') {
+		document.body.style.background = 'url('+options.bg_url+') repeat fixed center center / cover';
+	} else if (options.background === 'color') {
+		document.body.style.background = options.bg_color;
 	}
 
 	if (options.show_search_tips) {
@@ -86,17 +47,20 @@ browser.storage.local.get().then(function(options) {
 	if (Object.entries(options).length === 0) { // if no options yet
 		browser.runtime.setUninstallURL('http://zarch.info/UMiBO/uninstalled.html');
 		browser.storage.local.set({
-			separate_categories: true,
-			categories_toolbar: true,
-			categories_menu: true,
-			categories_mobile: true,
-			categories_other: true,
+			toolbar_as_folder: true,
 			show_search_tips: true,
+			background: 'default',
+			bg_url: 'https://images.unsplash.com/photo-1518627845667-0362e869f233?auto=format&fit=crop&w=3578&q=80',
+			bg_color: '#ffffff',
 			custom_css: null
 		});
 		location.reload();
 	}
 });
+
+registerFolder('menu________');
+registerFolder('mobile______');
+registerFolder('unfiled_____');
 
 let move_target, drop_target, resize_target, delete_drop_target, offsetX, offsetY;
 let closing = false;
@@ -112,8 +76,8 @@ function registerFolder(folder) {
 
 			drawWindow(folderId, folderTitle, folder.clientX-200, folder.clientY+50, 400, 300, len);
 			document.getElementById('win_'+folderId).animate(
-				[{ transform: 'scale(0)' }, { transform: 'scale(1)' }],
-				{ duration: 200 }
+				[{ transform: 'scale(0.2)' }, { transform: 'scale(1)' }],
+				{ duration: 150 }
 			);
 			registerWindow('win_'+folderId);
 			populateWindow(folderId);
@@ -128,8 +92,7 @@ function registerFolder(folder) {
 					y: folder.clientY+50,
 					x: folder.clientX-200,
 					h: 300,
-					w: 400,
-					z: len,
+					w: 400
 				};
 				browser.storage.local.set({'windows': arr_windows});
 			});
@@ -159,28 +122,38 @@ function registerWindow(id) {
 
 // raise
 	window.addEventListener('mousedown', function() {
+		if (closing) {
+			return;
+		}
+
 		let allWindows = document.getElementsByClassName('window');
 		for (let i = 0; i < allWindows.length; i++) {
-
 			if (allWindows[i].style.zIndex > 0 && window.style.zIndex !== allWindows.length) {
 				allWindows[i].style.zIndex--;
-				allWindows[i].classList.remove('firstWindow');
 			}
 		}
 		window.style.zIndex = allWindows.length.toString();
-		window.classList.add('firstWindow');
+
+		// document.body.append(window);
+		browser.storage.local.get().then(function(o) {
+			let data = o.windows[realIndex];
+			delete o.windows[realIndex];
+			o.windows[realIndex] = data;
+			browser.storage.local.set({'windows': o.windows });
+		});
 	});
 
 // close
 	window.childNodes[0].childNodes[2].addEventListener('mousedown', function() {
+		closing = true;
 		window.remove();
 
 		browser.storage.local.get().then(function(o) {
 			let arr_windows = o.windows;
 			delete arr_windows[realIndex]; // si tout explose c'est de sa faute
 			browser.storage.local.set({'windows': arr_windows });
+			closing = false;
 		});
-		closing = true;
 	});
 
 // resize
@@ -239,23 +212,12 @@ function populateWindow(id) {
 				WindowMain.insertAdjacentHTML('beforeend', '<a class="desktopLink" id="'+el.id+'" title="'+el.title+'" href="'+el.url+'"><img loading="lazy" width="16px" height="16px" src="https://s2.googleusercontent.com/s2/favicons?domain_url='+el.url+'"/>'+el.title+'</a>');
 				dragonPrepare(el.id);
 			} else if (el.type === 'folder') {
-				WindowMain.insertAdjacentHTML('beforeend', '<div class="desktopFolder" id="'+el.id+'" title="'+el.title+'" href="'+el.id+'" draggable="true">'+el.title+'</div>');
+				WindowMain.insertAdjacentHTML('beforeend', '<div class="desktopFolder" id="'+el.id+'" title="'+el.title+'" draggable="true">'+el.title+'</div>');
 				registerFolder(el.id);
 				dragonPrepare(el.id);
 			}
 		}
 	});
-}
-
-function fetchFolder(sub, zone) { // desktop icons
-	if (sub.type === 'bookmark') {
-		zone.insertAdjacentHTML('beforeend', '<a class="desktopLink" id="'+sub.id+'" title="'+sub.title+'" href="'+sub.url+'"><img width="16px" height="16px" src="https://s2.googleusercontent.com/s2/favicons?domain_url='+sub.url+'"/>'+sub.title+'</a>');
-		dragonPrepare(sub.id);
-	} else if (sub.type === 'folder') {
-		zone.insertAdjacentHTML('beforeend', '<div class="desktopFolder" id="'+sub.id+'" title="'+sub.title+'" href="'+sub.id+'" draggable="true">'+sub.title+'</div>');
-		registerFolder(sub.id);
-		dragonPrepare(sub.id);
-	}
 }
 
 function dragonPrepare(id) {
@@ -297,26 +259,23 @@ document.body.addEventListener('mouseup', function() {
 	if (move_target || resize_target) {
 		let win = resize_target ? resize_target : move_target;
 
-		if (closing === false) {
-			browser.storage.local.get().then(function(o) {
-				let arr_windows = o.windows ? o.windows : [];
+		browser.storage.local.get().then(function(o) {
+			let arr_windows = o.windows ? o.windows : [];
 
-				arr_windows[win.getAttribute('index')] = {
-					id:		win.getAttribute('index'),
-					title:	win.childNodes[0].title,
-					x:		win.offsetLeft,
-					y:		win.offsetTop,
-					w:		win.childNodes[1].offsetWidth, // 0 is <border>, 1 is <main>, 2 is <resize>
-					h:		win.childNodes[1].offsetHeight,
-				};
-				browser.storage.local.set({'windows': arr_windows });
-			});
-		}
+			arr_windows[win.getAttribute('index')] = {
+				id:		win.getAttribute('index'),
+				title:	win.childNodes[0].title,
+				x:		win.offsetLeft,
+				y:		win.offsetTop,
+				w:		win.childNodes[1].offsetWidth, // 0 is <border>, 1 is <main>, 2 is <resize>
+				h:		win.childNodes[1].offsetHeight,
+			};
+			browser.storage.local.set({'windows': arr_windows });
+		});
 		move_target = null;
 		resize_target = null;
 	}
 
-	closing = false;
 	if (document.getElementById('secureDrag')) {
 		document.getElementById('secureDrag').outerHTML = '';
 	}
@@ -360,7 +319,7 @@ function drawWindow(id, title, x, y, w, h, z) {
 
 	let data = '<div id="win_'+id+'" index="'+id+'" style="top:'+y+'px; left:'+x+'px;z-index:'+z+'" class="window">'
 	+'<div class="border" title="'+title+'">'
-	+'<span class="create_button" title="Create"></span>'+title+'<span id="close_button" title="Close"></span></div>'
+	+'<span class="create_button" title="Create"></span>'+title+'<span class="close_button" title="Close"></span></div>'
 	+'<main style="height:'+h+'px;width:'+w+'px"></main><div class="resize"></div>'
 	+'<div class="dropzone" id="drop_'+id+'"></div></div>';
 	document.body.insertAdjacentHTML('beforeend', data);
@@ -375,4 +334,3 @@ ToTranslate = document.getElementsByTagName('data');
 for (let i = 0; i < ToTranslate.length; ++i) {
 	ToTranslate[i].innerHTML = browser.i18n.getMessage(ToTranslate[i].value);
 }
-document.title = browser.i18n.getMessage('pageTitle');

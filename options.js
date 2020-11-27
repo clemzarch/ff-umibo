@@ -1,27 +1,47 @@
 browser.storage.local.get().then(function(options) {
 	if (Object.entries(options).length === 0) { // if no options yet
 		browser.storage.local.set({
-			separate_categories: true,
-			categories_toolbar: true,
-			categories_menu: true,
-			categories_mobile: true,
-			categories_other: true,
+			toolbar_as_folder: true,
 			show_search_tips: true,
+			background: 'default',
+			bg_url: 'https://images.unsplash.com/photo-1518627845667-0362e869f233?auto=format&fit=crop&w=3578&q=80',
+			bg_color: '#ffffff',
 			custom_css: null
 		});
 		location.reload();
 	}
 
-	// checkboxes
-	Inputs = document.getElementsByTagName('input');
-	for (var i = 0; i < Inputs.length; i++) {
-		Inputs[i].addEventListener("change", function(e) {
+	showAndHide(options.background);
+	document.getElementById(options.background).checked = true;
+
+	let Inputs = document.getElementsByTagName('input');
+	for (let i = 0; i < Inputs.length; i++) {
+		Inputs[i].addEventListener("input", function(e) {
+			if (e.target.type === 'radio' && e.target.checked) { //radio button
+				value = e.target.value;
+				showAndHide(value);
+			} else if (
+				e.target.type === 'text' ||
+				e.target.type === 'color'
+			) {
+				value = e.target.value;
+			} else {
+				value = e.target.checked;
+			}
+
 			browser.storage.local.set({
-				[e.target.name]: e.target.checked
+				[e.target.name]: value
 			});
 		});
 
-		Inputs[i].checked = options[Inputs[i].name];
+		if (Inputs[i].type === 'checkbox') {
+			Inputs[i].checked = options[Inputs[i].name];
+		} else if (
+			Inputs[i].type === 'text' ||
+			Inputs[i].type === 'color'
+		) {
+			Inputs[i].value = options[Inputs[i].name];
+		}
 	}
 
 	// custom css textarea
@@ -37,4 +57,17 @@ browser.storage.local.get().then(function(options) {
 ToTranslate = document.getElementsByTagName('data');
 for (let i = 0; i < ToTranslate.length; ++i) {
 	ToTranslate[i].innerHTML = browser.i18n.getMessage(ToTranslate[i].value);
+}
+
+function showAndHide(value) {
+	if (value === 'image') {
+		document.getElementById('bg_color').style.display = 'none';
+		document.getElementById('bg_url').style.display = 'block';
+	} else if (value === 'color') {
+		document.getElementById('bg_url').style.display = 'none';
+		document.getElementById('bg_color').style.display = 'block';
+	} else {
+		document.getElementById('bg_url').style.display = 'none';
+		document.getElementById('bg_color').style.display = 'none';
+	}
 }

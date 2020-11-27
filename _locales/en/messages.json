@@ -1,33 +1,39 @@
 {
-    "pageTitle": {
-        "message": "New Tab"
-    },
     "extensionDescription": {
         "message": "Turns your new tab into a virtual desktop to manage bookmarks."
     },
     "optionShowTip": {
         "message": "Show search tips."
     },
-    "optionSeparate": {
-        "message": "Display categories as folders."
+    "optionToolbarAsFolder": {
+        "message": "Display the Bookmarks Toolbar as a folder."
     },
-    "optionTitleCategories": {
-        "message": "Categories"
+    "optionTitleBackground": {
+        "message": "Background"
     },
     "optionTitleCustomCSS": {
         "message": "Custom CSS"
     },
-    "optionBookmarksToolbar": {
+    "BookmarksToolbar": {
         "message": "Bookmarks Toolbar"
     },
-    "optionBookmarksMenu": {
+    "BookmarksMenu": {
         "message": "Bookmarks Menu"
     },
-    "optionMobileBookmarks": {
+    "MobileBookmarks": {
         "message": "Mobile Bookmarks"
     },
-    "optionOtherBookmarks": {
+    "OtherBookmarks": {
         "message": "Other Bookmarks"
+    },
+    "optionBgDefault": {
+        "message": "Default"
+    },
+    "optionBgColor": {
+        "message": "Color"
+    },
+    "optionBgImage": {
+        "message": "Image"
     },
     "tipHistory": {
         "message": "History"

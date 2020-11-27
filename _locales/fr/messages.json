@@ -1,33 +1,39 @@
 {
-    "pageTitle": {
-        "message": "Nouvel Onglet"
-    },
     "extensionDescription": {
         "message": "Transforme le nouvel onglet en bureau virtuel pour gérer les marque-pages."
     },
     "optionShowTip": {
         "message": "Afficher les raccourcis."
     },
-    "optionSeparate": {
-        "message": "Afficher les catégories sous forme de dossiers."
+    "optionToolbarAsFolder": {
+        "message": "Afficher la Barre Personnelle sous forme de dossier."
     },
-    "optionTitleCategories": {
-        "message": "Catégories"
+    "optionTitleBackground": {
+        "message": "Fond d'écran"
     },
     "optionTitleCustomCSS": {
         "message": "CSS Custom"
     },
-    "optionBookmarksToolbar": {
+    "BookmarksToolbar": {
         "message": "Barre personnelle"
     },
-    "optionBookmarksMenu": {
+    "BookmarksMenu": {
         "message": "Menu des marque-pages"
     },
-    "optionMobileBookmarks": {
+    "MobileBookmarks": {
         "message": "Marque-pages de l'appareil mobile"
     },
-    "optionOtherBookmarks": {
+    "OtherBookmarks": {
         "message": "Autres marque-pages"
+    },
+    "optionBgDefault": {
+        "message": "Par défaut"
+    },
+    "optionBgColor": {
+        "message": "Couleur"
+    },
+    "optionBgImage": {
+        "message": "Image"
     },
     "tipHistory": {
         "message": "Historique"
