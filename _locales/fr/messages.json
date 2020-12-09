@@ -2,6 +2,9 @@
     "extensionDescription": {
         "message": "Transforme le nouvel onglet en bureau virtuel pour gérer les marque-pages."
     },
+    "optionsButton": {
+        "message": "Personaliser cette page"
+    },
     "optionShowTip": {
         "message": "Afficher les raccourcis."
     },

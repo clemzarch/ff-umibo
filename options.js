@@ -4,7 +4,7 @@ browser.storage.local.get().then(function(options) {
 			toolbar_as_folder: true,
 			show_search_tips: true,
 			background: 'default',
-			bg_url: 'https://images.unsplash.com/photo-1518627845667-0362e869f233?auto=format&fit=crop&w=3578&q=80',
+			bg_url: 'https://images.unsplash.com/photo-1600627225432-82de96999068?auto=format&fit=crop&w=2550&q=50',
 			bg_color: '#ffffff',
 			custom_css: null
 		});
@@ -71,3 +71,11 @@ function showAndHide(value) {
 		document.getElementById('bg_color').style.display = 'none';
 	}
 }
+
+// RED https://images.unsplash.com/photo-1513624954087-ca7109c0f710?auto=format&fit=crop&w=2550&q=80
+// GREEN https://images.unsplash.com/photo-1581084324492-c8076f130f86?auto=format&fit=crop&w=2550&q=80
+// BANDS https://images.unsplash.com/photo-1581084104193-bec602b556a0?auto=format&fit=crop&w=2550&q=80
+// BLUE&PINK https://images.unsplash.com/photo-1578598491752-1df4a1c57439?auto=format&fit=crop&w=2550&q=80
+// SPACE https://images.unsplash.com/photo-1570475820318-2dcd997f2c4b?auto=format&fit=crop&w=2550&q=80
+// NIGHTLY https://images.unsplash.com/photo-1600627225432-82de96999068?auto=format&fit=crop&w=2550&q=80
+// RED&BLUE https://images.unsplash.com/photo-1606162446244-0e3fd9cf11c2?auto=format&fit=crop&w=2550&q=80
