@@ -11,6 +11,9 @@
     "optionToolbarAsFolder": {
         "message": "Afficher la Barre Personnelle sous forme de dossier."
     },
+    "optionFontSize": {
+        "message": "Taille du Texte"
+    },
     "optionTitleBackground": {
         "message": "Fond d'écran"
     },

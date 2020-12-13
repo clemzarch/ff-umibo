@@ -1,18 +1,18 @@
 browser.storage.local.get().then(function(options) {
 	if (Object.entries(options).length === 0) { // if no options yet
 		browser.storage.local.set({
-			toolbar_as_folder: true,
-			show_search_tips: true,
-			background: 'default',
-			bg_url: 'https://images.unsplash.com/photo-1600627225432-82de96999068?auto=format&fit=crop&w=2550&q=50',
-			bg_color: '#ffffff',
-			custom_css: null
+			fold: true,
+			tip: true,
+			bg: 'default',
+			url: 'https://images.unsplash.com/photo-1600627225432-82de96999068?auto=format&fit=crop&w=2550&q=50',
+			color: '#fff',
+			css: null
 		});
 		location.reload();
 	}
 
-	showAndHide(options.background);
-	document.getElementById(options.background).checked = true;
+	showAndHide(options.bg);
+	document.getElementById(options.bg).checked = true;
 
 	let Inputs = document.getElementsByTagName('input');
 	for (let i = 0; i < Inputs.length; i++) {
@@ -22,7 +22,8 @@ browser.storage.local.get().then(function(options) {
 				showAndHide(value);
 			} else if (
 				e.target.type === 'text' ||
-				e.target.type === 'color'
+				e.target.type === 'color' ||
+				e.target.type === 'range'
 			) {
 				value = e.target.value;
 			} else {
@@ -38,6 +39,7 @@ browser.storage.local.get().then(function(options) {
 			Inputs[i].checked = options[Inputs[i].name];
 		} else if (
 			Inputs[i].type === 'text' ||
+			Inputs[i].type === 'range' ||
 			Inputs[i].type === 'color'
 		) {
 			Inputs[i].value = options[Inputs[i].name];
@@ -45,10 +47,10 @@ browser.storage.local.get().then(function(options) {
 	}
 
 	// custom css textarea
-	document.getElementById('custom_css').value = options.custom_css;
+	document.getElementById('custom_css').value = options.css;
 	document.getElementById('custom_css').addEventListener("keyup", function(e) {
 		browser.storage.local.set({
-			custom_css: e.target.value
+			css: e.target.value
 		});
 	});
 });

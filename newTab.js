@@ -1,31 +1,32 @@
-console.log('------start------');
+console.time('Critical path, total');
+console.time('Local storage');
 browser.storage.local.get().then(function(options) {
-	console.log('settings loaded');
+	console.time('Critical path, my part');
+	console.timeEnd('Local storage');
 
-	if (options.windows) { // restore windows
-		let keys = Object.keys(options.windows);
-		let i = 1;
+	console.time('Windows');
+	if (options.w) { // restore windows
+		let keys = Object.keys(options.w);
 		for (const key of keys) {
-			let w = options.windows[key];
+			let w = options.w[key];
 
-			drawWindow(w.id, w.title, w.x, w.y, w.w, w.h, i++);
+			drawWindow(key, w.title, w.x, w.y, w.w, w.h, 1);
 		}
 	}
+	console.timeEnd('Windows');
 
-	console.log('background?');
-	if (options.background === 'image') {
-		document.body.style.background = 'url('+options.bg_url+') repeat fixed center center / cover';
-	} else if (options.background === 'color') {
-		document.body.style.background = options.bg_color;
+	console.time('Cosmetics');
+	if (options.bg === 'image') {
+		document.body.style.background = 'url(' + options.url + ') repeat fixed center center / cover';
+	} else if (options.bg === 'color') {
+		document.body.style.background = options.color;
 	}
 
-	console.log('custom css?');
-	if (options.custom_css) {
-		document.head.insertAdjacentHTML('beforeend', '<style>'+options.custom_css+'</style>')
+	if (options.css) {
+		document.head.insertAdjacentHTML('beforeend', '<style>' + options.custom_css + '</style>')
 	}
 
-	console.log('toolbar?');
-	if (options.toolbar_as_folder) {
+	if (options.fold) {
 		let title = browser.i18n.getMessage("BookmarksToolbar");
 		document.body.insertAdjacentHTML('beforeend', '<div class="desktopFolder" id="toolbar_____">' + title + '</div>');
 		registerFolder('toolbar_____');
@@ -45,22 +46,28 @@ browser.storage.local.get().then(function(options) {
 		});
 	}
 
-	console.log('search tip?');
-	if (options.show_search_tips) {
+	if (options.tip) {
 		document.getElementById('tip_container').style.visibility = 'visible';
 	}
 
-	console.log('------all settings applied------');
+	if (options.font && options.font !== "0.5") {
+		document.head.insertAdjacentHTML('beforeend', '<style>*{font-size-adjust:' + options.font + '}</style>');
+	}
+
+	console.timeEnd('Cosmetics');
+
+	console.timeEnd('Critical path, total');
+	console.timeEnd('Critical path, my part');
 
 	if (Object.entries(options).length === 0) { // if no options yet
 		browser.runtime.setUninstallURL('http://zarch.info/UMiBO/uninstalled.html');
 		browser.storage.local.set({
-			toolbar_as_folder: true,
-			show_search_tips: true,
-			background: 'default',
-			bg_url: 'https://images.unsplash.com/photo-1518627845667-0362e869f233?auto=format&fit=crop&w=3578&q=80',
-			bg_color: '#ffffff',
-			custom_css: null
+			fold: true,
+			tip: true,
+			bg: 'default',
+			url: 'https://images.unsplash.com/photo-1600627225432-82de96999068?auto=format&fit=crop&w=2550&q=50',
+			color: '#fff',
+			css: null
 		});
 		location.reload();
 	}
@@ -83,17 +90,16 @@ function registerFolder(folder) {
 
 			// save in local storage
 			browser.storage.local.get().then(function(o) {
-				let arr_windows = o.windows ?? [];
+				let arr_windows = o.w ?? [];
 
 				arr_windows[folderId] = {
-					id: folderId,
 					title: folderTitle,
 					y: folder.clientY+50,
 					x: folder.clientX-200,
 					h: 300,
 					w: 400
 				};
-				browser.storage.local.set({'windows': arr_windows});
+				browser.storage.local.set({'w': arr_windows});
 			});
 		} else {
 			existingWindow.animate(
@@ -125,15 +131,11 @@ function drawWindow(id, title, x, y, w, h, z) {
 	+'<div class="dropzone" id="drop_'+id+'"></div></div>';
 	document.body.insertAdjacentHTML('beforeend', data);
 
-	console.log('drawing finished');
-
 	let window = document.getElementById('win_'+id);
 
 // populate
 	browser.bookmarks.getChildren(id).then(function(e) {
-		let BookmarksLength = e.length;
-
-		for (let i = 0; i < BookmarksLength; ++i) {
+		for (let i = 0; i < e.length; ++i) {
 			let el = e[i];
 			if (el.type === 'bookmark') {
 				if (el.title === '') {
@@ -149,7 +151,6 @@ function drawWindow(id, title, x, y, w, h, z) {
 			}
 		}
 	});
-	console.log('------Populating finished------');
 
 // move
 	window.childNodes[0].addEventListener('mousedown', function(e) {
@@ -170,7 +171,7 @@ function drawWindow(id, title, x, y, w, h, z) {
 		}
 
 		let allWindows = document.getElementsByClassName('window');
-		for (let i = 0; i < allWindows.length; i++) {
+		for (let i = 0; i < allWindows.length; ++i) {
 			if (allWindows[i].style.zIndex > 0 && window.style.zIndex !== allWindows.length) {
 				allWindows[i].style.zIndex--;
 			}
@@ -185,9 +186,9 @@ function drawWindow(id, title, x, y, w, h, z) {
 		window.remove();
 
 		browser.storage.local.get().then(function(o) {
-			let arr_windows = o.windows;
+			let arr_windows = o.w;
 			delete arr_windows[id]; // si tout explose c'est de sa faute
-			browser.storage.local.set({'windows': arr_windows });
+			browser.storage.local.set({'w': arr_windows });
 			closing = false;
 		});
 	});
@@ -235,8 +236,8 @@ function drawWindow(id, title, x, y, w, h, z) {
 
 // translations
 ToTranslate = document.getElementsByTagName('data');
-for (let i of ToTranslate) {
-	i.innerHTML = browser.i18n.getMessage(i.value);
+for (let i = 0; i < ToTranslate.length; ++i) {
+	ToTranslate[i].innerHTML = browser.i18n.getMessage(ToTranslate[i].value);
 }
 
 document.body.addEventListener('mousemove',function(e) {
@@ -253,18 +254,17 @@ document.body.addEventListener('mouseup', function() {
 	let win = move_target ?? resize_target ?? raise_target ?? null;
 	if (win) {
 		browser.storage.local.get().then(function(o) {
-			let arr_windows = o.windows ?? [];
+			let arr_windows = o.w ?? [];
 
 			delete arr_windows[win.getAttribute('index')];
 			arr_windows[win.getAttribute('index')] = {
-				id:		win.getAttribute('index'),
 				title:	win.childNodes[0].title,
 				x:		win.offsetLeft,
 				y:		win.offsetTop,
 				w:		win.childNodes[1].offsetWidth, // 0 is <border>, 1 is <main>, 2 is <resize>
 				h:		win.childNodes[1].offsetHeight,
 			};
-			browser.storage.local.set({'windows': arr_windows });
+			browser.storage.local.set({'w': arr_windows });
 		});
 		move_target = null;
 		resize_target = null;

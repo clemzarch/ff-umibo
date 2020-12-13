@@ -8,6 +8,9 @@
     "optionShowTip": {
         "message": "Show search tips."
     },
+    "optionFontSize": {
+        "message": "Font Size"
+    },
     "optionToolbarAsFolder": {
         "message": "Display the Bookmarks Toolbar as a folder."
     },
