@@ -1,18 +1,18 @@
 browser.storage.local.get().then(function(options) {
 	if (Object.entries(options).length === 0) { // if no options yet
 		browser.storage.local.set({
-			fold: true,
-			tip: true,
-			bg: 'default',
-			url: 'https://images.unsplash.com/photo-1600627225432-82de96999068?auto=format&fit=crop&w=2550&q=50',
-			color: '#fff',
-			css: null
+			toolbar_as_folder: true,
+            show_search_tips: true,
+            background: "default",
+            bg_url: "https://images.unsplash.com/photo-1600627225432-82de96999068?auto=format&fit=crop&w=2550&q=80",
+            bg_color: "#ffffff",
+            custom_css: null
 		});
 		location.reload();
 	}
 
-	showAndHide(options.bg);
-	document.getElementById(options.bg).checked = true;
+	showAndHide(options.background);
+	document.getElementById(options.background).checked = true;
 
 	let Inputs = document.getElementsByTagName('input');
 	for (let i = 0; i < Inputs.length; i++) {
@@ -47,10 +47,10 @@ browser.storage.local.get().then(function(options) {
 	}
 
 	// custom css textarea
-	document.getElementById('custom_css').value = options.css;
+	document.getElementById('custom_css').value = options.custom_css;
 	document.getElementById('custom_css').addEventListener("keyup", function(e) {
 		browser.storage.local.set({
-			css: e.target.value
+			custom_css: e.target.value
 		});
 	});
 });

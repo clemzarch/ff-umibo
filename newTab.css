@@ -190,6 +190,7 @@ hr {
 	right: 15px;
 	padding: 10px;
 	border-radius: 4px;
+	background-color: var(--field);
 }
 #options:hover {
 	background-color: var(--border);

@@ -62,12 +62,12 @@ h1 {
 <body>
 	<form>
 		<label>
-			<input name="tip" type="checkbox">
+			<input name="show_search_tips" type="checkbox">
 			<data value="optionShowTip"></data>
 		</label>
 		<br>
 		<label>
-			<input name="fold" type="checkbox">
+			<input name="toolbar_as_folder" type="checkbox">
 			<data value="optionToolbarAsFolder"></data>
 		</label>
 		<br>
@@ -81,24 +81,24 @@ h1 {
 
 		<h1><data value="optionTitleBackground"></data></h1>
 		<label for="default">
-			<input type="radio" id="default" value="default" name="bg"/>
+			<input type="radio" id="default" value="default" name="background"/>
 			<data value="optionBgDefault"></data>
 		</label>
 		<label for="color">
-			<input type="radio" id="color" value="color" name="bg"/>
+			<input type="radio" id="color" value="color" name="background"/>
 			<data value="optionBgColor"></data>
 		</label>
 		<label for="image">
-			<input type="radio" id="image" value="image" name="bg"/>
+			<input type="radio" id="image" value="image" name="background"/>
 			<data value="optionBgImage"></data>
 		</label>
 		<br>
 
-		<input id="bg_color" name="color" type="color">
-		<input id="bg_url" name="url" type="text">
+		<input id="bg_color" name="bg_color" type="color">
+		<input id="bg_url" name="bg_url" type="text">
 
 		<h1><data value="optionTitleCustomCSS"></data></h1>
-		<textarea id="css" spellcheck="false" rows="5"></textarea>
+		<textarea id="custom_css" spellcheck="false" rows="5"></textarea>
 	</form>
 	<script src="options.js"></script>
 </body>

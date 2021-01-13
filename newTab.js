@@ -16,17 +16,17 @@ browser.storage.local.get().then(function(options) {
 	console.timeEnd('Windows');
 
 	console.time('Cosmetics');
-	if (options.bg === 'image') {
-		document.body.style.background = 'url(' + options.url + ') repeat fixed center center / cover';
-	} else if (options.bg === 'color') {
-		document.body.style.background = options.color;
+	if (options.background === 'image') {
+		document.body.style.background = 'url(' + options.bg_url + ') repeat fixed center center / cover';
+	} else if (options.background === 'color') {
+		document.body.style.background = options.bg_color;
 	}
 
-	if (options.css) {
+	if (options.custom_css) {
 		document.head.insertAdjacentHTML('beforeend', '<style>' + options.custom_css + '</style>')
 	}
 
-	if (options.fold) {
+	if (options.toolbar_as_folder) {
 		let title = browser.i18n.getMessage("BookmarksToolbar");
 		document.body.insertAdjacentHTML('beforeend', '<div class="desktopFolder" id="toolbar_____">' + title + '</div>');
 		registerFolder('toolbar_____');
@@ -46,7 +46,7 @@ browser.storage.local.get().then(function(options) {
 		});
 	}
 
-	if (options.tip) {
+	if (options.show_search_tips) {
 		document.getElementById('tip_container').style.visibility = 'visible';
 	}
 
@@ -59,15 +59,24 @@ browser.storage.local.get().then(function(options) {
 	console.timeEnd('Critical path, total');
 	console.timeEnd('Critical path, my part');
 
+	if (options.windows) { // old windows
+        browser.storage.local.set({
+            w: options.windows
+        });
+
+        browser.storage.local.remove('windows');
+        location.reload();
+    }
+
 	if (Object.entries(options).length === 0) { // if no options yet
 		browser.runtime.setUninstallURL('http://zarch.info/UMiBO/uninstalled.html');
 		browser.storage.local.set({
-			fold: true,
-			tip: true,
-			bg: 'default',
-			url: 'https://images.unsplash.com/photo-1600627225432-82de96999068?auto=format&fit=crop&w=2550&q=50',
-			color: '#fff',
-			css: null
+            toolbar_as_folder: true,
+            show_search_tips: true,
+			background: "default",
+            bg_url: "https://images.unsplash.com/photo-1600627225432-82de96999068?auto=format&fit=crop&w=2550&q=80",
+            bg_color: "#ffffff",
+            custom_css: null
 		});
 		location.reload();
 	}

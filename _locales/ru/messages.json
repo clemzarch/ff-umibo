@@ -1,0 +1,68 @@
+{
+    "extensionDescription": {
+        "message": "Превращает новую вкладку в виртуальный рабочий стол для управления закладками."
+    },
+    "optionsButton": {
+        "message": "Персонализируйте эту страницу"
+    },
+    "optionShowTip": {
+        "message": "Показывать советы по поиску."
+    },
+    "optionFontSize": {
+        "message": "Размер шрифта"
+    },
+    "optionToolbarAsFolder": {
+        "message": "Отобразите панель закладок как папку."
+    },
+    "optionTitleBackground": {
+        "message": "Фоновый"
+    },
+    "optionTitleCustomCSS": {
+        "message": "Пользовательские CSS"
+    },
+    "BookmarksToolbar": {
+        "message": "Панель закладок"
+    },
+    "BookmarksMenu": {
+        "message": "Меню закладок"
+    },
+    "MobileBookmarks": {
+        "message": "Мобильные закладки"
+    },
+    "OtherBookmarks": {
+        "message": "Другие закладки"
+    },
+    "optionBgDefault": {
+        "message": "По умолчанию"
+    },
+    "optionBgColor": {
+        "message": "Цвет"
+    },
+    "optionBgImage": {
+        "message": "Изображение"
+    },
+    "tipHistory": {
+        "message": "История"
+    },
+    "tipBookmarks": {
+        "message": "Закладки"
+    },
+    "tipTabs": {
+        "message": "Вкладки"
+    },
+    "tipSearch": {
+        "message": "Поисковые системы"
+    },
+    "newFolderLabel": {
+        "message": "Новая папка"
+    },
+    "newFolderPlaceholder": {
+        "message": "Имя"
+    },
+    "newFolderSubmit": {
+        "message": "Создать"
+    },
+    "deleteVortex": {
+        "message": "Удалить"
+    }
+}
