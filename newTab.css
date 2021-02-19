@@ -6,6 +6,8 @@
 	--field: #474749;
 	--border: #595959;
 	--faded-text: #8f8f8f;
+    --config-bg: #262626;
+    --config-color: #b0b0b0;
 }
 @media (prefers-color-scheme: light) {
 	:root {
@@ -16,15 +18,18 @@
 		--field: #fff;
 		--border: #bbb;
 		--faded-text: #626262;
+		--config-bg: #d7d7d7;
+        --config-color: #595959;
 	}
 }
 
-body{
+body {
 	font: menu;
 	user-select: none;
 	background: var(--bg);
 	color: var(--color);
-	margin: 0 200px 0 0;
+	margin: 0 150px 0 0;
+	text-align: center;
 }
 a {
 	color: var(--color);
@@ -34,8 +39,9 @@ a {
 	visibility: hidden;
 	position: fixed;
 	bottom: 10px;
+	left: 0;
+	right: 150px;
 	font-size: 17px;
-	width: 100%;
 	color: var(--faded-text);
 	text-align: center;
 	z-index: -1;
@@ -43,15 +49,20 @@ a {
 #tip_container > div {
 	display: inline-block;
 	margin: 10px 20px;
+	background: var(--bg);
+    padding: 10px;
+    border-radius: 4px;
 }
 #tip_container > div > span {
 	display: inline-block;
-	background: var(--field);
-	padding: 1px;
-	margin: 0 6px 0 0;
-	width: 27px;
-	border-radius: 3px;
-	font-size: 20px;
+    background: var(--faded-text);
+    padding: 1px;
+    margin: 0 6px 0 0;
+    width: 27px;
+    border-radius: 3px;
+    font-size: 20px;
+    color: var(--bg);
+    font-weight: 600;
 }
 
 .window {
@@ -121,10 +132,7 @@ a {
     grid-template-columns: repeat(auto-fill, minmax(120px, max-content));
     grid-template-rows: repeat(auto-fit, 85px);
 }
-.window main .desktopLink img {
-	display: block;
-	margin: auto;
-}
+
 .desktopFolder {
 	background: var(--field);
 	display: inline-block;
@@ -132,8 +140,22 @@ a {
 	padding: 10px;
 	margin: 15px;
 	border-radius: 4px;
-	border: 1px solid var(--border);
 	transition-duration: 0.5s;
+	text-align: left;
+}
+body > .desktopFolder {
+    box-shadow: 0 3px 10px #0003;
+}
+.desktopFolder:hover {
+	box-shadow: 0 0 0 5px var(--border);
+	transition-duration: 0s;
+}
+.desktopFolder:active {
+    transform: translateY(2px);
+}
+.window main .desktopFolder {
+    overflow: hidden;
+	height: 40px;
 }
 
 .desktopLink {
@@ -145,18 +167,9 @@ a {
 	margin-right: 4px;
 	vertical-align: middle;
 }
-.desktopFolder:hover {
-	box-shadow: 0 0 0 5px var(--border);
-	transition-duration: 0s;
-}
 .desktopLink:hover {
 	outline: 1px solid var(--tab-line);
 	background: var(--faded-line);
-}
-
-.window main .desktopFolder {
-    overflow: hidden;
-	height: 40px;
 }
 .window main .desktopLink {
 	overflow: hidden;
@@ -165,15 +178,11 @@ a {
 	text-align: center;
 	padding: 10px;
 }
+.window main .desktopLink img {
+	display: block;
+	margin: auto;
+}
 
-hr {
-	border: none;
-	border-top: 1px dotted var(--border);
-}
-.desktop {
-    margin: 20px 0;
-    min-height: 40px;
-}
 #secureDrag {
 	z-index:10;
 	position:absolute;
@@ -190,22 +199,12 @@ hr {
 	right: 15px;
 	padding: 10px;
 	border-radius: 4px;
-	background-color: var(--field);
+	font-weight: 600;
+	color: var(--config-color);
+	background-color: var(--config-bg);
 }
 #options:hover {
 	background-color: var(--border);
-}
-#rename_vortex {
-	position:fixed;
-	right: 0;
-	top: 40%;
-	text-align: center;
-	padding: 10px;
-	height: 200px;
-	width: 200px;
-	border: 1px solid var(--border);
-	border-right: none;
-	display: none;
 }
 #delete_vortex {
 	position: fixed;
@@ -234,4 +233,9 @@ hr {
 	padding: 5px;
 	margin: 5px 0 5px 10px;
 	border: none;
+}
+
+#renameForm input {
+    padding: 0;
+    font: icon;
 }

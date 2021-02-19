@@ -1,10 +1,4 @@
-console.time('Critical path, total');
-console.time('Local storage');
 browser.storage.local.get().then(function(options) {
-	console.time('Critical path, my part');
-	console.timeEnd('Local storage');
-
-	console.time('Windows');
 	if (options.w) { // restore windows
 		let keys = Object.keys(options.w);
 		for (const key of keys) {
@@ -13,17 +7,17 @@ browser.storage.local.get().then(function(options) {
 			drawWindow(key, w.title, w.x, w.y, w.w, w.h, 1);
 		}
 	}
-	console.timeEnd('Windows');
 
-	console.time('Cosmetics');
 	if (options.background === 'image') {
 		document.body.style.background = 'url(' + options.bg_url + ') repeat fixed center center / cover';
+		document.head.insertAdjacentHTML('beforeend', '<style>body > .desktopLink {color:#fff;text-shadow:0 0 3px #000}</style>');
+
 	} else if (options.background === 'color') {
 		document.body.style.background = options.bg_color;
 	}
 
 	if (options.custom_css) {
-		document.head.insertAdjacentHTML('beforeend', '<style>' + options.custom_css + '</style>')
+		document.head.insertAdjacentHTML('beforeend', '<style>' + options.custom_css + '</style>');
 	}
 
 	if (options.toolbar_as_folder) {
@@ -54,26 +48,12 @@ browser.storage.local.get().then(function(options) {
 		document.head.insertAdjacentHTML('beforeend', '<style>*{font-size-adjust:' + options.font + '}</style>');
 	}
 
-	console.timeEnd('Cosmetics');
-
-	console.timeEnd('Critical path, total');
-	console.timeEnd('Critical path, my part');
-
-	if (options.windows) { // old windows
-        browser.storage.local.set({
-            w: options.windows
-        });
-
-        browser.storage.local.remove('windows');
-        location.reload();
-    }
-
 	if (Object.entries(options).length === 0) { // if no options yet
 		browser.runtime.setUninstallURL('http://zarch.info/UMiBO/uninstalled.html');
 		browser.storage.local.set({
             toolbar_as_folder: true,
             show_search_tips: true,
-			background: "default",
+			background: "image",
             bg_url: "https://images.unsplash.com/photo-1600627225432-82de96999068?auto=format&fit=crop&w=2550&q=80",
             bg_color: "#ffffff",
             custom_css: null
@@ -92,10 +72,12 @@ function registerFolder(folder) {
 			let len = document.getElementsByClassName('window').length;
 
 			drawWindow(folderId, folderTitle, folder.clientX-200, folder.clientY+50, 400, 300, len);
-			document.getElementById('win_'+folderId).animate(
-				[{ transform: 'scale(0.2)' }, { transform: 'scale(1)' }],
-				{ duration: 150 }
-			);
+			if (window.matchMedia("(prefers-reduced-motion: no-preference)").matches) {
+    			document.getElementById('win_'+folderId).animate(
+    				[{ transform: 'scale(0.2)' }, { transform: 'scale(1)' }],
+    				{ duration: 128 }
+    			);
+			}
 
 			// save in local storage
 			browser.storage.local.get().then(function(o) {
@@ -119,7 +101,7 @@ function registerFolder(folder) {
 	});
 }
 
-let move_target, drop_target, resize_target, raise_target, delete_drop_target, offsetX, offsetY;
+let move_target, mouse_over, drop_target, resize_target, raise_target, delete_drop_target, offsetX, offsetY;
 let closing = false;
 
 function drawWindow(id, title, x, y, w, h, z) {
@@ -309,6 +291,14 @@ function dragonPrepare(id) {
 		// place delete zone
 		document.getElementById('delete_vortex').style.visibility = 'visible';
 	});
+
+	document.getElementById(id).addEventListener('mouseenter', function(e) {
+	    mouse_over = e.currentTarget;
+	});
+
+    document.getElementById(id).addEventListener('mouseleave', function(e) {
+	    mouse_over = null;
+	});
 }
 // drop
 document.addEventListener('dragend', function() {
@@ -316,16 +306,20 @@ document.addEventListener('dragend', function() {
 		(dragon_target && drop_target) &&
 		(dragon_target !== drop_target) //had to check that
 	) {
-		browser.bookmarks.move(dragon_target, {parentId: drop_target}).then(function() {
-			location.reload();
-		}); // moving between zones
+	    browser.bookmarks.get(dragon_target).then(function(e) { // check if we're already in the destination
+	        if (e[0].parentId !== drop_target) {
+                browser.bookmarks.move(dragon_target, {parentId: drop_target}).then(function() {
+                    location.reload();
+                }); // moving between zones
+	        }
+	    });
 	} else if (dragon_target && delete_drop_target) { // dropping in vortex
 		browser.bookmarks.remove(dragon_target).then(function() {
 			location.reload();
 		});
-	} else {
-		location.reload();
 	}
+
+    location.reload();
 });
 
 registerFolder('menu________');
@@ -342,4 +336,32 @@ document.getElementById('delete_vortex').addEventListener('dragenter', function(
 		delete_drop_target = true;
 		drop_target = null;
 	}
+});
+
+var editing = false;
+document.addEventListener('keydown', function (e) {
+    if (e.key === 'Enter' && mouse_over !== null && editing === false) {
+        editing = true;
+
+        let content = '<form id="renameForm">'
+        + '<input value="'+mouse_over.title+'" name="folderName" placeholder="ye" type="text" required>'
+        + '<input name="origin" type="hidden" value="'+mouse_over.id+'">';
+        mouse_over.outerHTML = content;
+
+        mouse_over = null;
+
+        document.getElementById('renameForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            let formData = new FormData(e.target);
+
+            browser.bookmarks.update(
+                formData.get('origin'),
+                {
+                    title: formData.get('folderName')
+                }
+            ).then(function() {
+                location.reload();
+            });
+        });
+    }
 });

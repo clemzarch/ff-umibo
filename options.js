@@ -3,7 +3,7 @@ browser.storage.local.get().then(function(options) {
 		browser.storage.local.set({
 			toolbar_as_folder: true,
             show_search_tips: true,
-            background: "default",
+            background: "image",
             bg_url: "https://images.unsplash.com/photo-1600627225432-82de96999068?auto=format&fit=crop&w=2550&q=80",
             bg_color: "#ffffff",
             custom_css: null

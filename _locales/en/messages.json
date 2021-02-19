@@ -3,7 +3,7 @@
         "message": "Turns your new tab into a virtual desktop to manage bookmarks."
     },
     "optionsButton": {
-        "message": "Personalize this page"
+        "message": "Personalize"
     },
     "optionShowTip": {
         "message": "Show search tips."
@@ -39,7 +39,7 @@
         "message": "Color"
     },
     "optionBgImage": {
-        "message": "Image"
+        "message": "Image URL"
     },
     "tipHistory": {
         "message": "History"

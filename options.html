@@ -6,7 +6,7 @@ body {
 	background: #202023;
 	color: #f9f9f9;
 	font-size:15px;
-	margin-top: 5px;
+	padding: 10px;
 }
 label:hover {
 	background: #404040;
@@ -35,7 +35,8 @@ textarea {
 	width: 600px;
 	border: none;
 	background: #000;
-	padding: 10px;
+	padding: 10px 0;
+	letter-spacing: -1px;
 }
 h1 {
 	padding: 10px;
@@ -44,6 +45,10 @@ h1 {
 	font-size: 16px;
 	font-weight: 600;
 }
+input[type="range"] {
+    margin-bottom: -5px;
+}
+
 @media (prefers-color-scheme: light) {
 	textarea, #bg_url{
 		color: #000;
@@ -96,7 +101,15 @@ h1 {
 		<input id="bg_url" name="bg_url" type="text">
 
 		<h1><data value="optionTitleCustomCSS"></data></h1>
-		<textarea id="custom_css" spellcheck="false" rows="5"></textarea>
+		<textarea id="custom_css" spellcheck="false" rows="5" placeholder=":root {
+  --bg: #323234;
+  --color: #f9f9fa;
+  --tab-line: #0a84ff;
+  --faded-line: #0a84ff33;
+  --field: #474749;
+  --border: #595959;
+  --faded-text: #8f8f8f;
+}"></textarea>
 	</form>
 	<script src="options.js"></script>
 </body>
