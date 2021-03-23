@@ -25,6 +25,7 @@ browser.storage.local.get().then(function(options) {
 		document.body.insertAdjacentHTML('beforeend', '<div class="desktopFolder" id="toolbar_____">' + title + '</div>');
 		registerFolder('toolbar_____');
 	} else {
+		document.body.style.maxWidth = '1280px';
 		browser.bookmarks.getChildren('toolbar_____').then(function (bms) {
 			for (let i = 0; i < bms.length; ++i) {
 				if (bms[i].type === 'bookmark') {
@@ -326,7 +327,7 @@ registerFolder('menu________');
 registerFolder('mobile______');
 registerFolder('unfiled_____');
 
-document.getElementById('options').addEventListener("click", function() {
+document.getElementById('options').addEventListener("mousedown", function() {
 	browser.runtime.openOptionsPage();
 });
 

@@ -2,9 +2,6 @@
     "extensionDescription": {
         "message": "Turns your new tab into a virtual desktop to manage bookmarks."
     },
-    "optionsButton": {
-        "message": "Personalize"
-    },
     "optionShowTip": {
         "message": "Show search tips."
     },
