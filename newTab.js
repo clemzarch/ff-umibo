@@ -33,7 +33,7 @@ browser.storage.local.get().then(function(options) {
 					dragonPrepare(bms[i].id);
 				}
 				if (bms[i].type === 'folder') {
-					document.body.insertAdjacentHTML('beforeend', '<div class="desktopFolder" id="' + bms[i].id + '" draggable="true">' + bms[i].title + '</div>');
+					document.body.insertAdjacentHTML('beforeend', '<div class="desktopFolder" id="' + bms[i].id + '" title="' + bms[i].title + '" draggable="true">' + bms[i].title + '</div>');
 					registerFolder(bms[i].id);
 					dragonPrepare(bms[i].id);
 				}
@@ -75,7 +75,7 @@ function registerFolder(folder) {
 			drawWindow(folderId, folderTitle, folder.clientX-200, folder.clientY+50, 400, 300, len);
 			if (window.matchMedia("(prefers-reduced-motion: no-preference)").matches) {
     			document.getElementById('win_'+folderId).animate(
-    				[{ transform: 'scale(0.2)' }, { transform: 'scale(1)' }],
+    				[{ transform: 'scale(0.2)' }, {}],
     				{ duration: 128 }
     			);
 			}
@@ -95,7 +95,7 @@ function registerFolder(folder) {
 			});
 		} else {
 			existingWindow.animate(
-				[{ boxShadow: '0 0 0 5px var(--tab-line)' }, { boxShadow: 'none' }],
+				[{ boxShadow: '0 0 0 5px var(--hi-click)' }, { boxShadow: 'none' }],
 				{ duration: 500 }
 			);
 		}
@@ -116,12 +116,19 @@ function drawWindow(id, title, x, y, w, h, z) {
 	}
 
 // draw
-	let data = '<div id="win_'+id+'" index="'+id+'" style="top:'+y+'px; left:'+x+'px;z-index:'+z+'" class="window">'
-	+'<div class="border" title="'+title+'">'
-	+'<span class="create_button" title="Create"></span>'+title+'<span class="close_button" title="Close"></span></div>'
-	+'<main style="height:'+h+'px;width:'+w+'px"></main><div class="resize"></div>'
-	+'<div class="dropzone" id="drop_'+id+'"></div></div>';
-	document.body.insertAdjacentHTML('beforeend', data);
+	document.body.insertAdjacentHTML(
+        'beforeend',
+        '<div id="win_'+id+'" index="'+id+'" style="top:'+y+'px; left:'+x+'px;z-index:'+z+'" class="window">'
+        +'<div class="border" title="'+title+'">'
+        +'<span class="create_button" title="Create">'
+        +'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="16" height="16"><path d="M3 7 1.5 7l-.5.5L1 9l.5.5 1.5 0 .5-.5 0-1.5z"/><path d="m8.75 7-1.5 0-.5.5 0 1.5.5.5 1.5 0 .5-.5 0-1.5z"/><path d="M14.5 7 13 7l-.5.5 0 1.5.5.5 1.5 0L15 9l0-1.5z"/></svg>'
+        +'</span>'
+        +title+'<span class="close_button" title="Close">'
+        +'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="16" height="16"><path d="m9.108 7.776 4.709-4.709a.626.626 0 0 0-.884-.885L8.244 6.871l-.488 0-4.689-4.688a.625.625 0 1 0-.884.885L6.87 7.754l0 .491-4.687 4.687a.626.626 0 0 0 .884.885L7.754 9.13l.491 0 4.687 4.687a.627.627 0 0 0 .885 0 .626.626 0 0 0 0-.885L9.108 8.223l0-.447z"/></svg>'
+        +'</span></div>'
+        +'<main style="height:'+h+'px;width:'+w+'px"></main><div class="resize"></div>'
+        +'<div class="dropzone" id="drop_'+id+'"></div></div>'
+    );
 
 	let window = document.getElementById('win_'+id);
 
@@ -154,6 +161,7 @@ function drawWindow(id, title, x, y, w, h, z) {
 		offsetY = e.pageY - window.offsetTop;
 		move_target = window;
 		document.body.insertAdjacentHTML('beforeend','<div id="secureDrag"></div>');
+		document.getElementById('secureDrag').style.cursor = 'grabbing';
 	});
 
 // raise
@@ -193,6 +201,7 @@ function drawWindow(id, title, x, y, w, h, z) {
 		wW = window.childNodes[1].offsetWidth; //current width
 		resize_target = window;
 		document.body.insertAdjacentHTML('beforeend','<div id="secureDrag"></div>');
+		document.getElementById('secureDrag').style.cursor = 'nwse-resize';
 	});
 
 // create folder
@@ -269,15 +278,14 @@ document.body.addEventListener('mouseup', function() {
 });
 
 function dragonPrepare(id) {
-	document.getElementById(id).addEventListener('dragstart',function(e) {
+	document.getElementById(id).addEventListener('dragstart', function(e) {
 		dragon_target = e.currentTarget.id;
 
 		// place dropzones
 		let Dropzones = document.getElementsByClassName('dropzone');
 		for (let i = 0; i < Dropzones.length; ++i) {
 			Dropzones[i].style.display = 'block';
-			Dropzones[i].style.background = 'var(--faded-line)';
-			Dropzones[i].style.outline = '1px solid var(--tab-line)';
+			Dropzones[i].style.outline = '3px solid var(--hi-click)';
 
 			Dropzones[i].addEventListener('dragenter', function(e) {
 				if (
@@ -344,10 +352,9 @@ document.addEventListener('keydown', function (e) {
     if (e.key === 'Enter' && mouse_over !== null && editing === false) {
         editing = true;
 
-        let content = '<form id="renameForm">'
-        + '<input value="'+mouse_over.title+'" name="folderName" placeholder="ye" type="text" required>'
-        + '<input name="origin" type="hidden" value="'+mouse_over.id+'">';
-        mouse_over.outerHTML = content;
+        mouse_over.outerHTML = '<form id="renameForm">'
+           + '<input value="'+mouse_over.title+'" name="folderName" type="text" required>'
+           + '<input name="origin" type="hidden" value="'+mouse_over.id+'">';
 
         mouse_over = null;
 

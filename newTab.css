@@ -1,21 +1,21 @@
 :root {
-	--bg: #323234;
+	--bg: #1c1b22;
 	--color: #f9f9fa;
 	--faded-color: #bbbbbb;
-	--tab-line: #0a84ff;
-	--faded-line: #0a84ff33;
-	--field: #474749;
-	--border: #595959;
+	--hi: #383546;
+	--hi-click: #4d4769;
+	--field: #2b2a33;
+	--shadow: #00000066;
 }
 @media (prefers-color-scheme: light) {
 	:root {
-		--bg: #f0f0f4;
+		--bg: #f0f0f0;
 		--color: #333333;
 		--faded-color: #595a5b;
-		--tab-line: #0a84ff;
-		--faded-line: #0a84ff33;
+		--hi: #cccccc;
+		--hi-click: #a3d4ff;
 		--field: #f9f9fb;
-		--border: #cccccc;
+		--shadow: #00000015;
 	}
 }
 
@@ -59,31 +59,33 @@ a {
 }
 
 .window {
-	background: var(--bg);
 	position:absolute;
-	border-radius: 0 0 5px 5px;
-	border: 1px solid var(--border);
+	border-radius: 0 0 10px 10px;
 	transform-origin: center -50px;
+	box-shadow: 0 5px 15px var(--shadow);
 }
-.window .border{
+.window .border {
+    background: var(--field);
+    cursor: grab;
 	text-align:center;
 	line-height:32px;
-	border-bottom: 1px solid var(--border);
-	border-top: 2px solid var(--bg);
 }
 .window .border:active {
-	border-top: 2px solid var(--tab-line);
+	outline: 3px solid var(--hi-click);
 }
 
 .window .resize {
+    background: var(--field);
 	height: 20px;
+	border-radius: 0 0 10px 10px;
 	cursor: nwse-resize;
-	border-top: 1px solid var(--border);
 }
+.window .resize:active {
+	outline: 3px solid var(--hi-click);
+}
+
 .window .dropzone {
 	display: none;
-	background: var(--faded-line);
-	outline: 1px solid var(--tab-line);
 	position:absolute;
 	top:0;
 	left:0;
@@ -91,26 +93,22 @@ a {
 	bottom:0;
 }
 .window .border span {
+    cursor: default;
 	width: 20px;
 	height: 20px;
-	fill: var(--color);
-	-moz-context-properties: fill, fill-opacity;
-	background-repeat: no-repeat;
-	background-position: center;
 	padding: 2px;
-	margin: 3px 6px;
+	margin: 4px 6px;
+	line-height: 25px;
+	fill: currentColor;
 }
 .window .border .create_button {
 	float: left;
-	fill-opacity: 0.7;
-	background-image: url("chrome://global/skin/icons/more.svg");
 }
 .window .border .close_button {
 	float: right;
-	background-image: url("chrome://global/skin/icons/close.svg");
 }
 .window .border span:hover {
-    background-color: var(--border);
+    background-color: var(--hi);
     border-radius: 4px;
 }
 
@@ -122,30 +120,24 @@ a {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(120px, max-content));
     grid-template-rows: repeat(auto-fit, 85px);
+	background: var(--bg);
 }
 
 .desktopFolder {
 	background: var(--field);
-	fill: currentColor;
-    -moz-context-properties: fill, fill-opacity;
 	display: inline-block;
 	min-width: 35px;
-	padding: 10px 10px 10px 32px;
+	padding: 10px;
 	margin: 15px;
-	border-radius: 4px;
+	border-radius: 5px;
 	transition-duration: 0.5s;
-    background-repeat: no-repeat;
-    background-position: 10px 10px;
-    background-image: url(chrome://browser/skin/places/folder.svg);
-}
-body > .desktopFolder {
-    box-shadow: 0 3px 5px #0001;
 }
 .desktopFolder:hover {
-	box-shadow: 0 0 0 5px var(--border);
+	box-shadow: 0 0 0 5px var(--hi);
 	transition-duration: 0s;
 }
 .desktopFolder:active {
+    box-shadow: 0 0 0 5px var(--hi-click);
     transform: translateY(2px);
 }
 .window main .desktopFolder {
@@ -163,15 +155,18 @@ body > .desktopFolder {
 	vertical-align: middle;
 }
 .desktopLink:hover {
-	outline: 1px solid var(--tab-line);
-	background: var(--faded-line);
+	border-radius: 5px;
+	background: var(--hi);
 }
 .window main .desktopLink {
 	overflow: hidden;
-	height: 60px;
+	height: 57px;
 	word-break: break-word;
 	text-align: center;
 	padding: 10px;
+}
+.desktopLink:active {
+	background: var(--hi-click);
 }
 .window main .desktopLink img {
 	display: block;
@@ -181,7 +176,6 @@ body > .desktopFolder {
 #secureDrag {
 	z-index:10;
 	position:absolute;
-	cursor: move;
 	top:0;
 	bottom:0;
 	left:0;
@@ -195,29 +189,16 @@ body > .desktopFolder {
     cursor: pointer;
     background-color: var(--bg);
     fill: var(--faded-color);
-    -moz-context-properties: fill, fill-opacity;
-    background-repeat: no-repeat;
-    background-position: center;
     width: 40px;
     height: 40px;
+    line-height: 45px;
     display: inline-block;
     transition-duration: 0.5s;
     border-radius: 4px;
 }
 #quick-access div:hover {
     transition-duration: 0s;
-    background-color: var(--border);
-}
-
-#options {
-    background-image: url(chrome://global/skin/icons/settings.svg);
-}
-
-#toolbar_____ {
-    background-image: url(chrome://browser/skin/places/bookmarksToolbar.svg);
-}
-#menu________ {
-    background-image: url(chrome://browser/skin/places/bookmarksMenu.svg);
+    background-color: var(--hi);
 }
 
 #delete_vortex {
@@ -225,9 +206,8 @@ body > .desktopFolder {
     bottom: 0;
     text-align: center;
     font-size: 50px;
-    background: var(--faded-line);
-    color: var(--tab-line);
-    border-top: 1px solid;
+    background: var(--field);
+    color: var(--hi-click);
     line-height: 150px;
     visibility: hidden;
     left: 0;
@@ -235,10 +215,11 @@ body > .desktopFolder {
 }
 #createFolderForm {
     position: absolute;
-    top: 34px;
-    left: 15px;
-    background: var(--bg);
-    border: 1px solid var(--border);
+    top: 32px;
+    left: 0px;
+    background: var(--field);
+    right: 0px;
+    text-align: center;
 }
 #createFolderForm label {
 	padding: 10px;
