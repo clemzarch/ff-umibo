@@ -21,24 +21,22 @@ browser.storage.local.get().then(function(options) {
 	}
 
 	if (options.toolbar_as_folder) {
-		let title = browser.i18n.getMessage("BookmarksToolbar");
-		document.body.insertAdjacentHTML('beforeend', '<div class="desktopFolder" id="toolbar_____">' + title + '</div>');
 		registerFolder('toolbar_____');
 	} else {
-		document.body.style.maxWidth = '1280px';
 		browser.bookmarks.getChildren('toolbar_____').then(function (bms) {
 			for (let i = 0; i < bms.length; ++i) {
 				if (bms[i].type === 'bookmark') {
 					document.body.insertAdjacentHTML('beforeend', '<a class="desktopLink" id="' + bms[i].id + '" title="' + bms[i].title + '" href="' + bms[i].url + '"><img width="16px" height="16px" src="https://s2.googleusercontent.com/s2/favicons?domain_url=' + bms[i].url + '"/>' + bms[i].title + '</a>');
 					dragonPrepare(bms[i].id);
-				}
-				if (bms[i].type === 'folder') {
+				} else if (bms[i].type === 'folder') {
 					document.body.insertAdjacentHTML('beforeend', '<div class="desktopFolder" id="' + bms[i].id + '" title="' + bms[i].title + '" draggable="true">' + bms[i].title + '</div>');
 					registerFolder(bms[i].id);
 					dragonPrepare(bms[i].id);
 				}
 			}
 		});
+		document.body.style.maxWidth = '1280px';
+		document.getElementById('toolbar_____').outerHTML = null;
 	}
 
 	if (options.show_search_tips) {
