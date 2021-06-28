@@ -1,4 +1,4 @@
-browser.storage.local.get().then(function(options) {
+chrome.storage.local.get(null, function(options) {
 	if (options.w) { // restore windows
 		let keys = Object.keys(options.w);
 		for (const key of keys) {
@@ -23,7 +23,7 @@ browser.storage.local.get().then(function(options) {
 	if (options.toolbar_as_folder) {
 		registerFolder('toolbar_____');
 	} else {
-		browser.bookmarks.getChildren('toolbar_____').then(function (bms) {
+		chrome.bookmarks.getChildren('toolbar_____', function (bms) {
 			for (let i = 0; i < bms.length; ++i) {
 				if (bms[i].type === 'bookmark') {
 					document.body.insertAdjacentHTML('beforeend', '<a class="desktopLink" id="' + bms[i].id + '" title="' + bms[i].title + '" href="' + bms[i].url + '"><img width="16px" height="16px" src="https://s2.googleusercontent.com/s2/favicons?domain_url=' + bms[i].url + '"/>' + bms[i].title + '</a>');
@@ -48,8 +48,8 @@ browser.storage.local.get().then(function(options) {
 	}
 
 	if (Object.entries(options).length === 0) { // if no options yet
-		browser.runtime.setUninstallURL('http://zarch.info/UMiBO/uninstalled.html');
-		browser.storage.local.set({
+		chrome.runtime.setUninstallURL('http://zarch.info/UMiBO/uninstalled.html');
+		chrome.storage.local.set({
             toolbar_as_folder: true,
             show_search_tips: true,
 			background: "image",
@@ -79,7 +79,7 @@ function registerFolder(folder) {
 			}
 
 			// save in local storage
-			browser.storage.local.get().then(function(o) {
+			chrome.storage.local.get('w', function(o) {
 				let arr_windows = o.w ?? [];
 
 				arr_windows[folderId] = {
@@ -89,7 +89,7 @@ function registerFolder(folder) {
 					h: 300,
 					w: 400
 				};
-				browser.storage.local.set({'w': arr_windows});
+				chrome.storage.local.set({'w': arr_windows});
 			});
 		} else {
 			existingWindow.animate(
@@ -119,10 +119,10 @@ function drawWindow(id, title, x, y, w, h, z) {
         '<div id="win_'+id+'" index="'+id+'" style="top:'+y+'px; left:'+x+'px;z-index:'+z+'" class="window">'
         +'<div class="border" title="'+title+'">'
         +'<span class="create_button" title="Create">'
-        +'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="16" height="16"><path d="M3 7 1.5 7l-.5.5L1 9l.5.5 1.5 0 .5-.5 0-1.5z"/><path d="m8.75 7-1.5 0-.5.5 0 1.5.5.5 1.5 0 .5-.5 0-1.5z"/><path d="M14.5 7 13 7l-.5.5 0 1.5.5.5 1.5 0L15 9l0-1.5z"/></svg>'
+        +'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 2 16 16" width="12" height="12"><path d="M3 7 1.5 7l-.5.5L1 9l.5.5 1.5 0 .5-.5 0-1.5z"/><path d="m8.75 7-1.5 0-.5.5 0 1.5.5.5 1.5 0 .5-.5 0-1.5z"/><path d="M14.5 7 13 7l-.5.5 0 1.5.5.5 1.5 0L15 9l0-1.5z"/></svg>'
         +'</span>'
         +title+'<span class="close_button" title="Close">'
-        +'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="16" height="16"><path d="m9.108 7.776 4.709-4.709a.626.626 0 0 0-.884-.885L8.244 6.871l-.488 0-4.689-4.688a.625.625 0 1 0-.884.885L6.87 7.754l0 .491-4.687 4.687a.626.626 0 0 0 .884.885L7.754 9.13l.491 0 4.687 4.687a.627.627 0 0 0 .885 0 .626.626 0 0 0 0-.885L9.108 8.223l0-.447z"/></svg>'
+        +'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 2 16 16" width="12" height="12"><path d="m9.108 7.776 4.709-4.709a.626.626 0 0 0-.884-.885L8.244 6.871l-.488 0-4.689-4.688a.625.625 0 1 0-.884.885L6.87 7.754l0 .491-4.687 4.687a.626.626 0 0 0 .884.885L7.754 9.13l.491 0 4.687 4.687a.627.627 0 0 0 .885 0 .626.626 0 0 0 0-.885L9.108 8.223l0-.447z"/></svg>'
         +'</span></div>'
         +'<main style="height:'+h+'px;width:'+w+'px"></main><div class="resize"></div>'
         +'<div class="dropzone" id="drop_'+id+'"></div></div>'
@@ -131,21 +131,35 @@ function drawWindow(id, title, x, y, w, h, z) {
 	let window = document.getElementById('win_'+id);
 
 // populate
-	browser.bookmarks.getChildren(id).then(function(e) {
+	chrome.bookmarks.getChildren(id, function(e) {
+	    let elements = '';
+	    let foldersIds = [];
+	    let linksIds = [];
+
 		for (let i = 0; i < e.length; ++i) {
 			let el = e[i];
 			if (el.type === 'bookmark') {
 				if (el.title === '') {
 					el.title = el.url;
 				}
-				// OPTIMISER FETCH ICONS, TROP LENT QUAND OUVERTURE DE FENETRE
-				window.childNodes[1].insertAdjacentHTML('beforeend', '<a class="desktopLink" id="'+el.id+'" title="'+el.title+'" href="'+el.url+'"><img loading="lazy" width="16px" height="16px" src="https://s2.googleusercontent.com/s2/favicons?domain_url='+el.url+'"/>'+el.title+'</a>');
-				dragonPrepare(el.id);
+
+				elements += '<a class="desktopLink" id="'+el.id+'" title="'+el.title+'" href="'+el.url+'"><img loading="lazy" width="16px" height="16px" src="https://s2.googleusercontent.com/s2/favicons?domain_url='+el.url+'"/>'+el.title+'</a>';
+			    linksIds.push(el.id);
 			} else if (el.type === 'folder') {
-				window.childNodes[1].insertAdjacentHTML('beforeend', '<div class="desktopFolder" id="'+el.id+'" title="'+el.title+'" draggable="true">'+el.title+'</div>');
-				registerFolder(el.id);
-				dragonPrepare(el.id);
+			    elements += '<div class="desktopFolder" id="'+el.id+'" title="'+el.title+'" draggable="true">'+el.title+'</div>';
+			    foldersIds.push(el.id);
 			}
+		}
+
+		window.childNodes[1].innerHTML = elements;
+
+		for (let i = 0; i < foldersIds.length; i++) {
+		    registerFolder(foldersIds[i]);
+		    dragonPrepare(foldersIds[i]);
+		}
+
+		for (let i = 0; i < linksIds.length; i++) {
+		    dragonPrepare(linksIds[i]);
 		}
 	});
 
@@ -170,7 +184,7 @@ function drawWindow(id, title, x, y, w, h, z) {
 
 		let allWindows = document.getElementsByClassName('window');
 		for (let i = 0; i < allWindows.length; ++i) {
-			if (allWindows[i].style.zIndex > 0 && window.style.zIndex !== allWindows.length) {
+			if (allWindows[i].style.zIndex > 0 && window.style.zIndex < allWindows.length) {
 				allWindows[i].style.zIndex--;
 			}
 		}
@@ -183,10 +197,10 @@ function drawWindow(id, title, x, y, w, h, z) {
 		closing = true;
 		window.remove();
 
-		browser.storage.local.get().then(function(o) {
+		chrome.storage.local.get('w', function(o) {
 			let arr_windows = o.w;
 			delete arr_windows[id]; // si tout explose c'est de sa faute
-			browser.storage.local.set({'w': arr_windows });
+			chrome.storage.local.set({'w': arr_windows });
 			closing = false;
 		});
 	});
@@ -252,7 +266,7 @@ document.body.addEventListener('mousemove',function(e) {
 document.body.addEventListener('mouseup', function() {
 	let win = move_target ?? resize_target ?? raise_target ?? null;
 	if (win) {
-		browser.storage.local.get().then(function(o) {
+		chrome.storage.local.get('w', function(o) {
 			let arr_windows = o.w ?? [];
 
 			delete arr_windows[win.getAttribute('index')];
@@ -263,7 +277,7 @@ document.body.addEventListener('mouseup', function() {
 				w:		win.childNodes[1].offsetWidth, // 0 is <border>, 1 is <main>, 2 is <resize>
 				h:		win.childNodes[1].offsetHeight,
 			};
-			browser.storage.local.set({'w': arr_windows });
+			chrome.storage.local.set({'w': arr_windows });
 		});
 		move_target = null;
 		resize_target = null;
@@ -313,9 +327,9 @@ document.addEventListener('dragend', function() {
 		(dragon_target && drop_target) &&
 		(dragon_target !== drop_target) //had to check that
 	) {
-	    browser.bookmarks.get(dragon_target).then(function(e) { // check if we're already in the destination
+	    chrome.bookmarks.get(dragon_target, function(e) { // check if we're already in the destination
 	        if (e[0].parentId !== drop_target) {
-                browser.bookmarks.move(dragon_target, {parentId: drop_target}).then(function() {
+                chrome.bookmarks.move(dragon_target, {parentId: drop_target}).then(function() {
                     location.reload();
                 }); // moving between zones
 	        }
@@ -334,7 +348,7 @@ registerFolder('mobile______');
 registerFolder('unfiled_____');
 
 document.getElementById('options').addEventListener("mousedown", function() {
-	browser.runtime.openOptionsPage();
+	chrome.runtime.openOptionsPage();
 });
 
 // watching for delete vortex
@@ -360,7 +374,7 @@ document.addEventListener('keydown', function (e) {
             e.preventDefault();
             let formData = new FormData(e.target);
 
-            browser.bookmarks.update(
+            chrome.bookmarks.update(
                 formData.get('origin'),
                 {
                     title: formData.get('folderName')

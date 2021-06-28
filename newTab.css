@@ -60,13 +60,14 @@ a {
 
 .window {
 	position:absolute;
-	border-radius: 0 0 10px 10px;
+	border-radius: 10px;
 	transform-origin: center -50px;
-	box-shadow: 0 5px 15px var(--shadow);
+	box-shadow: 0 0 0 1px #0000000f, 0 5px 15px var(--shadow);
 }
 .window .border {
     background: var(--field);
     cursor: grab;
+    border-radius: 10px 10px 0 0;
 	text-align:center;
 	line-height:32px;
 }
@@ -97,7 +98,8 @@ a {
 	width: 20px;
 	height: 20px;
 	padding: 2px;
-	margin: 4px 6px;
+	margin: 4px;
+	border-radius: 6px;
 	line-height: 25px;
 	fill: currentColor;
 }
@@ -109,7 +111,6 @@ a {
 }
 .window .border span:hover {
     background-color: var(--hi);
-    border-radius: 4px;
 }
 
 .window main {
@@ -233,4 +234,41 @@ a {
 #renameForm input {
     padding: 0;
     font: icon;
+}
+
+@media (forced-colors: active) {
+    :root {
+        --bg: Canvas;
+        --color: CanvasText;
+        --faded-color: CanvasText;
+        --hi: Highlight;
+        --hi-click: Highlight;
+        --field: ButtonFace;
+        --shadow: #00000015;
+    }
+
+    .window {
+        outline: 1px solid;
+    }
+
+    .window .border span {
+        background-color: var(--bg);
+    }
+
+    .desktopFolder {
+        outline: 1px solid;
+        transition-duration: unset;
+    }
+
+    .window .border {
+        border-bottom: 1px solid;
+    }
+
+    .window .resize {
+        border-top: 1px solid;
+    }
+
+    .desktopLink:hover {
+        color: var(--bg);
+    }
 }
