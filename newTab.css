@@ -1,21 +1,23 @@
 :root {
-	--bg: #1c1b22;
-	--color: #f9f9fa;
-	--faded-color: #bbbbbb;
-	--hi: #383546;
-	--hi-click: #4d4769;
-	--field: #2b2a33;
-	--shadow: #00000066;
+    --color: #f9f9fa;
+    --bg: #1c1b22;
+    --bg-hi: #383546;
+    --field: #2b2a33;
+    --field-hi: #414048;
+    --click: #4d4769;
+    --faded-color: #bbbbbb;
+    --shadow: #00000066;
 }
 @media (prefers-color-scheme: light) {
 	:root {
-		--bg: #f0f0f0;
-		--color: #333333;
-		--faded-color: #595a5b;
-		--hi: #cccccc;
-		--hi-click: #a3d4ff;
-		--field: #f9f9fb;
-		--shadow: #00000015;
+        --color: #333333;
+        --bg: #f0f0f4;
+        --bg-hi: #dadae1;
+        --field: #f9f9fb;
+        --field-hi: #e5e5e7;
+        --click: #cfcfd8;
+        --faded-color: #595a5b;
+        --shadow: #00000015;
 	}
 }
 
@@ -71,18 +73,12 @@ a {
 	text-align:center;
 	line-height:32px;
 }
-.window .border:active {
-	outline: 3px solid var(--hi-click);
-}
 
 .window .resize {
     background: var(--field);
 	height: 20px;
 	border-radius: 0 0 10px 10px;
 	cursor: nwse-resize;
-}
-.window .resize:active {
-	outline: 3px solid var(--hi-click);
 }
 
 .window .dropzone {
@@ -110,7 +106,7 @@ a {
 	float: right;
 }
 .window .border span:hover {
-    background-color: var(--hi);
+    background-color: var(--field-hi);
 }
 
 .window main {
@@ -131,15 +127,13 @@ a {
 	padding: 10px;
 	margin: 15px;
 	border-radius: 5px;
-	transition-duration: 0.5s;
+	box-shadow: 0 0 1px var(--shadow);
 }
 .desktopFolder:hover {
-	box-shadow: 0 0 0 5px var(--hi);
-	transition-duration: 0s;
+	background: var(--bg-hi);
 }
 .desktopFolder:active {
-    box-shadow: 0 0 0 5px var(--hi-click);
-    transform: translateY(2px);
+	background: var(--click);
 }
 .window main .desktopFolder {
     overflow: hidden;
@@ -150,14 +144,14 @@ a {
     display: inline-block;
 	text-decoration: none;
 	padding: 15px;
+	border-radius: 5px;
 }
 .desktopLink img {
 	margin-right: 4px;
 	vertical-align: middle;
 }
 .desktopLink:hover {
-	border-radius: 5px;
-	background: var(--hi);
+	background: var(--bg-hi);
 }
 .window main .desktopLink {
 	overflow: hidden;
@@ -167,7 +161,7 @@ a {
 	padding: 10px;
 }
 .desktopLink:active {
-	background: var(--hi-click);
+	background: var(--click);
 }
 .window main .desktopLink img {
 	display: block;
@@ -199,7 +193,7 @@ a {
 }
 #quick-access div:hover {
     transition-duration: 0s;
-    background-color: var(--hi);
+    background-color: var(--bg-hi);
 }
 
 #delete_vortex {
@@ -208,7 +202,7 @@ a {
     text-align: center;
     font-size: 50px;
     background: var(--field);
-    color: var(--hi-click);
+    color: var(--click);
     line-height: 150px;
     visibility: hidden;
     left: 0;
@@ -228,7 +222,6 @@ a {
 #createFolderForm label input {
 	padding: 5px;
 	margin: 5px 0 5px 10px;
-	border: none;
 }
 
 #renameForm input {
@@ -237,26 +230,14 @@ a {
 }
 
 @media (forced-colors: active) {
-    :root {
-        --bg: Canvas;
-        --color: CanvasText;
-        --faded-color: CanvasText;
-        --hi: Highlight;
-        --hi-click: Highlight;
-        --field: ButtonFace;
-        --shadow: #00000015;
-    }
-
-    .window {
+    .window,
+    .window .border span,
+    .desktopFolder
+    {
         outline: 1px solid;
-    }
-
-    .window .border span {
-        background-color: var(--bg);
     }
 
     .desktopFolder {
-        outline: 1px solid;
         transition-duration: unset;
     }
 
@@ -269,6 +250,11 @@ a {
     }
 
     .desktopLink:hover {
-        color: var(--bg);
+        background: unset;
+        text-decoration: underline;
+    }
+    .desktopFolder:hover {
+        background: Highlight;
+        color: Canvas;
     }
 }
