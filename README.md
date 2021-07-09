@@ -5,4 +5,3 @@ The add-on is stable and can be installed on Firefox: https://addons.mozilla.org
 
 Upcoming fixes:
 - save scroll position
-- Proton theme
