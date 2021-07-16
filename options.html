@@ -27,6 +27,7 @@ textarea {
 	font-family: Consolas, monospace;
 	line-height: 25px;
 	margin-bottom: 10px;
+	resize: vertical;
 }
 #bg_color {
 	display: none;
@@ -103,14 +104,14 @@ input[type="range"] {
 		<input id="bg_url" name="bg_url" type="text">
 
 		<h1><data value="optionTitleCustomCSS"></data></h1>
-		<textarea id="custom_css" spellcheck="false" rows="5" placeholder=":root {
-  --bg: #1c1b22;
-  --color: #f9f9fa;
-  --faded-color: #bbbbbb;
-  --tab-line: #0a84ff;
-  --faded-line: #0a84ff33;
-  --field: #2b2a33;
-  --border: #4f4c62;
+		<textarea id="custom_css" spellcheck="false" rows="9" placeholder=":root {
+  --bg: #f0f0f4;
+  --color: #333333;
+  --faded-color: #595a5b;
+  --hi: #dadae1;
+  --hi-click: #cfcfd8;
+  --field: #f9f9fb;
+  --shadow: #00000015;
 }"></textarea>
 	</form>
 	<script src="options.js"></script>
