@@ -1,0 +1,65 @@
+{
+    "extensionDescription": {
+        "message": "Az új lapot virtuális asztallá alakítja a könyvjelzők kezeléséhez."
+    },
+    "optionShowTip": {
+        "message": "Keresési tippek megjelenítése."
+    },
+    "optionFontSize": {
+        "message": "Betűméret"
+    },
+    "optionToolbarAsFolder": {
+        "message": "A Könyvjelzők eszköztár mappaként való megjelenítése."
+    },
+    "optionTitleBackground": {
+        "message": "Háttér"
+    },
+    "optionTitleCustomCSS": {
+        "message": "Egyéni CSS"
+    },
+    "BookmarksToolbar": {
+        "message": "Könyvjelzők eszköztár"
+    },
+    "BookmarksMenu": {
+        "message": "Könyvjelzők menü"
+    },
+    "MobileBookmarks": {
+        "message": "Mobil könyvjelzők"
+    },
+    "OtherBookmarks": {
+        "message": "Más könyvjelzők"
+    },
+    "optionBgDefault": {
+        "message": "Default"
+    },
+    "optionBgColor": {
+        "message": "Alapértelmezett"
+    },
+    "optionBgImage": {
+        "message": "Kép URL"
+    },
+    "tipHistory": {
+        "message": "Előzmények"
+    },
+    "tipBookmarks": {
+        "message": "Könyvjelzők"
+    },
+    "tipTabs": {
+        "message": "Lap"
+    },
+    "tipSearch": {
+        "message": "Keresőszolgáltatás"
+    },
+    "newFolderLabel": {
+        "message": "Új mappa"
+    },
+    "newFolderPlaceholder": {
+        "message": "Név"
+    },
+    "newFolderSubmit": {
+        "message": "Hozzon létre"
+    },
+    "deleteVortex": {
+        "message": "Törlés"
+    }
+}

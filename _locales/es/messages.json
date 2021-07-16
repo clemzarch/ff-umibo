@@ -1,0 +1,65 @@
+{
+    "extensionDescription": {
+        "message": "Convierte tu nueva pestaña en un escritorio virtual para gestionar los marcadores."
+    },
+    "optionShowTip": {
+        "message": "Mostrar consejos de búsqueda."
+    },
+    "optionFontSize": {
+        "message": "Tamaño de la fuente"
+    },
+    "optionToolbarAsFolder": {
+        "message": "Mostrar la Barra de Marcadores como una carpeta."
+    },
+    "optionTitleBackground": {
+        "message": "Fondo"
+    },
+    "optionTitleCustomCSS": {
+        "message": "CSS personalizado"
+    },
+    "BookmarksToolbar": {
+        "message": "Barra de herramientas de marcadores"
+    },
+    "BookmarksMenu": {
+        "message": "Menú marcadores"
+    },
+    "MobileBookmarks": {
+        "message": "Marcadores móviles"
+    },
+    "OtherBookmarks": {
+        "message": "Otros marcadores"
+    },
+    "optionBgDefault": {
+        "message": "Por defecto"
+    },
+    "optionBgColor": {
+        "message": "Color"
+    },
+    "optionBgImage": {
+        "message": "Imagen URL"
+    },
+    "tipHistory": {
+        "message": "Historial"
+    },
+    "tipBookmarks": {
+        "message": "Marcadores"
+    },
+    "tipTabs": {
+        "message": "Pestañas"
+    },
+    "tipSearch": {
+        "message": "Motores de búsqueda"
+    },
+    "newFolderLabel": {
+        "message": "Nueva carpeta"
+    },
+    "newFolderPlaceholder": {
+        "message": "Nombre"
+    },
+    "newFolderSubmit": {
+        "message": "Crear"
+    },
+    "deleteVortex": {
+        "message": "Borrar"
+    }
+}

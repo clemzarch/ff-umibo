@@ -1,0 +1,65 @@
+{
+    "extensionDescription": {
+        "message": "新しいタブを仮想デスクトップにして、ブックマークを管理することができます。"
+    },
+    "optionShowTip": {
+        "message": "検索のヒントを表示します。"
+    },
+    "optionFontSize": {
+        "message": "フォントサイズ"
+    },
+    "optionToolbarAsFolder": {
+        "message": "ブックマークツールバーをフォルダとして表示します。"
+    },
+    "optionTitleBackground": {
+        "message": "バックグラウンド"
+    },
+    "optionTitleCustomCSS": {
+        "message": "カスタムCSS"
+    },
+    "BookmarksToolbar": {
+        "message": "ブックマークツールバー"
+    },
+    "BookmarksMenu": {
+        "message": "ブックマークメニュー"
+    },
+    "MobileBookmarks": {
+        "message": "モバイルブックマーク"
+    },
+    "OtherBookmarks": {
+        "message": "他のブックマーク"
+    },
+    "optionBgDefault": {
+        "message": "デフォルト"
+    },
+    "optionBgColor": {
+        "message": "カラー"
+    },
+    "optionBgImage": {
+        "message": "画像URL"
+    },
+    "tipHistory": {
+        "message": "履歴"
+    },
+    "tipBookmarks": {
+        "message": "ブックマーク"
+    },
+    "tipTabs": {
+        "message": "タブ"
+    },
+    "tipSearch": {
+        "message": "検索エンジン"
+    },
+    "newFolderLabel": {
+        "message": "新しいフォルダ"
+    },
+    "newFolderPlaceholder": {
+        "message": "名前"
+    },
+    "newFolderSubmit": {
+        "message": "クリエイト"
+    },
+    "deleteVortex": {
+        "message": "削除"
+    }
+}

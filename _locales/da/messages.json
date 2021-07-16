@@ -1,0 +1,65 @@
+{
+    "extensionDescription": {
+        "message": "Gør din nye fane til et virtuelt skrivebord til at administrere bogmærker."
+    },
+    "optionShowTip": {
+        "message": "Vis søgetips."
+    },
+    "optionFontSize": {
+        "message": "Skriftstørrelse"
+    },
+    "optionToolbarAsFolder": {
+        "message": "Viser bogmærkelinjen som en mappe."
+    },
+    "optionTitleBackground": {
+        "message": "Baggrund"
+    },
+    "optionTitleCustomCSS": {
+        "message": "Brugerdefineret CSS"
+    },
+    "BookmarksToolbar": {
+        "message": "Bogmærkelinjen"
+    },
+    "BookmarksMenu": {
+        "message": "Bogmærke-menuen"
+    },
+    "MobileBookmarks": {
+        "message": "Mobile bogmærker"
+    },
+    "OtherBookmarks": {
+        "message": "Andre bogmærker"
+    },
+    "optionBgDefault": {
+        "message": "Standard"
+    },
+    "optionBgColor": {
+        "message": "Farve"
+    },
+    "optionBgImage": {
+        "message": "URL til billede"
+    },
+    "tipHistory": {
+        "message": "Historik"
+    },
+    "tipBookmarks": {
+        "message": "Bogmærker"
+    },
+    "tipTabs": {
+        "message": "Faneblad"
+    },
+    "tipSearch": {
+        "message": "Søgetjeneste"
+    },
+    "newFolderLabel": {
+        "message": "Ny mappe"
+    },
+    "newFolderPlaceholder": {
+        "message": "Navn"
+    },
+    "newFolderSubmit": {
+        "message": "Opret"
+    },
+    "deleteVortex": {
+        "message": "Slet"
+    }
+}

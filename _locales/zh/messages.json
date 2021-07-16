@@ -1,0 +1,65 @@
+{
+    "extensionDescription": {
+        "message": "把你的新标签变成一个虚拟的桌面来管理书签。"
+    },
+    "optionShowTip": {
+        "message": "显示搜索提示。"
+    },
+    "optionFontSize": {
+        "message": "字体大小"
+    },
+    "optionToolbarAsFolder": {
+        "message": "将书签工具条显示为一个文件夹。"
+    },
+    "optionTitleBackground": {
+        "message": "背景介绍"
+    },
+    "optionTitleCustomCSS": {
+        "message": "自定义CSS"
+    },
+    "BookmarksToolbar": {
+        "message": "书签工具栏"
+    },
+    "BookmarksMenu": {
+        "message": "书签菜单"
+    },
+    "MobileBookmarks": {
+        "message": "手机书签"
+    },
+    "OtherBookmarks": {
+        "message": "其他书签"
+    },
+    "optionBgDefault": {
+        "message": "默认情况下"
+    },
+    "optionBgColor": {
+        "message": "颜色"
+    },
+    "optionBgImage": {
+        "message": "图片网址"
+    },
+    "tipHistory": {
+        "message": "历史记录"
+    },
+    "tipBookmarks": {
+        "message": "书签"
+    },
+    "tipTabs": {
+        "message": "标签"
+    },
+    "tipSearch": {
+        "message": "搜索引擎"
+    },
+    "newFolderLabel": {
+        "message": "新文件夹"
+    },
+    "newFolderPlaceholder": {
+        "message": "命名"
+    },
+    "newFolderSubmit": {
+        "message": "创建"
+    },
+    "deleteVortex": {
+        "message": "删除"
+    }
+}

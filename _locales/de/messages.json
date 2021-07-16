@@ -1,0 +1,65 @@
+{
+    "extensionDescription": {
+        "message": "Verwandelt Ihre neue Registerkarte in einen virtuellen Desktop, um Lesezeichen zu verwalten."
+    },
+    "optionShowTip": {
+        "message": "Suchtipps anzeigen."
+    },
+    "optionFontSize": {
+        "message": "Schriftgröße"
+    },
+    "optionToolbarAsFolder": {
+        "message": "Zeigt die Lesezeichen-Symbolleiste als Ordner an."
+    },
+    "optionTitleBackground": {
+        "message": "Hintergrund"
+    },
+    "optionTitleCustomCSS": {
+        "message": "Benutzerdefiniertes CSS"
+    },
+    "BookmarksToolbar": {
+        "message": "Lesezeichen-Symbolleiste"
+    },
+    "BookmarksMenu": {
+        "message": "Lesezeichen-Menü"
+    },
+    "MobileBookmarks": {
+        "message": "Mobile Lesezeichen"
+    },
+    "OtherBookmarks": {
+        "message": "Weitere Lesezeichen"
+    },
+    "optionBgDefault": {
+        "message": "Standard"
+    },
+    "optionBgColor": {
+        "message": "Farbe"
+    },
+    "optionBgImage": {
+        "message": "Abbildung URL"
+    },
+    "tipHistory": {
+        "message": "Chronik"
+    },
+    "tipBookmarks": {
+        "message": "Lesezeichen"
+    },
+    "tipTabs": {
+        "message": "Registerkarten"
+    },
+    "tipSearch": {
+        "message": "Suchmaschinen"
+    },
+    "newFolderLabel": {
+        "message": "Neuer Ordner"
+    },
+    "newFolderPlaceholder": {
+        "message": "Name"
+    },
+    "newFolderSubmit": {
+        "message": "Schaffen"
+    },
+    "deleteVortex": {
+        "message": "Löschen"
+    }
+}
