@@ -1,22 +1,20 @@
 :root {
-    --color: #f9f9fa;
     --bg: #1c1b22;
-    --bg-hi: #383546;
-    --field: #2b2a33;
-    --field-hi: #414048;
-    --click: #4d4769;
+    --color: #f9f9fa;
     --faded-color: #bbbbbb;
+    --hi: #383546;
+    --hi-click: #4d4769;
+    --field: #2b2a33;
     --shadow: #00000066;
 }
 @media (prefers-color-scheme: light) {
 	:root {
-        --color: #333333;
         --bg: #f0f0f4;
-        --bg-hi: #dadae1;
-        --field: #f9f9fb;
-        --field-hi: #e5e5e7;
-        --click: #cfcfd8;
+        --color: #333333;
         --faded-color: #595a5b;
+        --hi: #dadae1;
+        --hi-click: #cfcfd8;
+        --field: #f9f9fb;
         --shadow: #00000015;
 	}
 }
@@ -106,7 +104,7 @@ a {
 	float: right;
 }
 .window .border span:hover {
-    background-color: var(--field-hi);
+    background-color: var(--hi);
 }
 
 .window main {
@@ -130,10 +128,10 @@ a {
 	box-shadow: 0 0 1px var(--shadow);
 }
 .desktopFolder:hover {
-	background: var(--bg-hi);
+	background: var(--hi);
 }
 .desktopFolder:active {
-	background: var(--click);
+	background: var(--hi-click);
 }
 .window main .desktopFolder {
     overflow: hidden;
@@ -149,9 +147,10 @@ a {
 .desktopLink img {
 	margin-right: 4px;
 	vertical-align: middle;
+	image-rendering: optimizespeed;
 }
 .desktopLink:hover {
-	background: var(--bg-hi);
+	background: var(--hi);
 }
 .window main .desktopLink {
 	overflow: hidden;
@@ -161,11 +160,12 @@ a {
 	padding: 10px;
 }
 .desktopLink:active {
-	background: var(--click);
+	background: var(--hi-click);
 }
 .window main .desktopLink img {
 	display: block;
 	margin: auto;
+	image-rendering: optimizespeed;
 }
 
 #secureDrag {
@@ -193,7 +193,7 @@ a {
 }
 #quick-access div:hover {
     transition-duration: 0s;
-    background-color: var(--bg-hi);
+    background-color: var(--hi);
 }
 
 #delete_vortex {
@@ -202,7 +202,7 @@ a {
     text-align: center;
     font-size: 50px;
     background: var(--field);
-    color: var(--click);
+    color: var(--hi-click);
     line-height: 150px;
     visibility: hidden;
     left: 0;

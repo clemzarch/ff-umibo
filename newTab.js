@@ -173,7 +173,7 @@ function drawWindow(id, title, x, y, w, h, z) {
 		offsetY = e.pageY - window.offsetTop;
 		move_target = window;
 		document.body.insertAdjacentHTML('beforeend','<div id="secureDrag"></div>');
-		document.getElementById('secureDrag').style.cursor = 'none';
+		document.getElementById('secureDrag').style.cursor = 'grabbing';
 	});
 
 // raise
