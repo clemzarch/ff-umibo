@@ -59,6 +59,10 @@ chrome.storage.local.get(null, function(options) {
 		});
 		location.reload();
 	}
+
+	if (navigator.userAgent.indexOf('Mac OS X') !== -1) {
+	  document.body.classList.add("macOS");
+	}
 });
 
 function registerFolder(folder) {
@@ -73,8 +77,8 @@ function registerFolder(folder) {
 			drawWindow(folderId, folderTitle, folder.clientX-200, folder.clientY+50, 400, 300, len);
 			if (window.matchMedia("(prefers-reduced-motion: no-preference)").matches) {
     			document.getElementById('win_'+folderId).animate(
-    				[{ transform: 'scale(0.2)' }, {}],
-    				{ duration: 128 }
+    				[{ transform: 'scale(0.2)' }, { transform: 'scale(1.1)' }, {}],
+    				{ duration: 256 }
     			);
 			}
 
@@ -93,8 +97,8 @@ function registerFolder(folder) {
 			});
 		} else {
 			existingWindow.animate(
-				[{ boxShadow: '0 0 0 5px var(--click)' }, { boxShadow: 'none' }],
-				{ duration: 500 }
+				[{ transform: 'scale(0.95)' }, { transform: 'scale(1.05)' }, {}],
+				{ duration: 256 }
 			);
 		}
 	});

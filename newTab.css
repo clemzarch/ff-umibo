@@ -73,10 +73,10 @@ a {
 }
 
 .window .resize {
-    background: var(--field);
+    margin: -10px;
 	height: 20px;
-	border-radius: 0 0 10px 10px;
 	cursor: nwse-resize;
+    position: relative;
 }
 
 .window .dropzone {
@@ -116,6 +116,7 @@ a {
     grid-template-columns: repeat(auto-fill, minmax(120px, max-content));
     grid-template-rows: repeat(auto-fit, 85px);
 	background: var(--bg);
+    border-radius: 0 0 10px 10px;
 }
 
 .desktopFolder {
@@ -159,13 +160,16 @@ a {
 	text-align: center;
 	padding: 10px;
 }
+.macOS .window main .desktopLink {
+    height: 54px;
+}
 .desktopLink:active {
 	background: var(--hi-click);
 }
 .window main .desktopLink img {
 	display: block;
 	margin: auto;
-	image-rendering: optimizespeed;
+    image-rendering: optimizeSpeed;
 }
 
 #secureDrag {
@@ -211,9 +215,9 @@ a {
 #createFolderForm {
     position: absolute;
     top: 32px;
-    left: 0px;
+    left: 0;
     background: var(--field);
-    right: 0px;
+    right: 0;
     text-align: center;
 }
 #createFolderForm label {
