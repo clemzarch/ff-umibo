@@ -126,13 +126,12 @@ a {
 	padding: 10px;
 	margin: 15px;
 	border-radius: 5px;
-	box-shadow: 0 0 1px var(--shadow);
 }
 .desktopFolder:hover {
-	background: var(--hi);
+	box-shadow: 0 0 0 5px var(--hi);
 }
 .desktopFolder:active {
-	background: var(--hi-click);
+	box-shadow: 0 0 0 5px var(--hi-click);
 }
 .window main .desktopFolder {
     overflow: hidden;
@@ -173,7 +172,7 @@ a {
 }
 
 #secureDrag {
-	z-index:10;
+	z-index: 999999;
 	position:absolute;
 	top:0;
 	bottom:0;
@@ -211,6 +210,7 @@ a {
     visibility: hidden;
     left: 0;
     right: 0;
+    z-index: 999999;
 }
 #createFolderForm {
     position: absolute;

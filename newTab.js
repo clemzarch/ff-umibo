@@ -188,12 +188,10 @@ function drawWindow(id, title, x, y, w, h, z) {
 
 		let allWindows = document.getElementsByClassName('window');
 
-        if (window.style.zIndex == allWindows.length) { // raising the window that's already raised
-            return;
-        }
-
-		for (let i = 0; i < allWindows.length; ++i) { // let windows reach negative indexes, who cares, 2 windows shouldn't have the same index
-            allWindows[i].style.zIndex--;
+		for (let i = 0; i < allWindows.length; ++i) { // cycle through windows, lower the ones higher than our target
+            if (allWindows[i].style.zIndex > window.style.zIndex) {
+                allWindows[i].style.zIndex--;
+            }
 		}
 		window.style.zIndex = allWindows.length.toString();
 		raise_target = window;
