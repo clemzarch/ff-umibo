@@ -11,6 +11,9 @@
     "optionFontSize": {
         "message": "Taille du Texte"
     },
+    "optionIconSize": {
+        "message": "Taille des Icônes"
+    },
     "optionTitleBackground": {
         "message": "Fond d'écran"
     },

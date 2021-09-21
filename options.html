@@ -10,7 +10,7 @@ body {
 }
 label:hover {
 	border-radius: 7px;
-	background: #343244;
+	background: #605d7745;
 }
 label {
 	line-height: 35px;
@@ -51,6 +51,16 @@ h1 {
 input[type="range"] {
     margin-bottom: -5px;
 }
+.range-marker {
+    width: 2px;
+    height: 32px;
+    display: inline-block;
+    background: #bbb;
+    position: relative;
+    left: -87px;
+    z-index: -1;
+    top: 10px;
+}
 
 @media (prefers-color-scheme: light) {
 	textarea, #bg_url{
@@ -62,7 +72,10 @@ input[type="range"] {
 		background: #ffffff;
 	}
 	label:hover {
-		background: #eaeaea;
+		background: #a4a4a43b;
+	}
+	.range-marker {
+		background: #888;
 	}
 }
 </style>
@@ -81,7 +94,14 @@ input[type="range"] {
 		<br>
 		<label>
 			<span id="fontLabel"><input name="font" type="range" max="0.7" min="0.3" step="0.1" /></span>
+			<span class="range-marker"></span>
 			<data value="optionFontSize"></data>
+		</label>
+		<br>
+		<label>
+			<span id="iconLabel"><input name="icon" type="range" max="24" min="8" step="1" /></span>
+			<span class="range-marker"></span>
+			<data value="optionIconSize"></data>
 		</label>
 		<br>
 

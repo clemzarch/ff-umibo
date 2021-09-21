@@ -8,6 +8,9 @@
     "optionFontSize": {
         "message": "字体大小"
     },
+    "optionIconSize": {
+        "message": "图标大小"
+    },
     "optionToolbarAsFolder": {
         "message": "将书签工具条显示为一个文件夹。"
     },

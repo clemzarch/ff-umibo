@@ -8,6 +8,9 @@
     "optionFontSize": {
         "message": "Schriftgröße"
     },
+    "optionIconSize": {
+        "message": "Icon-Größe"
+    },
     "optionToolbarAsFolder": {
         "message": "Zeigt die Lesezeichen-Symbolleiste als Ordner an."
     },

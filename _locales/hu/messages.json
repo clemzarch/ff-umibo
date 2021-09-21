@@ -8,6 +8,9 @@
     "optionFontSize": {
         "message": "Betűméret"
     },
+    "optionIconSize": {
+        "message": "Ikon mérete"
+    },
     "optionToolbarAsFolder": {
         "message": "A Könyvjelzők eszköztár mappaként való megjelenítése."
     },

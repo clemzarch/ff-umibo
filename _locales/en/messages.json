@@ -8,6 +8,9 @@
     "optionFontSize": {
         "message": "Font Size"
     },
+    "optionIconSize": {
+        "message": "Icon Size"
+    },
     "optionToolbarAsFolder": {
         "message": "Display the Bookmarks Toolbar as a folder."
     },

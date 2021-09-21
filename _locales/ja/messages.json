@@ -8,6 +8,9 @@
     "optionFontSize": {
         "message": "フォントサイズ"
     },
+    "optionIconSize": {
+        "message": "アイコンサイズ"
+    },
     "optionToolbarAsFolder": {
         "message": "ブックマークツールバーをフォルダとして表示します。"
     },

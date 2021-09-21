@@ -8,6 +8,9 @@
     "optionFontSize": {
         "message": "Tamaño de la fuente"
     },
+    "optionIconSize": {
+        "message": "Tamaño del icono"
+    },
     "optionToolbarAsFolder": {
         "message": "Mostrar la Barra de Marcadores como una carpeta."
     },

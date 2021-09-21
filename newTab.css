@@ -73,10 +73,10 @@ a {
 }
 
 .window .resize {
-    margin: -10px;
+    background: var(--field);
 	height: 20px;
 	cursor: nwse-resize;
-    position: relative;
+    border-radius: 0 0 10px 10px;
 }
 
 .window .dropzone {
@@ -112,11 +112,10 @@ a {
 	overflow: auto;
 	min-width: 100%;
 	min-height: 100px;
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(120px, max-content));
-    grid-template-rows: repeat(auto-fit, 85px);
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(120px, max-content));
+	grid-template-rows: repeat(auto-fit, 85px);
 	background: var(--bg);
-    border-radius: 0 0 10px 10px;
 }
 
 .desktopFolder {

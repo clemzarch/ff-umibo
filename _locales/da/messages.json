@@ -8,6 +8,9 @@
     "optionFontSize": {
         "message": "Skriftstørrelse"
     },
+    "optionIconSize": {
+        "message": "Ikonstørrelse"
+    },
     "optionToolbarAsFolder": {
         "message": "Viser bogmærkelinjen som en mappe."
     },

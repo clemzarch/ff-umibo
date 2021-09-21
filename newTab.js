@@ -8,16 +8,13 @@ chrome.storage.local.get(null, function(options) {
 		}
 	}
 
+	let moreCSS = options.custom_css ?? '';
+
 	if (options.background === 'image') {
 		document.body.style.background = 'url(' + options.bg_url + ') repeat fixed center center / cover';
-		document.head.insertAdjacentHTML('beforeend', '<style>body > .desktopLink {color:#fff;text-shadow:0 0 3px #000}</style>');
-
+		moreCSS += 'body > .desktopLink {color:#fff;text-shadow:0 0 3px #000}';
 	} else if (options.background === 'color') {
 		document.body.style.background = options.bg_color;
-	}
-
-	if (options.custom_css) {
-		document.head.insertAdjacentHTML('beforeend', '<style>' + options.custom_css + '</style>');
 	}
 
 	if (options.toolbar_as_folder) {
@@ -44,24 +41,31 @@ chrome.storage.local.get(null, function(options) {
 	}
 
 	if (options.font && options.font !== "0.5") {
-		document.head.insertAdjacentHTML('beforeend', '<style>*{font-size-adjust:' + options.font + '}</style>');
+		moreCSS += '* {font-size-adjust:' + options.font + '}';
+	}
+
+	if (options.icon && options.icon !== "16") {
+		moreCSS += 'img {height:' + options.icon + 'px; width: ' + options.icon + 'px}';
+		moreCSS += '.window main .desktopLink {height: '+ (41 + parseInt(options.icon)) +'px}';
+	}
+
+	document.head.insertAdjacentHTML('beforeend', '<style>'+ moreCSS + '</style>');
+
+	if (navigator.userAgent.indexOf('Mac OS X') !== -1) {
+	  document.body.classList.add("macOS");
 	}
 
 	if (Object.entries(options).length === 0) { // if no options yet
 		chrome.runtime.setUninstallURL('http://zarch.info/UMiBO/uninstalled.html');
 		chrome.storage.local.set({
-            toolbar_as_folder: true,
-            show_search_tips: true,
+			toolbar_as_folder: true,
+			show_search_tips: true,
 			background: "image",
-            bg_url: "https://images.unsplash.com/photo-1600627225432-82de96999068?auto=format&fit=crop&w=2550&q=80",
-            bg_color: "#ffffff",
-            custom_css: null
+			bg_url: "https://images.unsplash.com/photo-1600627225432-82de96999068?auto=format&fit=crop&w=2550&q=80",
+			bg_color: "#ffffff",
+			custom_css: null
 		});
 		location.reload();
-	}
-
-	if (navigator.userAgent.indexOf('Mac OS X') !== -1) {
-	  document.body.classList.add("macOS");
 	}
 });
 
@@ -76,10 +80,10 @@ function registerFolder(folder) {
 
 			drawWindow(folderId, folderTitle, folder.clientX-200, folder.clientY+50, 400, 300, len);
 			if (window.matchMedia("(prefers-reduced-motion: no-preference)").matches) {
-    			document.getElementById('win_'+folderId).animate(
-    				[{ transform: 'scale(0.2)' }, { transform: 'scale(1.1)' }, {}],
-    				{ duration: 256 }
-    			);
+				document.getElementById('win_'+folderId).animate(
+					[{ transform: 'scale(0.2)' }, { transform: 'scale(1.1)' }, {}],
+					{ duration: 256 }
+				);
 			}
 
 			// save in local storage
@@ -119,26 +123,26 @@ function drawWindow(id, title, x, y, w, h, z) {
 
 // draw
 	document.body.insertAdjacentHTML(
-        'beforeend',
-        '<div id="win_'+id+'" index="'+id+'" style="top:'+y+'px; left:'+x+'px;z-index:'+z+'" class="window">'
-        +'<div class="border" title="'+title+'">'
-        +'<span class="create_button" title="Create">'
-        +'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 2 16 16" width="12" height="12"><path d="M3 7H1.5l-.5.5V9l.5.5H3l.5-.5V7.5zM8.8 7H7.2l-.5.5V9l.5.5h1.5l.6-.5V7.5zM14.5 7H13l-.5.5V9l.5.5h1.5L15 9V7.5z"/></svg>'
-        +'</span>'
-        +title+'<span class="close_button" title="Close">'
-        +'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 2 16 16" width="12" height="12"><path d="M9.1 7.78l4.72-4.71a.63.63 0 00-.89-.89l-4.69 4.7h-.48l-4.7-4.7a.63.63 0 10-.88.89l4.69 4.68v.5l-4.69 4.68a.63.63 0 00.89.89l4.68-4.69h.5l4.68 4.69a.63.63 0 00.89 0 .63.63 0 000-.89L9.1 8.23v-.45z"/></svg>'
-        +'</span></div>'
-        +'<main style="height:'+h+'px;width:'+w+'px"></main><div class="resize"></div>'
-        +'<div class="dropzone" id="drop_'+id+'"></div></div>'
-    );
+		'beforeend',
+		'<div id="win_'+id+'" index="'+id+'" style="top:'+y+'px; left:'+x+'px;z-index:'+z+'" class="window">'
+		+'<div class="border" title="'+title+'">'
+		+'<span class="create_button" title="Create">'
+		+'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 2 16 16" width="12" height="12"><path d="M3 7H1.5l-.5.5V9l.5.5H3l.5-.5V7.5zM8.8 7H7.2l-.5.5V9l.5.5h1.5l.6-.5V7.5zM14.5 7H13l-.5.5V9l.5.5h1.5L15 9V7.5z"/></svg>'
+		+'</span>'
+		+title+'<span class="close_button" title="Close">'
+		+'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 2 16 16" width="12" height="12"><path d="M9.1 7.78l4.72-4.71a.63.63 0 00-.89-.89l-4.69 4.7h-.48l-4.7-4.7a.63.63 0 10-.88.89l4.69 4.68v.5l-4.69 4.68a.63.63 0 00.89.89l4.68-4.69h.5l4.68 4.69a.63.63 0 00.89 0 .63.63 0 000-.89L9.1 8.23v-.45z"/></svg>'
+		+'</span></div>'
+		+'<main style="height:'+h+'px;width:'+w+'px"></main><div class="resize"></div>'
+		+'<div class="dropzone" id="drop_'+id+'"></div></div>'
+	);
 
 	let window = document.getElementById('win_'+id);
 
 // populate
 	chrome.bookmarks.getChildren(id, function(e) {
-	    let elements = '';
-	    let foldersIds = [];
-	    let linksIds = [];
+		let elements = '';
+		let foldersIds = [];
+		let linksIds = [];
 
 		for (let i = 0; i < e.length; ++i) {
 			let el = e[i];
@@ -148,22 +152,22 @@ function drawWindow(id, title, x, y, w, h, z) {
 				}
 
 				elements += '<a class="desktopLink" id="'+el.id+'" title="'+el.title+'" href="'+el.url+'"><img loading="lazy" width="16px" height="16px" src="https://s2.googleusercontent.com/s2/favicons?domain_url='+el.url+'"/>'+el.title+'</a>';
-			    linksIds.push(el.id);
+				linksIds.push(el.id);
 			} else if (el.type === 'folder') {
-			    elements += '<div class="desktopFolder" id="'+el.id+'" title="'+el.title+'" draggable="true">'+el.title+'</div>';
-			    foldersIds.push(el.id);
+				elements += '<div class="desktopFolder" id="'+el.id+'" title="'+el.title+'" draggable="true">'+el.title+'</div>';
+				foldersIds.push(el.id);
 			}
 		}
 
 		window.childNodes[1].innerHTML = elements; // may be faster, or may not
 
 		for (let i = 0; i < foldersIds.length; i++) {
-		    registerFolder(foldersIds[i]);
-		    dragonPrepare(foldersIds[i]);
+			registerFolder(foldersIds[i]);
+			dragonPrepare(foldersIds[i]);
 		}
 
 		for (let i = 0; i < linksIds.length; i++) {
-		    dragonPrepare(linksIds[i]);
+			dragonPrepare(linksIds[i]);
 		}
 	});
 
@@ -176,8 +180,7 @@ function drawWindow(id, title, x, y, w, h, z) {
 		offsetX = e.pageX - window.offsetLeft;
 		offsetY = e.pageY - window.offsetTop;
 		move_target = window;
-		document.body.insertAdjacentHTML('beforeend','<div id="secureDrag"></div>');
-		document.getElementById('secureDrag').style.cursor = 'grabbing';
+		document.body.insertAdjacentHTML('beforeend', '<div id="secureDrag" style="cursor: grabbing"></div>');
 	});
 
 // raise
@@ -189,9 +192,9 @@ function drawWindow(id, title, x, y, w, h, z) {
 		let allWindows = document.getElementsByClassName('window');
 
 		for (let i = 0; i < allWindows.length; ++i) { // cycle through windows, lower the ones higher than our target
-            if (allWindows[i].style.zIndex > window.style.zIndex) {
-                allWindows[i].style.zIndex--;
-            }
+			if (allWindows[i].style.zIndex > window.style.zIndex) {
+				allWindows[i].style.zIndex--;
+			}
 		}
 		window.style.zIndex = allWindows.length.toString();
 		raise_target = window;
@@ -217,8 +220,7 @@ function drawWindow(id, title, x, y, w, h, z) {
 		wH = window.childNodes[1].offsetHeight; //current height
 		wW = window.childNodes[1].offsetWidth; //current width
 		resize_target = window;
-		document.body.insertAdjacentHTML('beforeend','<div id="secureDrag"></div>');
-		document.getElementById('secureDrag').style.cursor = 'nwse-resize';
+		document.body.insertAdjacentHTML('beforeend', '<div id="secureDrag" style="cursor: nwse-resize"></div>');
 	});
 
 // create folder
@@ -258,7 +260,7 @@ for (let i = 0; i < ToTranslate.length; ++i) {
 	ToTranslate[i].innerHTML = browser.i18n.getMessage(ToTranslate[i].value);
 }
 
-document.body.addEventListener('mousemove',function(e) {
+document.body.addEventListener('mousemove', function(e) {
 	if (move_target) {
 		move_target.style.left = e.pageX - offsetX+'px';
 		move_target.style.top = e.pageY - offsetY+'px';
@@ -295,7 +297,9 @@ document.body.addEventListener('mouseup', function() { // save the new window po
 });
 
 function dragonPrepare(id) {
-	document.getElementById(id).addEventListener('dragstart', function(e) {
+	let target = document.getElementById(id);
+
+	target.addEventListener('dragstart', function(e) {
 		dragon_target = e.currentTarget.id;
 
 		// place dropzones
@@ -309,7 +313,7 @@ function dragonPrepare(id) {
 					e.target.id &&
 					(e.target.classList.contains('dropzone') || e.target.classList.contains('desktopFolder'))
 				) {
-					drop_target = e.target.id.replace('drop_','');
+					drop_target = e.target.id.replace('drop_', '');
 				}
 			});
 		}
@@ -318,12 +322,12 @@ function dragonPrepare(id) {
 		document.getElementById('delete_vortex').style.visibility = 'visible';
 	});
 
-	document.getElementById(id).addEventListener('mouseenter', function(e) {
-	    mouse_over = e.currentTarget;
+	target.addEventListener('mouseenter', function(e) {
+		mouse_over = e.currentTarget;
 	});
 
-    document.getElementById(id).addEventListener('mouseleave', function(e) {
-	    mouse_over = null;
+	target.addEventListener('mouseleave', function(e) {
+		mouse_over = null;
 	});
 }
 // drop
@@ -332,20 +336,20 @@ document.addEventListener('dragend', function() {
 		(dragon_target && drop_target) &&
 		(dragon_target !== drop_target) //had to check that
 	) {
-	    chrome.bookmarks.get(dragon_target, function(e) { // check if we're already in the destination
-	        if (e[0].parentId !== drop_target) {
-                chrome.bookmarks.move(dragon_target, {parentId: drop_target}).then(function() {
-                    location.reload();
-                }); // moving between zones
-	        }
-	    });
+		chrome.bookmarks.get(dragon_target, function(e) { // check if we're already in the destination
+			if (e[0].parentId !== drop_target) {
+				chrome.bookmarks.move(dragon_target, {parentId: drop_target}).then(function() {
+					location.reload();
+				}); // moving between zones
+			}
+		});
 	} else if (dragon_target && delete_drop_target) { // dropping in vortex
 		browser.bookmarks.remove(dragon_target).then(function() {
 			location.reload();
 		});
 	}
 
-    location.reload();
+	location.reload();
 });
 
 registerFolder('menu________');
@@ -367,31 +371,31 @@ document.getElementById('delete_vortex').addEventListener('dragenter', function(
 // rename (hover+Enter)
 var editing = false;
 document.addEventListener('keydown', function (e) {
-    if (e.key === 'Enter' && mouse_over !== null && editing === false) {
-        editing = true;
+	if (e.key === 'Enter' && mouse_over !== null && editing === false) {
+		editing = true;
 
-        mouse_over.outerHTML = '<form id="renameForm">'
-           + '<input value="'+mouse_over.title+'" name="folderName" type="text" required>'
-           + '<input name="origin" type="hidden" value="'+mouse_over.id+'">';
+		mouse_over.outerHTML = '<form id="renameForm">'
+			+ '<input value="'+mouse_over.title+'" name="folderName" type="text" required>'
+			+ '<input name="origin" type="hidden" value="'+mouse_over.id+'">';
 
-        mouse_over = null;
+		mouse_over = null;
 
-        document.getElementById('renameForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            let formData = new FormData(e.target);
+		document.getElementById('renameForm').addEventListener('submit', function(e) {
+			e.preventDefault();
+			let formData = new FormData(e.target);
 
-            browser.bookmarks.update(
-                formData.get('origin'),
-                {
-                    title: formData.get('folderName')
-                }
-            ).then(function() {
-                location.reload();
-            });
-        });
-    }
+			browser.bookmarks.update(
+				formData.get('origin'),
+				{
+					title: formData.get('folderName')
+				}
+			).then(function() {
+				location.reload();
+			});
+		});
+	}
 
-    if (e.key === 'Escape' && editing === true) {
-        location.reload();
-    }
+	if (e.key === 'Escape' && editing === true) {
+		location.reload();
+	}
 });

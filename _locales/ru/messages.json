@@ -8,6 +8,9 @@
     "optionFontSize": {
         "message": "Размер шрифта"
     },
+    "optionIconSize": {
+        "message": "Размер значка"
+    },
     "optionToolbarAsFolder": {
         "message": "Отобразите панель закладок как папку."
     },
