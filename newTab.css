@@ -212,12 +212,12 @@ a {
     z-index: 999999;
 }
 #createFolderForm {
-    position: absolute;
-    top: 32px;
-    left: 0;
-    background: var(--field);
-    right: 0;
-    text-align: center;
+	position: absolute;
+	top: 32px;
+	left: 0;
+	background: var(--field);
+	right: 0;
+	text-align: center;
 }
 #createFolderForm label {
 	padding: 10px;
@@ -225,6 +225,8 @@ a {
 #createFolderForm label input {
 	padding: 5px;
 	margin: 5px 0 5px 10px;
+	max-width: 200px;
+	width: -moz-available;
 }
 
 #renameForm input {

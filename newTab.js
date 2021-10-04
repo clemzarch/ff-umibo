@@ -136,7 +136,7 @@ function drawWindow(id, title, x, y, w, h, z) {
 		+'<div class="dropzone" id="drop_'+id+'"></div></div>'
 	);
 
-	let window = document.getElementById('win_'+id);
+	let win = document.getElementById('win_'+id);
 
 // populate
 	chrome.bookmarks.getChildren(id, function(e) {
@@ -159,7 +159,7 @@ function drawWindow(id, title, x, y, w, h, z) {
 			}
 		}
 
-		window.childNodes[1].innerHTML = elements; // may be faster, or may not
+		win.childNodes[1].innerHTML = elements; // may be faster, or may not
 
 		for (let i = 0; i < foldersIds.length; i++) {
 			registerFolder(foldersIds[i]);
@@ -172,19 +172,19 @@ function drawWindow(id, title, x, y, w, h, z) {
 	});
 
 // move
-	window.childNodes[0].addEventListener('mousedown', function(e) {
+	win.childNodes[0].addEventListener('mousedown', function(e) {
 		if (!e.target.classList.contains('border')) {
 			return;
 		}
 
-		offsetX = e.pageX - window.offsetLeft;
-		offsetY = e.pageY - window.offsetTop;
-		move_target = window;
+		offsetX = e.pageX - win.offsetLeft;
+		offsetY = e.pageY - win.offsetTop;
+		move_target = win;
 		document.body.insertAdjacentHTML('beforeend', '<div id="secureDrag" style="cursor: grabbing"></div>');
 	});
 
 // raise
-	window.addEventListener('mousedown', function() {
+	win.addEventListener('mousedown', function() {
 		if (closing) {
 			return;
 		}
@@ -192,18 +192,18 @@ function drawWindow(id, title, x, y, w, h, z) {
 		let allWindows = document.getElementsByClassName('window');
 
 		for (let i = 0; i < allWindows.length; ++i) { // cycle through windows, lower the ones higher than our target
-			if (allWindows[i].style.zIndex > window.style.zIndex) {
+			if (allWindows[i].style.zIndex > win.style.zIndex) {
 				allWindows[i].style.zIndex--;
 			}
 		}
-		window.style.zIndex = allWindows.length.toString();
-		raise_target = window;
+		win.style.zIndex = allWindows.length.toString();
+		raise_target = win;
 	});
 
 // close
-	window.childNodes[0].childNodes[2].addEventListener('mousedown', function() {
+	win.childNodes[0].childNodes[2].addEventListener('mousedown', function() {
 		closing = true;
-		window.remove();
+		win.remove();
 
 		chrome.storage.local.get('w', function(o) {
 			let arr_windows = o.w;
@@ -214,20 +214,28 @@ function drawWindow(id, title, x, y, w, h, z) {
 	});
 
 // resize
-	window.childNodes[2].addEventListener('mousedown', function(e) {
+	win.childNodes[2].addEventListener('mousedown', function(e) {
 		pX = e.pageX;
 		pY = e.pageY;
-		wH = window.childNodes[1].offsetHeight; //current height
-		wW = window.childNodes[1].offsetWidth; //current width
-		resize_target = window;
+		wH = win.childNodes[1].offsetHeight; //current height
+		wW = win.childNodes[1].offsetWidth; //current width
+		resize_target = win;
 		document.body.insertAdjacentHTML('beforeend', '<div id="secureDrag" style="cursor: nwse-resize"></div>');
 	});
 
 // create folder
-	window.childNodes[0].childNodes[0].addEventListener('mousedown', function() {
-		if (document.getElementById('createFolderForm')) {
-			document.getElementById('createFolderForm').remove();
+	win.childNodes[0].childNodes[0].addEventListener('mousedown', function(e) {
+		let existingPanel = win.querySelector('#createFolderForm');
+
+		if (existingPanel) {
+			existingPanel.remove();
 			return;
+		}
+
+		existingPanel = document.getElementById('createFolderForm');
+
+		if (existingPanel) {
+			existingPanel.remove();
 		}
 
 		let label = browser.i18n.getMessage("newFolderLabel");
@@ -238,7 +246,7 @@ function drawWindow(id, title, x, y, w, h, z) {
 			+ '<label>'+label+'<input name="folderName" placeholder="'+placeholder+'" type="text" required></label>'
 			+ '<input name="origin" type="hidden" value="'+id+'">'
 			+ '<input type="submit" value="'+submit+'"></form>';
-		window.insertAdjacentHTML('beforeend', content);
+		win.insertAdjacentHTML('beforeend', content);
 
 		document.getElementById('createFolderForm').addEventListener('submit', function(e) {
 			e.preventDefault();
@@ -251,6 +259,12 @@ function drawWindow(id, title, x, y, w, h, z) {
 				location.reload();
 			});
 		});
+	});
+
+	win.childNodes[0].childNodes[0].addEventListener('mouseup', function() {
+		if (document.getElementById('createFolderForm')) {
+			document.getElementById('createFolderForm').childNodes[0].childNodes[1].focus();
+		}
 	});
 }
 
