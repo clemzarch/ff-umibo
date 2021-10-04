@@ -1,3 +1,21 @@
+browser.theme.getCurrent().then(function (theme) {
+	if (theme.colors === null) {
+		return;
+	}
+
+	document.head.insertAdjacentHTML(
+		'beforeend',
+		'<style>:root{'
+		+'--bg: '+theme.colors.frame+';'
+		+'--color: '+theme.colors.toolbar_text+';'
+		+'--faded-color: '+theme.colors.panel_item_active+';'
+		+'--hi: '+theme.colors.panel_item_hover+';'
+		+'--hi-click: '+theme.colors.panel_item_active+';'
+		+'--field: '+theme.colors.toolbar+';'
+		+'}</style>'
+	);
+});
+
 chrome.storage.local.get(null, function(options) {
 	if (options.w) { // restore windows
 		let keys = Object.keys(options.w);
