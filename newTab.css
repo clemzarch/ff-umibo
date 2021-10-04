@@ -24,6 +24,8 @@ body {
 	user-select: none;
 	background: var(--bg);
 	color: var(--color);
+	margin: 20px auto 0 auto;
+	max-width: max-content;
 }
 a {
 	color: var(--color);
@@ -108,6 +110,12 @@ a {
 .window .border .create_button {
 	float: left;
 }
+#win_recentlyClosed .border {
+	padding-left: 20px;
+}
+#win_recentlyClosed .border .create_button {
+	display: none;
+}
 .window .border .close_button {
 	float: right;
 }
@@ -134,7 +142,7 @@ a {
 	margin: 15px;
 	border-radius: 5px;
 	height: 16px;
-	vertical-align: top;
+	vertical-align: middle;
 }
 .desktopFolder:hover {
 	box-shadow: 0 0 0 5px var(--hi);
