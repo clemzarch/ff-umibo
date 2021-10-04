@@ -20,6 +20,8 @@ chrome.storage.local.get(null, function(options) {
 	if (options.toolbar_as_folder) {
 		registerFolder('toolbar_____');
 	} else {
+		document.body.style.maxWidth = '1280px';
+		document.getElementById('toolbar_____').outerHTML = null;
 		chrome.bookmarks.getChildren('toolbar_____', function (bms) {
 			for (let i = 0; i < bms.length; ++i) {
 				if (bms[i].type === 'bookmark') {
@@ -32,8 +34,6 @@ chrome.storage.local.get(null, function(options) {
 				}
 			}
 		});
-		document.body.style.maxWidth = '1280px';
-		document.getElementById('toolbar_____').outerHTML = null;
 	}
 
 	if (options.show_search_tips) {
@@ -121,6 +121,10 @@ function drawWindow(id, title, x, y, w, h, z) {
 		x = 0;
 	}
 
+	if (id === 'recentlyClosed') {
+		title = browser.i18n.getMessage('RecentlyClosed');
+	}
+
 // draw
 	document.body.insertAdjacentHTML(
 		'beforeend',
@@ -139,37 +143,42 @@ function drawWindow(id, title, x, y, w, h, z) {
 	let win = document.getElementById('win_'+id);
 
 // populate
-	chrome.bookmarks.getChildren(id, function(e) {
-		let elements = '';
-		let foldersIds = [];
-		let linksIds = [];
+	if (id === 'recentlyClosed') {
+		populateRecentlyClosed();
+		browser.sessions.onChanged.addListener(populateRecentlyClosed);
+	} else {
+		chrome.bookmarks.getChildren(id, function(e) {
+			let elements = '';
+			let foldersIds = [];
+			let linksIds = [];
 
-		for (let i = 0; i < e.length; ++i) {
-			let el = e[i];
-			if (el.type === 'bookmark') {
-				if (el.title === '') {
-					el.title = el.url;
+			for (let i = 0; i < e.length; ++i) {
+				let el = e[i];
+				if (el.type === 'bookmark') {
+					if (el.title === '') {
+						el.title = el.url;
+					}
+
+					elements += '<a class="desktopLink" id="'+el.id+'" title="'+el.title+'" href="'+el.url+'"><img loading="lazy" width="16px" height="16px" src="https://s2.googleusercontent.com/s2/favicons?domain_url='+el.url+'"/>'+el.title+'</a>';
+					linksIds.push(el.id);
+				} else if (el.type === 'folder') {
+					elements += '<div class="desktopFolder" id="'+el.id+'" title="'+el.title+'" draggable="true">'+el.title+'</div>';
+					foldersIds.push(el.id);
 				}
-
-				elements += '<a class="desktopLink" id="'+el.id+'" title="'+el.title+'" href="'+el.url+'"><img loading="lazy" width="16px" height="16px" src="https://s2.googleusercontent.com/s2/favicons?domain_url='+el.url+'"/>'+el.title+'</a>';
-				linksIds.push(el.id);
-			} else if (el.type === 'folder') {
-				elements += '<div class="desktopFolder" id="'+el.id+'" title="'+el.title+'" draggable="true">'+el.title+'</div>';
-				foldersIds.push(el.id);
 			}
-		}
 
-		win.childNodes[1].innerHTML = elements; // may be faster, or may not
+			win.childNodes[1].innerHTML = elements; // may be faster, or may not
 
-		for (let i = 0; i < foldersIds.length; i++) {
-			registerFolder(foldersIds[i]);
-			dragonPrepare(foldersIds[i]);
-		}
+			for (let i = 0; i < foldersIds.length; i++) {
+				registerFolder(foldersIds[i]);
+				dragonPrepare(foldersIds[i]);
+			}
 
-		for (let i = 0; i < linksIds.length; i++) {
-			dragonPrepare(linksIds[i]);
-		}
-	});
+			for (let i = 0; i < linksIds.length; i++) {
+				dragonPrepare(linksIds[i]);
+			}
+		});
+	}
 
 // move
 	win.childNodes[0].addEventListener('mousedown', function(e) {
@@ -268,34 +277,27 @@ function drawWindow(id, title, x, y, w, h, z) {
 	});
 }
 
-showRecentlyClosed();
-browser.sessions.onChanged.addListener(showRecentlyClosed);
+function populateRecentlyClosed() {
+	var div = document.getElementById('win_recentlyClosed').childNodes[1];
 
-function showRecentlyClosed() {
-	var div = document.getElementById('recentlyClosed');
+	if (!div) {
+		return;
+	}
 
 	browser.sessions.getRecentlyClosed().then(function (e) {
-		var tabList = [];
-
-		for (let i = 0; i < e.length; ++i) {
-			if (e[i].tab) {
-				tabList.push(e[i].tab);
-			}
-		}
-
 		var seen = [];
 		var dom = '';
 
-		tabList.forEach(function (tab) {
-			if (seen[tab.url]) {
-				return;
-			}
+		for (let i = 0; i < e.length; ++i) {
+			let tab = e[i].tab;
 
 			if (
+				!tab ||
+				seen[tab.url] ||
 				tab.title.startsWith('moz-extension://') ||
 				tab.url.startsWith('about:')
 			) {
-				return;
+				continue;
 			}
 
 			if (!tab.favIconUrl) {
@@ -305,9 +307,9 @@ function showRecentlyClosed() {
 			}
 
 			dom += '<a class="desktopLink" href="'+tab.url+'">'+img + sanitize(tab.title)+'</a>';
-
 			seen[tab.url] = true;
-		});
+		}
+
 		div.innerHTML = dom;
 	});
 }
@@ -413,6 +415,7 @@ document.addEventListener('dragend', function() {
 registerFolder('menu________');
 registerFolder('mobile______');
 registerFolder('unfiled_____');
+registerFolder('recentlyClosed');
 
 document.getElementById('options').addEventListener("mousedown", function() {
 	chrome.runtime.openOptionsPage();

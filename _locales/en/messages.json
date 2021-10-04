@@ -32,6 +32,9 @@
     "OtherBookmarks": {
         "message": "Other Bookmarks"
     },
+    "RecentlyClosed": {
+        "message": "Recently closed tabs"
+    },
     "optionBgDefault": {
         "message": "Default"
     },

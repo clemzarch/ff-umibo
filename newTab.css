@@ -231,15 +231,6 @@ a {
 	font: icon;
 }
 
-#recentlyClosed {
-	width: 200px;
-	display: inline-block;
-}
-
-#recentlyClosed a {
-	display: block;
-}
-
 @media (forced-colors: active) {
 	.window,
 	.window .border span,
