@@ -21,7 +21,9 @@
 	},
 	"permissions": [
 		"bookmarks",
-		"storage"
+		"storage",
+		"sessions",
+		"tabs"
 	],
 	"options_ui": {
 		"page": "options.html"

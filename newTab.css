@@ -110,6 +110,12 @@ a {
 .window .border .create_button {
 	float: left;
 }
+#win_recentlyClosed .border {
+	padding-left: 20px;
+}
+#win_recentlyClosed .border .create_button {
+	display: none;
+}
 .window .border .close_button {
 	float: right;
 }
@@ -136,7 +142,7 @@ a {
 	margin: 15px;
 	border-radius: 5px;
 	height: 16px;
-	vertical-align: top;
+	vertical-align: middle;
 }
 .desktopFolder:hover {
 	box-shadow: 0 0 0 5px var(--hi);
@@ -145,20 +151,20 @@ a {
 	box-shadow: 0 0 0 5px var(--hi-click);
 }
 .window main .desktopFolder {
-    overflow: hidden;
+	overflow: hidden;
 	height: 40px;
 }
 
 .desktopLink {
-    display: inline-block;
+	display: inline-block;
 	text-decoration: none;
 	padding: 15px;
 	border-radius: 5px;
 }
 .desktopLink img {
 	margin-right: 4px;
-	vertical-align: middle;
-	image-rendering: optimizespeed;
+	vertical-align: bottom;
+	image-rendering: optimizeSpeed;
 }
 .desktopLink:hover {
 	background: var(--hi);
@@ -179,7 +185,6 @@ a {
 .window main .desktopLink img {
 	display: block;
 	margin: auto;
-    image-rendering: optimizeSpeed;
 }
 
 #secureDrag {
@@ -195,6 +200,7 @@ a {
 	text-align: center;
 	fill: var(--color);
 	cursor: pointer;
+	min-width: 0;
 }
 
 #delete_vortex {
