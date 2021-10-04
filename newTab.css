@@ -24,8 +24,6 @@ body {
 	user-select: none;
 	background: var(--bg);
 	color: var(--color);
-	margin: 20px auto 0 auto;
-	max-width: max-content;
 }
 a {
 	color: var(--color);
@@ -145,20 +143,20 @@ a {
 	box-shadow: 0 0 0 5px var(--hi-click);
 }
 .window main .desktopFolder {
-    overflow: hidden;
+	overflow: hidden;
 	height: 40px;
 }
 
 .desktopLink {
-    display: inline-block;
+	display: inline-block;
 	text-decoration: none;
 	padding: 15px;
 	border-radius: 5px;
 }
 .desktopLink img {
 	margin-right: 4px;
-	vertical-align: middle;
-	image-rendering: optimizespeed;
+	vertical-align: bottom;
+	image-rendering: optimizeSpeed;
 }
 .desktopLink:hover {
 	background: var(--hi);
@@ -179,7 +177,6 @@ a {
 .window main .desktopLink img {
 	display: block;
 	margin: auto;
-    image-rendering: optimizeSpeed;
 }
 
 #secureDrag {
@@ -195,6 +192,7 @@ a {
 	text-align: center;
 	fill: var(--color);
 	cursor: pointer;
+	min-width: 0;
 }
 
 #delete_vortex {
@@ -234,27 +232,12 @@ a {
 }
 
 #recentlyClosed {
-	max-width: 150px;
+	width: 200px;
 	display: inline-block;
 }
 
 #recentlyClosed a {
-	font-style: inherit;
-	text-decoration: none;
-	padding: 10px;
-	margin: 10px;
-	border-radius: 10px;
-	background: var(--shadow);
-	word-break: break-word;
-}
-
-#recentlyClosed a:hover {
-	background: var(--hi);
-}
-
-#recentlyClosed a img {
-	margin-right: 8px;
-	vertical-align: bottom;
+	display: block;
 }
 
 @media (forced-colors: active) {
