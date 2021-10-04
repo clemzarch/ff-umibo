@@ -69,6 +69,57 @@ chrome.storage.local.get(null, function(options) {
 	}
 });
 
+
+showRecentlyClosed();
+browser.sessions.onChanged.addListener(showRecentlyClosed);
+
+function showRecentlyClosed() {
+	var div = document.getElementById('recentlyClosed');
+
+	browser.sessions.getRecentlyClosed().then(function (e) {
+		var tabList = [];
+
+		for (let i = 0; i < e.length; ++i) {
+
+			if (e[i].tab) {
+				tabList.push(e[i].tab);
+			} else if (e[i].window) {
+				continue;
+				e[i].window.tabs.forEach(function(el) {
+					tabList.push(el);
+				});
+			}
+		}
+
+		var seen = [];
+		var dom = '';
+
+		tabList.forEach(function (tab) {
+			if (seen[tab.url]) {
+				return;
+			}
+
+			if (
+				tab.title.startsWith('moz-extension://') ||
+				tab.url.startsWith('about:')
+			) {
+				return;
+			}
+
+			if (!tab.favIconUrl) {
+				img = '';
+			} else {
+				img = '<img height="16px" width="16px" src="'+tab.favIconUrl+'"/>';
+			}
+
+			dom += '<a class="desktopLink" href="'+tab.url+'">'+img + sanitize(tab.title)+'</a>';
+
+			seen[tab.url] = true;
+		});
+		div.innerHTML = dom;
+	});
+}
+
 function registerFolder(folder) {
 	document.getElementById(folder).addEventListener('click', function(folder) {
 		let folderId = folder.target.id;
@@ -413,3 +464,16 @@ document.addEventListener('keydown', function (e) {
 		location.reload();
 	}
 });
+
+function sanitize(string) {
+  const map = {
+      '&': '&amp;',
+      '<': '&lt;',
+      '>': '&gt;',
+      '"': '&quot;',
+      "'": '&#x27;',
+      "/": '&#x2F;',
+  };
+  const reg = /[&<>"'/]/ig;
+  return string.replace(reg, (match)=>(map[match]));
+}

@@ -233,6 +233,30 @@ a {
 	font: icon;
 }
 
+#recentlyClosed {
+	max-width: 150px;
+	display: inline-block;
+}
+
+#recentlyClosed a {
+	font-style: inherit;
+	text-decoration: none;
+	padding: 10px;
+	margin: 10px;
+	border-radius: 10px;
+	background: var(--shadow);
+	word-break: break-word;
+}
+
+#recentlyClosed a:hover {
+	background: var(--hi);
+}
+
+#recentlyClosed a img {
+	margin-right: 8px;
+	vertical-align: bottom;
+}
+
 @media (forced-colors: active) {
 	.window,
 	.window .border span,
