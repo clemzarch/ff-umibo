@@ -52,7 +52,7 @@ chrome.storage.local.get(null, function(options) {
 	document.head.insertAdjacentHTML('beforeend', '<style>'+ moreCSS + '</style>');
 
 	if (navigator.userAgent.indexOf('Mac OS X') !== -1) {
-	  document.body.classList.add("macOS");
+		document.body.classList.add("macOS");
 	}
 
 	if (Object.entries(options).length === 0) { // if no options yet

@@ -1,21 +1,21 @@
 :root {
-    --bg: #1c1b22;
-    --color: #f9f9fa;
-    --faded-color: #bbbbbb;
-    --hi: #383546;
-    --hi-click: #4d4769;
-    --field: #2b2a33;
-    --shadow: #00000066;
+	--bg: #1c1b22;
+	--color: #f9f9fa;
+	--faded-color: #bbbbbb;
+	--hi: #383546;
+	--hi-click: #4d4769;
+	--field: #2b2a33;
+	--shadow: #00000066;
 }
 @media (prefers-color-scheme: light) {
 	:root {
-        --bg: #f0f0f4;
-        --color: #333333;
-        --faded-color: #595a5b;
-        --hi: #dadae1;
-        --hi-click: #cfcfd8;
-        --field: #f9f9fb;
-        --shadow: #00000015;
+		--bg: #f0f0f4;
+		--color: #333333;
+		--faded-color: #595a5b;
+		--hi: #dadae1;
+		--hi-click: #cfcfd8;
+		--field: #f9f9fb;
+		--shadow: #00000015;
 	}
 }
 
@@ -34,28 +34,38 @@ a {
 #tip_container {
 	visibility: hidden;
 	position: fixed;
-    top: 50%;
-    left: 0;
-    right: 0;
-    color: var(--faded-color);
-    text-align: center;
-    z-index: -1;
-    font-size: 17px;
+	bottom: 5px;
+	left: 0;
+	right: 0;
+	color: var(--faded-color);
+	text-align: center;
+	z-index: -1;
+	font-size: 17px;
 }
-#tip_container > div {
-    text-align: left;
-    line-height: 50px;
-    display: inline-block;
+#tip_container header {
+	text-align: left;
+	font-weight: 600;
+}
+
+#tip_container section {
+	margin: 10px auto 0 auto;
+	max-width: max-content;
+}
+#tip_container section div {
+	text-align: left;
+	line-height: 50px;
+	display: inline-block;
+	margin-right: 20px;
 }
 #tip_container span {
-    display: inline-block;
-    background: var(--field);
-    margin: 0 6px 0 0;
-    border-radius: 3px;
-    font-size: 20px;
-    text-align: center;
-    width: 30px;
-    line-height: 30px;
+	display: inline-block;
+	background: var(--field);
+	margin: 0 6px 0 0;
+	border-radius: 3px;
+	font-size: 20px;
+	text-align: center;
+	width: 30px;
+	line-height: 30px;
 }
 
 .window {
@@ -125,6 +135,8 @@ a {
 	padding: 10px;
 	margin: 15px;
 	border-radius: 5px;
+	height: 16px;
+	vertical-align: top;
 }
 .desktopFolder:hover {
 	box-shadow: 0 0 0 5px var(--hi);
@@ -179,37 +191,24 @@ a {
 	right:0;
 }
 
-#quick-access {
-    text-align: center;
-}
-#quick-access div {
-    cursor: pointer;
-    background-color: var(--bg);
-    fill: var(--faded-color);
-    width: 40px;
-    height: 40px;
-    line-height: 45px;
-    display: inline-block;
-    transition-duration: 0.5s;
-    border-radius: 4px;
-}
-#quick-access div:hover {
-    transition-duration: 0s;
-    background-color: var(--hi);
+#options {
+	text-align: center;
+	fill: var(--color);
+	cursor: pointer;
 }
 
 #delete_vortex {
-    position: fixed;
-    bottom: 0;
-    text-align: center;
-    font-size: 50px;
-    background: var(--field);
-    color: var(--hi-click);
-    line-height: 150px;
-    visibility: hidden;
-    left: 0;
-    right: 0;
-    z-index: 999999;
+	position: fixed;
+	bottom: 0;
+	text-align: center;
+	font-size: 50px;
+	background: var(--field);
+	color: var(--hi-click);
+	line-height: 150px;
+	visibility: hidden;
+	left: 0;
+	right: 0;
+	z-index: 999999;
 }
 #createFolderForm {
 	position: absolute;
@@ -230,36 +229,32 @@ a {
 }
 
 #renameForm input {
-    padding: 0;
-    font: icon;
+	padding: 0;
+	font: icon;
 }
 
 @media (forced-colors: active) {
-    .window,
-    .window .border span,
-    .desktopFolder
-    {
-        outline: 1px solid;
-    }
+	.window,
+	.window .border span,
+	.desktopFolder
+	{
+		outline: 1px solid;
+	}
 
-    .desktopFolder {
-        transition-duration: unset;
-    }
+	.window .border {
+		border-bottom: 1px solid;
+	}
 
-    .window .border {
-        border-bottom: 1px solid;
-    }
+	.window .resize {
+		border-top: 1px solid;
+	}
 
-    .window .resize {
-        border-top: 1px solid;
-    }
-
-    .desktopLink:hover {
-        background: unset;
-        text-decoration: underline;
-    }
-    .desktopFolder:hover {
-        background: Highlight;
-        color: Canvas;
-    }
+	.desktopLink:hover {
+		background: unset;
+		text-decoration: underline;
+	}
+	.desktopFolder:hover {
+		background: Highlight;
+		color: Canvas;
+	}
 }
