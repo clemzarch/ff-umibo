@@ -1,21 +1,3 @@
-browser.theme.getCurrent().then(function (theme) {
-	if (theme.colors === null) {
-		return;
-	}
-
-	document.head.insertAdjacentHTML(
-		'beforeend',
-		'<style>:root{'
-		+'--bg: '+theme.colors.frame+';'
-		+'--color: '+theme.colors.toolbar_text+';'
-		+'--faded-color: '+theme.colors.panel_item_active+';'
-		+'--hi: '+theme.colors.panel_item_hover+';'
-		+'--hi-click: '+theme.colors.panel_item_active+';'
-		+'--field: '+theme.colors.toolbar+';'
-		+'}</style>'
-	);
-});
-
 chrome.storage.local.get(null, function(options) {
 	if (options.w) { // restore windows
 		let keys = Object.keys(options.w);
@@ -86,6 +68,39 @@ chrome.storage.local.get(null, function(options) {
 		location.reload();
 	}
 });
+
+applyTheme();
+browser.theme.onUpdated.addListener(applyTheme);
+
+function applyTheme () {
+	browser.theme.getCurrent().then(function (theme) {
+		if (
+			theme.colors === null ||
+			theme.colors.frame === undefined ||
+			theme.colors.toolbar === undefined ||
+			theme.colors.toolbar_text === undefined ||
+			theme.colors.icons_attention === undefined
+		) {
+			if (existingTheme = document.getElementById('theme')) {
+				existingTheme.outerHTML = '';
+			}
+			return;
+		}
+
+		document.head.insertAdjacentHTML(
+			'beforeend',
+			'<style id="theme">:root{'
+			+'--bg: '+theme.colors.frame+';'
+			+'--field: '+theme.colors.toolbar+';'
+			+'--color: '+theme.colors.toolbar_text+';'
+			+'--faded-color: '+theme.colors.icons_attention+';'
+			+'--hi: #0002;'
+			+'--hi-click: #0003;'
+			+'}'
+			+'</style>'
+		);
+	});
+}
 
 function registerFolder(folder) {
 	document.getElementById(folder).addEventListener('click', function(folder) {
