@@ -72,6 +72,10 @@ browser.theme.onUpdated.addListener(applyTheme);
 
 function applyTheme () {
 	browser.theme.getCurrent().then(function (theme) {
+		if (existingTheme = document.getElementById('theme')) {
+			existingTheme.outerHTML = '';
+		}
+
 		if (
 			theme.colors === null ||
 			theme.colors.frame === undefined ||
@@ -79,9 +83,6 @@ function applyTheme () {
 			theme.colors.toolbar_text === undefined ||
 			theme.colors.icons_attention === undefined
 		) {
-			if (existingTheme = document.getElementById('theme')) {
-				existingTheme.outerHTML = '';
-			}
 			return;
 		}
 
