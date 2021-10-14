@@ -10,16 +10,11 @@ chrome.storage.local.get(null, function(options) {
 
 	let moreCSS = options.custom_css ?? '';
 
-	if (options.background === 'image') {
-		document.body.style.background = 'url(' + options.bg_url + ') repeat fixed center center / cover';
-		moreCSS += 'body > .desktopLink {color:#fff;text-shadow:0 0 3px #000}';
-	} else if (options.background === 'color') {
-		document.body.style.background = options.bg_color;
-	}
-
 	if (options.toolbar_as_folder) {
 		registerFolder('toolbar_____');
 	} else {
+		moreCSS += 'body {max-width: 1280px}';
+		document.getElementById('toolbar_____').outerHTML = null;
 		chrome.bookmarks.getChildren('toolbar_____', function (bms) {
 			for (let i = 0; i < bms.length; ++i) {
 				if (bms[i].type === 'bookmark') {
@@ -32,12 +27,16 @@ chrome.storage.local.get(null, function(options) {
 				}
 			}
 		});
-		document.body.style.maxWidth = '1280px';
-		document.getElementById('toolbar_____').outerHTML = null;
+	}
+
+	if (options.background === 'image') {
+		moreCSS += 'body {background: url(' + options.bg_url + ') repeat fixed center center / cover} body > .desktopLink {color:#fff;text-shadow:0 0 3px #000}';
+	} else if (options.background === 'color') {
+		moreCSS += 'body {background: ' + options.bg_color + '}';
 	}
 
 	if (options.show_search_tips) {
-		document.getElementById('tip_container').style.visibility = 'visible';
+		moreCSS += '#tip_container{visibility:visible}';
 	}
 
 	if (options.font && options.font !== "0.5") {
@@ -45,8 +44,7 @@ chrome.storage.local.get(null, function(options) {
 	}
 
 	if (options.icon && options.icon !== "16") {
-		moreCSS += 'img {height:' + options.icon + 'px; width: ' + options.icon + 'px}';
-		moreCSS += '.window main .desktopLink {height: '+ (41 + parseInt(options.icon)) +'px}';
+		moreCSS += 'img {height:' + options.icon + 'px; width: ' + options.icon + 'px} .window main .desktopLink {height: '+ (41 + parseInt(options.icon)) +'px}';
 	}
 
 	document.head.insertAdjacentHTML('beforeend', '<style>'+ moreCSS + '</style>');
@@ -68,6 +66,40 @@ chrome.storage.local.get(null, function(options) {
 		location.reload();
 	}
 });
+
+applyTheme();
+browser.theme.onUpdated.addListener(applyTheme);
+
+function applyTheme () {
+	browser.theme.getCurrent().then(function (theme) {
+		if (existingTheme = document.getElementById('theme')) {
+			existingTheme.outerHTML = '';
+		}
+
+		if (
+			theme.colors === null ||
+			theme.colors.frame === undefined ||
+			theme.colors.toolbar === undefined ||
+			theme.colors.toolbar_text === undefined ||
+			theme.colors.icons_attention === undefined
+		) {
+			return;
+		}
+
+		document.head.insertAdjacentHTML(
+			'beforeend',
+			'<style id="theme">:root{'
+			+'--bg: '+theme.colors.frame+';'
+			+'--field: '+theme.colors.toolbar+';'
+			+'--color: '+theme.colors.toolbar_text+';'
+			+'--faded-color: '+theme.colors.icons_attention+';'
+			+'--hi: #0002;'
+			+'--hi-click: #0003;'
+			+'}'
+			+'</style>'
+		);
+	});
+}
 
 function registerFolder(folder) {
 	document.getElementById(folder).addEventListener('click', function(folder) {
