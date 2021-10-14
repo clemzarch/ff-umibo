@@ -10,16 +10,11 @@ chrome.storage.local.get(null, function(options) {
 
 	let moreCSS = options.custom_css ?? '';
 
-	if (options.background === 'image') {
-		document.body.style.background = 'url(' + options.bg_url + ') repeat fixed center center / cover';
-		moreCSS += 'body > .desktopLink {color:#fff;text-shadow:0 0 3px #000}';
-	} else if (options.background === 'color') {
-		document.body.style.background = options.bg_color;
-	}
-
 	if (options.toolbar_as_folder) {
 		registerFolder('toolbar_____');
 	} else {
+		moreCSS += 'body {max-width: 1280px}';
+		document.getElementById('toolbar_____').outerHTML = null;
 		chrome.bookmarks.getChildren('toolbar_____', function (bms) {
 			for (let i = 0; i < bms.length; ++i) {
 				if (bms[i].type === 'bookmark') {
@@ -32,12 +27,16 @@ chrome.storage.local.get(null, function(options) {
 				}
 			}
 		});
-		document.body.style.maxWidth = '1280px';
-		document.getElementById('toolbar_____').outerHTML = null;
+	}
+
+	if (options.background === 'image') {
+		moreCSS += 'body {background: url(' + options.bg_url + ') repeat fixed center center / cover} body > .desktopLink {color:#fff;text-shadow:0 0 3px #000}';
+	} else if (options.background === 'color') {
+		moreCSS += 'body {background: ' + options.bg_color + '}';
 	}
 
 	if (options.show_search_tips) {
-		document.getElementById('tip_container').style.visibility = 'visible';
+		moreCSS += '#tip_container{visibility:visible}';
 	}
 
 	if (options.font && options.font !== "0.5") {
@@ -45,8 +44,7 @@ chrome.storage.local.get(null, function(options) {
 	}
 
 	if (options.icon && options.icon !== "16") {
-		moreCSS += 'img {height:' + options.icon + 'px; width: ' + options.icon + 'px}';
-		moreCSS += '.window main .desktopLink {height: '+ (41 + parseInt(options.icon)) +'px}';
+		moreCSS += 'img {height:' + options.icon + 'px; width: ' + options.icon + 'px} .window main .desktopLink {height: '+ (41 + parseInt(options.icon)) +'px}';
 	}
 
 	document.head.insertAdjacentHTML('beforeend', '<style>'+ moreCSS + '</style>');
