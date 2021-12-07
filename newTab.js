@@ -155,6 +155,14 @@ function drawWindow(id, title, x, y, w, h, z) {
 		x = 0;
 	}
 
+	//check if size/location are probably in pixels and we need to convert them to percentages.
+	if (x > 100 || y > 100 || h > 100 || w > 100) {
+		x = (x * 100) / window.innerWidth;
+		y = (y * 100) / window.innerHeight;
+		w = (w * 100) / window.innerWidth;
+		h = (h * 100) / window.innerHeight;
+	}
+
 // draw
 	document.body.insertAdjacentHTML(
 		'beforeend',
@@ -230,7 +238,7 @@ function drawWindow(id, title, x, y, w, h, z) {
 				allWindows[i].style.zIndex--;
 			}
 		}
-		win.style.zIndex = allWindows.length.toString();
+		win.style.zIndex = allWindows.length;
 		raise_target = win;
 	});
 
