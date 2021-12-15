@@ -257,10 +257,10 @@ function drawWindow(id, title, x, y, w, h, z) {
 		win.remove();
 
 		chrome.storage.local.get('w', function(o) {
-			let arr_windows = o.w;
-			delete arr_windows[id]; // fingers crossed
-			chrome.storage.local.set({'w': arr_windows });
-			closing = false;
+			delete o.w[id]; // fingers crossed
+			chrome.storage.local.set({'w': o.w }, function() {
+				closing = false;
+			});
 		});
 	});
 
