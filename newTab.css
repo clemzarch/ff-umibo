@@ -219,6 +219,7 @@ a {
 	background: var(--field);
 	right: 0;
 	text-align: center;
+	box-shadow: 0 5px 10px -5px var(--shadow);
 }
 #createFolderForm label {
 	padding: 10px;

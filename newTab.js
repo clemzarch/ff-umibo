@@ -27,7 +27,7 @@ chrome.storage.local.get(null, function(options) {
 	}
 
 	if (options.background === 'image') {
-		moreCSS += 'body {background: url(' + options.bg_url + ') repeat fixed center center / cover} body > .desktopLink {color:#fff;text-shadow:0 0 3px #000}';
+		moreCSS += 'body {background: url(' + options.bg_url + ') repeat fixed center center / cover} body > .desktopLink, #tip_container data {color:#fff;text-shadow:0 0 3px #000}';
 	} else if (options.background === 'color') {
 		moreCSS += 'body {background: ' + options.bg_color + '}';
 	}
@@ -275,6 +275,8 @@ function drawWindow(id, title, x, y, w, h, z) {
 
 // create folder
 	win.childNodes[0].childNodes[0].addEventListener('mousedown', function(e) {
+		e.preventDefault();
+
 		let existingPanel = win.querySelector('#createFolderForm');
 
 		if (existingPanel) {
@@ -298,6 +300,8 @@ function drawWindow(id, title, x, y, w, h, z) {
 			+ '<input type="submit" value="'+submit+'"></form>';
 		win.insertAdjacentHTML('beforeend', content);
 
+		document.getElementById('createFolderForm').childNodes[0].childNodes[1].focus();
+
 		document.getElementById('createFolderForm').addEventListener('submit', function(e) {
 			e.preventDefault();
 			let formData = new FormData(e.target);
@@ -309,12 +313,6 @@ function drawWindow(id, title, x, y, w, h, z) {
 				location.reload();
 			});
 		});
-	});
-
-	win.childNodes[0].childNodes[0].addEventListener('mouseup', function() {
-		if (document.getElementById('createFolderForm')) {
-			document.getElementById('createFolderForm').childNodes[0].childNodes[1].focus();
-		}
 	});
 }
 
