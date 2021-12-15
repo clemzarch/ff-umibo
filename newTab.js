@@ -134,6 +134,7 @@ function registerFolder(folder) {
 				chrome.storage.local.set({'w': arr_windows});
 			});
 		} else {
+			existingWindow.dispatchEvent(new Event('mousedown'));
 			existingWindow.animate(
 				[{}, { transformOrigin: 'center', transform: 'scale(0.95)' }, { transform: 'scale(1.1)' }, {}],
 				{ duration: 256 }
