@@ -135,7 +135,7 @@ function registerFolder(folder) {
 			});
 		} else {
 			existingWindow.animate(
-				[{ transform: 'scale(0.95)' }, { transform: 'scale(1.05)' }, {}],
+				[{}, { transformOrigin: 'center', transform: 'scale(0.95)' }, { transform: 'scale(1.1)' }, {}],
 				{ duration: 256 }
 			);
 		}
