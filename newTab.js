@@ -151,7 +151,7 @@ function drawWindow(id, title, x, y, w, h, z) {
 		y = 0;
 	}
 
-	if (x < 0) {
+	if (x < -5) {
 		x = 0;
 	}
 
@@ -161,6 +161,14 @@ function drawWindow(id, title, x, y, w, h, z) {
 		y = (y * 100) / window.innerHeight;
 		w = (w * 100) / window.innerWidth;
 		h = (h * 100) / window.innerHeight;
+	}
+
+	// second pass to catch windows still stuck outside the frame
+	if (x > 97) {
+		x = 90;
+	}
+	if (y > 97) {
+		y = 90;
 	}
 
 // draw
