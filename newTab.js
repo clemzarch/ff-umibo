@@ -135,7 +135,10 @@ function registerFolder(folder) {
 				chrome.storage.local.set({'w': arr_windows});
 			});
 		} else {
-			existingWindow.dispatchEvent(new Event('mousedown'));
+//			this is buggy. str: open window, try reopening, then close, and reload. result: window's still there
+//			some storage race between the one that's clicked and the one that's brought to foreground?
+//			existingWindow.dispatchEvent(new Event('mousedown'));
+
 			existingWindow.animate(
 				[{}, { transformOrigin: 'center', transform: 'scale(0.95)' }, { transform: 'scale(1.1)' }, {}],
 				{ duration: 256 }
