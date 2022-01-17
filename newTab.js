@@ -51,7 +51,6 @@ chrome.storage.local.get(null, function(options) {
 	}
 
 	if (Object.entries(options).length === 0) { // if no options yet
-		chrome.runtime.setUninstallURL('http://zarch.info/UMiBO/uninstalled.html');
 		chrome.storage.local.set({
 			toolbar_as_folder: true,
 			show_search_tips: true,
