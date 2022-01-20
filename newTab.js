@@ -98,6 +98,9 @@ function applyTheme () {
 	});
 }
 
+let move_target, mouse_over, drop_target, resize_target, raise_target, delete_drop_target, offsetX, offsetY;
+let closing = false;
+
 function registerFolder(folder) {
 	document.getElementById(folder).addEventListener('click', function(folder) {
 		let folderId = folder.target.id;
@@ -139,15 +142,28 @@ function registerFolder(folder) {
 //			existingWindow.dispatchEvent(new Event('mousedown'));
 
 			existingWindow.animate(
-				[{}, { transformOrigin: 'center', transform: 'scale(0.95)' }, { transform: 'scale(1.1)' }, {}],
+				[{ transformOrigin: 'center', transform: 'scale(0.95)' }, { transform: 'scale(1.1)' }, {}],
 				{ duration: 256 }
 			);
 		}
 	});
-}
 
-let move_target, mouse_over, drop_target, resize_target, raise_target, delete_drop_target, offsetX, offsetY;
-let closing = false;
+	document.getElementById(folder).addEventListener('mouseenter', function(folder) {
+		let existingWindow = document.getElementById('win_'+folder.target.id);
+
+		if (existingWindow !== null) {
+			existingWindow.style.outline = '5px solid var(--hi-click)';
+		}
+	});
+
+	document.getElementById(folder).addEventListener('mouseleave', function(folder) {
+		let existingWindow = document.getElementById('win_'+folder.target.id);
+
+		if (existingWindow !== null) {
+			existingWindow.style.outline = null
+		}
+	});
+}
 
 function drawWindow(id, title, x, y, w, h, z) {
 // check if window stuck
