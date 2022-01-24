@@ -4,7 +4,7 @@ chrome.storage.local.get(null, function(options) {
 		for (const key of keys) {
 			let w = options.w[key];
 
-			drawWindow(key, w.title, w.x, w.y, w.w, w.h, 1);
+			drawWindow(key, w.title, w.x, w.y, w.w, w.h, 1, options.sortColumn);
 		}
 	}
 
@@ -102,48 +102,50 @@ function applyTheme () {
 }
 
 function registerFolder(folder) {
-	document.getElementById(folder).addEventListener('click', function(folder) {
-		let folderId = folder.target.id;
-		let existingWindow = document.getElementById('win_'+folderId);
+    chrome.storage.local.get(null, function(options) {
+        document.getElementById(folder).addEventListener('click', function(folder) {
+            let folderId = folder.target.id;
+            let existingWindow = document.getElementById('win_'+folderId);
 
-		if (existingWindow === null) {
-			let folderTitle = folder.target.innerHTML;
-			let len = document.getElementsByClassName('window').length;
+            if (existingWindow === null) {
+                let folderTitle = folder.target.innerHTML;
+                let len = document.getElementsByClassName('window').length + 1;
 
-			drawWindow(folderId, folderTitle, folder.clientX-200, folder.clientY+50, 400, 300, len);
-			if (window.matchMedia("(prefers-reduced-motion: no-preference)").matches) {
-				document.getElementById('win_'+folderId).animate(
-					[{ transform: 'scale(0.2)' }, { transform: 'scale(1.1)' }, {}],
-					{ duration: 256 }
-				);
-			}
+                drawWindow(folderId, folderTitle, folder.clientX-200, folder.clientY+50, 400, 300, len, options.sortColumn);
+                if (window.matchMedia("(prefers-reduced-motion: no-preference)").matches) {
+                    document.getElementById('win_'+folderId).animate(
+                        [{ transform: 'scale(0.2)' }, { transform: 'scale(1.1)' }, {}],
+                        { duration: 256 }
+                    );
+                }
 
-			// save in local storage
-			chrome.storage.local.get('w', function(o) {
-				let arr_windows = o.w ?? [];
+                // save in local storage
+                chrome.storage.local.get('w', function(o) {
+                    let arr_windows = o.w ?? [];
 
-				arr_windows[folderId] = {
-					title: folderTitle,
-					y: folder.clientY+50,
-					x: folder.clientX-200,
-					h: 300,
-					w: 400
-				};
-				chrome.storage.local.set({'w': arr_windows});
-			});
-		} else {
-			existingWindow.animate(
-				[{ transform: 'scale(0.95)' }, { transform: 'scale(1.05)' }, {}],
-				{ duration: 256 }
-			);
-		}
-	});
+                    arr_windows[folderId] = {
+                        title: folderTitle,
+                        y: folder.clientY+50,
+                        x: folder.clientX-200,
+                        h: 300,
+                        w: 400
+                    };
+                    chrome.storage.local.set({'w': arr_windows});
+                });
+            } else {
+                existingWindow.animate(
+                    [{ transform: 'scale(0.95)' }, { transform: 'scale(1.05)' }, {}],
+                    { duration: 256 }
+                );
+            }
+        });
+    });
 }
 
 let move_target, mouse_over, drop_target, resize_target, raise_target, delete_drop_target, offsetX, offsetY;
 let closing = false;
 
-function drawWindow(id, title, x, y, w, h, z) {
+function drawWindow(id, title, x, y, w, h, z, sortColumn = null) {
 // check if window stuck
 	if (y < 0) {
 		y = 0;
@@ -175,6 +177,16 @@ function drawWindow(id, title, x, y, w, h, z) {
 		let elements = '';
 		let foldersIds = [];
 		let linksIds = [];
+
+        if (sortColumn === 'dateAdded') {
+            e.sort(function(a, b) {
+                return a[sortColumn] < b[sortColumn]
+            });
+        } else if (sortColumn === 'title') {
+            e.sort(function(a, b) {
+                return a.title.toUpperCase() > b.title.toUpperCase()
+            });
+        }
 
 		for (let i = 0; i < e.length; ++i) {
 			let el = e[i];
