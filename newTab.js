@@ -1,11 +1,8 @@
 chrome.storage.local.get(null, function(options) {
-	if (options.w) { // restore windows
-		let keys = Object.keys(options.w);
-		for (const key of keys) {
-			let w = options.w[key];
+	for (let key in options.w) {
+		let w = options.w[key];
 
-			drawWindow(key, w.title, w.x, w.y, w.w, w.h, 1, options.sortColumn);
-		}
+        drawWindow(key, w.title, w.x, w.y, w.w, w.h, 1, options.sortColumn);
 	}
 
 	let moreCSS = options.custom_css ?? '';
@@ -30,7 +27,7 @@ chrome.storage.local.get(null, function(options) {
 	}
 
 	if (options.background === 'image') {
-		moreCSS += 'body {background: url(' + options.bg_url + ') repeat fixed center center / cover} body > .desktopLink {color:#fff;text-shadow:0 0 3px #000}';
+		moreCSS += 'body {background: url(' + options.bg_url + ') repeat fixed center center / cover} body > .desktopLink, #tip_container data {color:#fff;text-shadow:0 0 3px #000}';
 	} else if (options.background === 'color') {
 		moreCSS += 'body {background: ' + options.bg_color + '}';
 	}
@@ -54,7 +51,6 @@ chrome.storage.local.get(null, function(options) {
 	}
 
 	if (Object.entries(options).length === 0) { // if no options yet
-		chrome.runtime.setUninstallURL('http://zarch.info/UMiBO/uninstalled.html');
 		chrome.storage.local.set({
 			toolbar_as_folder: true,
 			show_search_tips: true,
@@ -62,8 +58,9 @@ chrome.storage.local.get(null, function(options) {
 			bg_url: "https://images.unsplash.com/photo-1600627225432-82de96999068?auto=format&fit=crop&w=2550&q=80",
 			bg_color: "#ffffff",
 			custom_css: null
+		}, function() {
+			location.reload();
 		});
-		location.reload();
 	}
 });
 
@@ -101,49 +98,74 @@ function applyTheme () {
 	});
 }
 
+let move_target, mouse_over, drop_target, resize_target, raise_target, delete_drop_target, offsetX, offsetY;
+let closing = false;
+
 function registerFolder(folder) {
     chrome.storage.local.get(null, function(options) {
         document.getElementById(folder).addEventListener('click', function(folder) {
             let folderId = folder.target.id;
             let existingWindow = document.getElementById('win_'+folderId);
 
-            if (existingWindow === null) {
-                let folderTitle = folder.target.innerHTML;
-                let len = document.getElementsByClassName('window').length + 1;
+		if (existingWindow === null) {
+			let folderTitle = folder.target.innerHTML;
+			let len = document.getElementsByClassName('window').length;
 
-                drawWindow(folderId, folderTitle, folder.clientX-200, folder.clientY+50, 400, 300, len, options.sortColumn);
-                if (window.matchMedia("(prefers-reduced-motion: no-preference)").matches) {
-                    document.getElementById('win_'+folderId).animate(
-                        [{ transform: 'scale(0.2)' }, { transform: 'scale(1.1)' }, {}],
-                        { duration: 256 }
-                    );
-                }
+			let computedLeft = ((folder.clientX-200) * 100) / window.innerWidth;
+			let computedTop = ((folder.clientY+50) * 100) / window.innerHeight;
+			let computedWidth = 40000 / window.innerWidth;
+			let computedHeight = 30000 / window.innerHeight;
 
-                // save in local storage
-                chrome.storage.local.get('w', function(o) {
-                    let arr_windows = o.w ?? [];
+			drawWindow(folderId, folderTitle, computedLeft, computedTop, computedWidth, computedHeight, len, options.sortColumn);
+			if (window.matchMedia("(prefers-reduced-motion: no-preference)").matches) {
+				document.getElementById('win_'+folderId).animate(
+					[{ transform: 'scale(0.2)' }, { transform: 'scale(1.1)' }, {}],
+					{ duration: 256 }
+				);
+			}
 
-                    arr_windows[folderId] = {
-                        title: folderTitle,
-                        y: folder.clientY+50,
-                        x: folder.clientX-200,
-                        h: 300,
-                        w: 400
-                    };
-                    chrome.storage.local.set({'w': arr_windows});
-                });
-            } else {
-                existingWindow.animate(
-                    [{ transform: 'scale(0.95)' }, { transform: 'scale(1.05)' }, {}],
-                    { duration: 256 }
-                );
-            }
-        });
-    });
+			// save in local storage
+			chrome.storage.local.get('w', function(o) {
+				let arr_windows = o.w ?? [];
+
+				arr_windows[folderId] = {
+					title: folderTitle,
+					y: computedTop,
+					x: computedLeft,
+					h: computedHeight,
+					w: computedWidth
+				};
+				chrome.storage.local.set({'w': arr_windows});
+			});
+		} else {
+//			this is buggy. str: open window, try reopening, then close, and reload. result: window's still there
+//			some storage race between the one that's clicked and the one that's brought to foreground?
+//			existingWindow.dispatchEvent(new Event('mousedown'));
+
+			existingWindow.animate(
+				[{ transformOrigin: 'center', transform: 'scale(0.95)' }, { transform: 'scale(1.1)' }, {}],
+				{ duration: 256 }
+			);
+		}
+	});
+	});
+
+	document.getElementById(folder).addEventListener('mouseenter', function(folder) {
+		let existingWindow = document.getElementById('win_'+folder.target.id);
+
+		if (existingWindow !== null) {
+			existingWindow.style.outline = '5px solid var(--hi-click)';
+		}
+	});
+
+	document.getElementById(folder).addEventListener('mouseleave', function(folder) {
+		let existingWindow = document.getElementById('win_'+folder.target.id);
+
+		if (existingWindow !== null) {
+			existingWindow.style.outline = null
+		}
+	});
 }
-
-let move_target, mouse_over, drop_target, resize_target, raise_target, delete_drop_target, offsetX, offsetY;
-let closing = false;
 
 function drawWindow(id, title, x, y, w, h, z, sortColumn = null) {
 // check if window stuck
@@ -151,14 +173,30 @@ function drawWindow(id, title, x, y, w, h, z, sortColumn = null) {
 		y = 0;
 	}
 
-	if (x < 0) {
+	if (x < -5) {
 		x = 0;
+	}
+
+	//check if size/location are probably in pixels and we need to convert them to percentages.
+	if (x > 100 || y > 100 || h > 100 || w > 100) {
+		x = (x * 100) / window.innerWidth;
+		y = (y * 100) / window.innerHeight;
+		w = (w * 100) / window.innerWidth;
+		h = (h * 100) / window.innerHeight;
+	}
+
+	// second pass to catch windows still stuck outside the frame
+	if (x > 97) {
+		x = 90;
+	}
+	if (y > 97) {
+		y = 90;
 	}
 
 // draw
 	document.body.insertAdjacentHTML(
 		'beforeend',
-		'<div id="win_'+id+'" index="'+id+'" style="top:'+y+'px; left:'+x+'px;z-index:'+z+'" class="window">'
+		'<div id="win_'+id+'" index="'+id+'" style="top:'+y+'%; left:'+x+'%;z-index:'+z+'" class="window">'
 		+'<div class="border" title="'+title+'">'
 		+'<span class="create_button" title="Create">'
 		+'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 2 16 16" width="12" height="12"><path d="M3 7H1.5l-.5.5V9l.5.5H3l.5-.5V7.5zM8.8 7H7.2l-.5.5V9l.5.5h1.5l.6-.5V7.5zM14.5 7H13l-.5.5V9l.5.5h1.5L15 9V7.5z"/></svg>'
@@ -166,7 +204,7 @@ function drawWindow(id, title, x, y, w, h, z, sortColumn = null) {
 		+title+'<span class="close_button" title="Close">'
 		+'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 2 16 16" width="12" height="12"><path d="M9.1 7.78l4.72-4.71a.63.63 0 00-.89-.89l-4.69 4.7h-.48l-4.7-4.7a.63.63 0 10-.88.89l4.69 4.68v.5l-4.69 4.68a.63.63 0 00.89.89l4.68-4.69h.5l4.68 4.69a.63.63 0 00.89 0 .63.63 0 000-.89L9.1 8.23v-.45z"/></svg>'
 		+'</span></div>'
-		+'<main style="height:'+h+'px;width:'+w+'px"></main><div class="resize"></div>'
+		+'<main style="height:'+h+'vh;width:'+w+'vw"></main><div class="resize"></div>'
 		+'<div class="dropzone" id="drop_'+id+'"></div></div>'
 	);
 
@@ -240,7 +278,7 @@ function drawWindow(id, title, x, y, w, h, z, sortColumn = null) {
 				allWindows[i].style.zIndex--;
 			}
 		}
-		win.style.zIndex = allWindows.length.toString();
+		win.style.zIndex = allWindows.length;
 		raise_target = win;
 	});
 
@@ -250,10 +288,10 @@ function drawWindow(id, title, x, y, w, h, z, sortColumn = null) {
 		win.remove();
 
 		chrome.storage.local.get('w', function(o) {
-			let arr_windows = o.w;
-			delete arr_windows[id]; // fingers crossed
-			chrome.storage.local.set({'w': arr_windows });
-			closing = false;
+			delete o.w[id]; // fingers crossed
+			chrome.storage.local.set({'w': o.w }, function() {
+				closing = false;
+			});
 		});
 	});
 
@@ -269,6 +307,8 @@ function drawWindow(id, title, x, y, w, h, z, sortColumn = null) {
 
 // create folder
 	win.childNodes[0].childNodes[0].addEventListener('mousedown', function(e) {
+		e.preventDefault();
+
 		let existingPanel = win.querySelector('#createFolderForm');
 
 		if (existingPanel) {
@@ -292,6 +332,8 @@ function drawWindow(id, title, x, y, w, h, z, sortColumn = null) {
 			+ '<input type="submit" value="'+submit+'"></form>';
 		win.insertAdjacentHTML('beforeend', content);
 
+		document.getElementById('createFolderForm').childNodes[0].childNodes[1].focus();
+
 		document.getElementById('createFolderForm').addEventListener('submit', function(e) {
 			e.preventDefault();
 			let formData = new FormData(e.target);
@@ -303,12 +345,6 @@ function drawWindow(id, title, x, y, w, h, z, sortColumn = null) {
 				location.reload();
 			});
 		});
-	});
-
-	win.childNodes[0].childNodes[0].addEventListener('mouseup', function() {
-		if (document.getElementById('createFolderForm')) {
-			document.getElementById('createFolderForm').childNodes[0].childNodes[1].focus();
-		}
 	});
 }
 
@@ -331,16 +367,30 @@ document.body.addEventListener('mousemove', function(e) {
 document.body.addEventListener('mouseup', function() { // save the new window position and size, and put it on top of the pile
 	let win = move_target ?? resize_target ?? raise_target ?? null;
 	if (win) {
+		// end of the drag-n-drop or resize, turn back the pixels into percentages.
+		// this resolves `browser frame resizing` and `UI scale changes` which would push the windows outside the frame.
+		// better do it here, and not during page load, since this function is called in the background.
+
+		let computedLeft = (win.offsetLeft * 100) / window.innerWidth;
+		let computedTop = (win.offsetTop * 100) / window.innerHeight;
+		let computedWidth = (win.childNodes[1].offsetWidth * 100) / window.innerWidth;
+		let computedHeight = (win.childNodes[1].offsetHeight * 100) / window.innerHeight;
+
+		win.style.left = computedLeft + '%';
+		win.style.top = computedTop + '%';
+		win.childNodes[1].style.width = computedWidth + 'vw';
+		win.childNodes[1].style.height = computedHeight + 'vh';
+
 		chrome.storage.local.get('w', function(o) {
 			let arr_windows = o.w ?? [];
 
 			delete arr_windows[win.getAttribute('index')];
 			arr_windows[win.getAttribute('index')] = {
 				title:	win.childNodes[0].title,
-				x:		win.offsetLeft,
-				y:		win.offsetTop,
-				w:		win.childNodes[1].offsetWidth, // 0 is <border>, 1 is <main>, 2 is <resize>
-				h:		win.childNodes[1].offsetHeight
+				x:		computedLeft,
+				y:		computedTop,
+				w:		computedWidth, // 0 is <border>, 1 is <main>, 2 is <resize>
+				h:		computedHeight
 			};
 			chrome.storage.local.set({'w': arr_windows });
 		});
