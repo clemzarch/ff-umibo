@@ -14,6 +14,21 @@
     "optionToolbarAsFolder": {
         "message": "Display the Bookmarks Toolbar as a folder."
     },
+    "optionTitleSort": {
+        "message": "Sort order"
+    },
+    "optionSortColumnDefault": {
+        "message": "None (default)"
+    },
+    "optionSortColumnDate": {
+        "message": "Most recent first"
+    },
+    "optionSortColumnAlphabetical": {
+        "message": "Alphabetical"
+    },
+    "optionSortReverse": {
+        "message": "Reverse"
+    },
     "optionTitleBackground": {
         "message": "Background"
     },

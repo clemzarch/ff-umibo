@@ -14,12 +14,15 @@ browser.storage.local.get().then(function(options) {
 	showAndHide(options.background);
 	document.getElementById(options.background).checked = true;
 
+    if (options.sortColumn) {
+	    document.getElementById('sortColumn' + options.sortColumn).checked = true;
+    }
+
 	let Inputs = document.getElementsByTagName('input');
 	for (let i = 0; i < Inputs.length; i++) {
 		Inputs[i].addEventListener("input", function(e) {
 			if (e.target.type === 'radio' && e.target.checked) { //radio button
 				value = e.target.value;
-				showAndHide(value);
 			} else if (
 				e.target.type === 'text' ||
 				e.target.type === 'color' ||
@@ -29,6 +32,10 @@ browser.storage.local.get().then(function(options) {
 			} else {
 				value = e.target.checked;
 			}
+
+            if (e.target.name === 'background') {
+                showAndHide(value);
+            }
 
 			browser.storage.local.set({
 				[e.target.name]: value

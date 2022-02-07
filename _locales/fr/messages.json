@@ -8,6 +8,21 @@
     "optionToolbarAsFolder": {
         "message": "Afficher la Barre Personnelle sous forme de dossier."
     },
+    "optionTitleSort": {
+        "message": "Tri"
+    },
+    "optionSortColumnDefault": {
+        "message": "Aucun (par défaut)"
+    },
+    "optionSortColumnDate": {
+        "message": "Les plus récents d'abord"
+    },
+    "optionSortColumnAlphabetical": {
+        "message": "Alphabétique"
+    },
+    "optionSortReverse": {
+        "message": "Inversé"
+    },
     "optionFontSize": {
         "message": "Taille du Texte"
     },

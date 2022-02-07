@@ -2,13 +2,13 @@ chrome.storage.local.get(null, function(options) {
 	for (let key in options.w) {
 		let w = options.w[key];
 
-		drawWindow(key, w.title, w.x, w.y, w.w, w.h, 1);
+		drawWindow(key, w.title, w.x, w.y, w.w, w.h, 1, options.sortColumn, options.sortReverse);
 	}
 
 	let moreCSS = options.custom_css ?? '';
 
 	if (options.toolbar_as_folder) {
-		registerFolder('toolbar_____');
+		registerFolder('toolbar_____', options.sortColumn, options.sortReverse);
 	} else {
 		moreCSS += 'body {max-width: 1280px}';
 		document.getElementById('toolbar_____').outerHTML = null;
@@ -19,7 +19,7 @@ chrome.storage.local.get(null, function(options) {
 					dragonPrepare(bms[i].id);
 				} else if (bms[i].type === 'folder') {
 					document.body.insertAdjacentHTML('beforeend', '<div class="desktopFolder" id="' + bms[i].id + '" title="' + bms[i].title + '" draggable="true">' + bms[i].title + '</div>');
-					registerFolder(bms[i].id);
+					registerFolder(bms[i].id, options.sortColumn, options.sortReverse);
 					dragonPrepare(bms[i].id);
 				}
 			}
@@ -62,6 +62,11 @@ chrome.storage.local.get(null, function(options) {
 			location.reload();
 		});
 	}
+	console.log(options);
+
+	registerFolder('menu________', options.sortColumn, options.sortReverse);
+	registerFolder('mobile______', options.sortColumn, options.sortReverse);
+	registerFolder('unfiled_____', options.sortColumn, options.sortReverse);
 });
 
 applyTheme();
@@ -101,10 +106,10 @@ function applyTheme () {
 let move_target, mouse_over, drop_target, resize_target, raise_target, delete_drop_target, offsetX, offsetY;
 let closing = false;
 
-function registerFolder(folder) {
-	document.getElementById(folder).addEventListener('click', function(folder) {
+function registerFolder(folder, sortColumn = null, sortReverse = false) {
+	document.getElementById(folder).addEventListener('click', function (folder) {
 		let folderId = folder.target.id;
-		let existingWindow = document.getElementById('win_'+folderId);
+		let existingWindow = document.getElementById('win_' + folderId);
 
 		if (existingWindow === null) {
 			let folderTitle = folder.target.innerHTML;
@@ -115,7 +120,7 @@ function registerFolder(folder) {
 			let computedWidth = 40000 / window.innerWidth;
 			let computedHeight = 30000 / window.innerHeight;
 
-			drawWindow(folderId, folderTitle, computedLeft, computedTop, computedWidth, computedHeight, len);
+			drawWindow(folderId, folderTitle, computedLeft, computedTop, computedWidth, computedHeight, len, sortColumn, sortReverse);
 			if (window.matchMedia("(prefers-reduced-motion: no-preference)").matches) {
 				document.getElementById('win_'+folderId).animate(
 					[{ transform: 'scale(0.2)' }, { transform: 'scale(1.1)' }, {}],
@@ -165,7 +170,7 @@ function registerFolder(folder) {
 	});
 }
 
-function drawWindow(id, title, x, y, w, h, z) {
+function drawWindow(id, title, x, y, w, h, z, sortColumn = null, sortReverse = false) {
 // check if window stuck
 	if (y < 0) {
 		y = 0;
@@ -210,6 +215,32 @@ function drawWindow(id, title, x, y, w, h, z) {
 
 // populate
 	chrome.bookmarks.getChildren(id, function(e) {
+		if (sortColumn === 'dateAdded') {
+			// dateAdded should return most recent first,
+			// so smallest timestamps first
+			e.sort(function (a, b) {
+				return sortReverse ?
+					a['dateAdded'] > b['dateAdded'] :
+					a['dateAdded'] < b['dateAdded']
+				;
+			});
+		} else if (sortColumn === 'title') {
+			e.sort(function (a, b) {
+				if (!a['title']) {
+					a['title'] = a['url'];
+				}
+
+				if (!b['title']) {
+					b['title'] = b['url'];
+				}
+
+				return sortReverse ?
+					a['title'].toUpperCase() < b['title'].toUpperCase() :
+					a['title'].toUpperCase() > b['title'].toUpperCase()
+				;
+			});
+		}
+
 		let elements = '';
 		let foldersIds = [];
 		let linksIds = [];
@@ -232,7 +263,7 @@ function drawWindow(id, title, x, y, w, h, z) {
 		win.childNodes[1].innerHTML = elements; // may be faster, or may not
 
 		for (let i = 0; i < foldersIds.length; i++) {
-			registerFolder(foldersIds[i]);
+			registerFolder(foldersIds[i], sortColumn, sortReverse);
 			dragonPrepare(foldersIds[i]);
 		}
 
@@ -422,7 +453,7 @@ function dragonPrepare(id) {
 		mouse_over = e.currentTarget;
 	});
 
-	target.addEventListener('mouseleave', function(e) {
+	target.addEventListener('mouseleave', function () {
 		mouse_over = null;
 	});
 }
@@ -447,10 +478,6 @@ document.addEventListener('dragend', function() {
 
 	location.reload();
 });
-
-registerFolder('menu________');
-registerFolder('mobile______');
-registerFolder('unfiled_____');
 
 document.getElementById('options').addEventListener("mousedown", function() {
 	chrome.runtime.openOptionsPage();
