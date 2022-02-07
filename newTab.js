@@ -215,29 +215,35 @@ function drawWindow(id, title, x, y, w, h, z, sortColumn = null, sortReverse = f
 
 // populate
 	chrome.bookmarks.getChildren(id, function(e) {
+		if (sortColumn === 'dateAdded') {
+			// dateAdded should return most recent first,
+			// so smallest timestamps first
+			e.sort(function (a, b) {
+				return sortReverse ?
+					a['dateAdded'] > b['dateAdded'] :
+					a['dateAdded'] < b['dateAdded']
+				;
+			});
+		} else if (sortColumn === 'title') {
+			e.sort(function (a, b) {
+				if (!a['title']) {
+					a['title'] = a['url'];
+				}
+
+				if (!b['title']) {
+					b['title'] = b['url'];
+				}
+
+				return sortReverse ?
+					a['title'].toUpperCase() < b['title'].toUpperCase() :
+					a['title'].toUpperCase() > b['title'].toUpperCase()
+				;
+			});
+		}
+
 		let elements = '';
 		let foldersIds = [];
 		let linksIds = [];
-
-		if (sortColumn && sortColumn !== 'default') {
-			if (sortColumn === 'dateAdded') {
-				// dateAdded should actually return most recent first,
-				// so smallest timestamps first
-				e.sort(function (a, b) {
-					return sortReverse ?
-						a[sortColumn] > b[sortColumn] :
-						a[sortColumn] < b[sortColumn]
-					;
-				});
-			} else {
-				e.sort(function (a, b) {
-					return sortReverse ?
-						a[sortColumn].toUpperCase() < b[sortColumn].toUpperCase() :
-						a[sortColumn].toUpperCase() > b[sortColumn].toUpperCase()
-					;
-				});
-			}
-		}
 
 		for (let i = 0; i < e.length; ++i) {
 			let el = e[i];
