@@ -47,16 +47,9 @@ a {
 	text-align: left;
 	font-weight: 600;
 }
-
-#tip_container section {
-	margin: 10px auto 0 auto;
-	max-width: max-content;
-}
 #tip_container section div {
-	text-align: left;
-	line-height: 50px;
 	display: inline-block;
-	margin-right: 20px;
+	margin: 10px;
 }
 #tip_container span {
 	display: inline-block;
@@ -138,6 +131,7 @@ a {
 	border-radius: 5px;
 	height: 16px;
 	vertical-align: middle;
+	box-shadow: 0 1px 1px var(--shadow);
 }
 .desktopFolder:hover {
 	box-shadow: 0 0 0 5px var(--hi);
