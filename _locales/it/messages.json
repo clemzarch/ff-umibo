@@ -1,0 +1,83 @@
+{
+    "extensionDescription": {
+        "message": "Trasforma la tua nuova scheda in un desktop virtuale per gestire i segnalibri."
+    },
+    "optionShowTip": {
+        "message": "Mostra i suggerimenti per la ricerca."
+    },
+    "optionFontSize": {
+        "message": "Dimensione del carattere"
+    },
+    "optionIconSize": {
+        "message": "Dimensione dell'icona"
+    },
+    "optionToolbarAsFolder": {
+        "message": "Visualizza la barra dei segnalibri come una cartella."
+    },
+    "optionTitleSort": {
+        "message": "Ordinamento"
+    },
+    "optionSortColumnDefault": {
+        "message": "Nessuno (predefinito)"
+    },
+    "optionSortColumnDate": {
+        "message": "Il più recente prima"
+    },
+    "optionSortColumnAlphabetical": {
+        "message": "Alfabetico"
+    },
+    "optionSortReverse": {
+        "message": "Invertire"
+    },
+    "optionTitleBackground": {
+        "message": "Sfondo"
+    },
+    "optionTitleCustomCSS": {
+        "message": "CSS personalizzato"
+    },
+    "BookmarksToolbar": {
+        "message": "Barra dei segnalibri"
+    },
+    "BookmarksMenu": {
+        "message": "Menu segnalibri"
+    },
+    "MobileBookmarks": {
+        "message": "Segnalibri mobili"
+    },
+    "OtherBookmarks": {
+        "message": "Altri segnalibri"
+    },
+    "optionBgDefault": {
+        "message": "Default"
+    },
+    "optionBgColor": {
+        "message": "Colore"
+    },
+    "optionBgImage": {
+        "message": "URL dell'immagine"
+    },
+    "tipHistory": {
+        "message": "Cronologia"
+    },
+    "tipBookmarks": {
+        "message": "Segnalibri"
+    },
+    "tipTabs": {
+        "message": "Schede"
+    },
+    "tipSearch": {
+        "message": "Motori di ricerca"
+    },
+    "newFolderLabel": {
+        "message": "Nuova cartella"
+    },
+    "newFolderPlaceholder": {
+        "message": "Nome"
+    },
+    "newFolderSubmit": {
+        "message": "Creare"
+    },
+    "deleteVortex": {
+        "message": "Cancellare"
+    }
+}

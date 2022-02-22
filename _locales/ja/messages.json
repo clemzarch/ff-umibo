@@ -14,6 +14,21 @@
     "optionToolbarAsFolder": {
         "message": "ブックマークツールバーをフォルダとして表示します。"
     },
+    "optionTitleSort": {
+        "message": "ソート順"
+    },
+    "optionSortColumnDefault": {
+        "message": "なし（デフォルト）"
+    },
+    "optionSortColumnDate": {
+        "message": "直近の第一"
+    },
+    "optionSortColumnAlphabetical": {
+        "message": "アルファベット順"
+    },
+    "optionSortReverse": {
+        "message": "逆"
+    },
     "optionTitleBackground": {
         "message": "バックグラウンド"
     },

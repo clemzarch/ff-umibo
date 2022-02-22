@@ -1,0 +1,83 @@
+{
+    "extensionDescription": {
+        "message": " Yer işaretlerini yönetmek için yeni sekmenizi sanal masaüstüne dönüştürür."
+    },
+    "optionShowTip": {
+        "message": " Arama ipuçlarını gösterin."
+    },
+    "optionFontSize": {
+        "message": " Yazı Tipi Boyutu"
+    },
+    "optionIconSize": {
+        "message": "Simge Boyutu"
+    },
+    "optionToolbarAsFolder": {
+        "message": "Yer İmleri Araç Çubuğu'nu klasör olarak görüntüleyin."
+    },
+    "optionTitleSort": {
+        "message": "Sıralama düzeni"
+    },
+    "optionSortColumnDefault": {
+        "message": "Yok (varsayılan)"
+    },
+    "optionSortColumnDate": {
+        "message": "En son ilk"
+    },
+    "optionSortColumnAlphabetical": {
+        "message": "Alfabetik"
+    },
+    "optionSortReverse": {
+        "message": "Ters"
+    },
+    "optionTitleBackground": {
+        "message": "Arka plan"
+    },
+    "optionTitleCustomCSS": {
+        "message": "Özel CSS"
+    },
+    "BookmarksToolbar": {
+        "message": "Yer imleri araç çubuğu"
+    },
+    "BookmarksMenu": {
+        "message": "Yer imleri menüsü"
+    },
+    "MobileBookmarks": {
+        "message": "Mobil yer imleri"
+    },
+    "OtherBookmarks": {
+        "message": "Diğer yer imleri"
+    },
+    "optionBgDefault": {
+        "message": "Temerrüt"
+    },
+    "optionBgColor": {
+        "message": "Renk"
+    },
+    "optionBgImage": {
+        "message": "Resim URL'si"
+    },
+    "tipHistory": {
+        "message": "Geçmiş"
+    },
+    "tipBookmarks": {
+        "message": "Yer im -leri"
+    },
+    "tipTabs": {
+        "message": "Sekmeler"
+    },
+    "tipSearch": {
+        "message": "Arama motorları"
+    },
+    "newFolderLabel": {
+        "message": "Yeni klasör"
+    },
+    "newFolderPlaceholder": {
+        "message": "İsim"
+    },
+    "newFolderSubmit": {
+        "message": "Oluşturun"
+    },
+    "deleteVortex": {
+        "message": "Silmak"
+    }
+}

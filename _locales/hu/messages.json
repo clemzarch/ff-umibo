@@ -14,6 +14,21 @@
     "optionToolbarAsFolder": {
         "message": "A Könyvjelzők eszköztár mappaként való megjelenítése."
     },
+    "optionTitleSort": {
+        "message": "Rendezési sorrend"
+    },
+    "optionSortColumnDefault": {
+        "message": "Nincs (alapértelmezett)"
+    },
+    "optionSortColumnDate": {
+        "message": "Legutóbbi első"
+    },
+    "optionSortColumnAlphabetical": {
+        "message": "Betűrendes"
+    },
+    "optionSortReverse": {
+        "message": "Fordított"
+    },
     "optionTitleBackground": {
         "message": "Háttér"
     },

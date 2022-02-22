@@ -14,6 +14,21 @@
     "optionToolbarAsFolder": {
         "message": "Zeigt die Lesezeichen-Symbolleiste als Ordner an."
     },
+    "optionTitleSort": {
+        "message": "Sortierreihenfolge"
+    },
+    "optionSortColumnDefault": {
+        "message": "Keine (Standard)"
+    },
+    "optionSortColumnDate": {
+        "message": "Neueste zuerst"
+    },
+    "optionSortColumnAlphabetical": {
+        "message": "Alphabetisch"
+    },
+    "optionSortReverse": {
+        "message": "Umgekehrt"
+    },
     "optionTitleBackground": {
         "message": "Hintergrund"
     },

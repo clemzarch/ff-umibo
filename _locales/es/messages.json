@@ -5,14 +5,29 @@
     "optionShowTip": {
         "message": "Mostrar consejos de búsqueda."
     },
+    "optionToolbarAsFolder": {
+        "message": "Mostrar la Barra de Marcadores como una carpeta."
+    },
+    "optionTitleSort": {
+        "message": "Ordenar"
+    },
+    "optionSortColumnDefault": {
+        "message": "Ninguno (por defecto)"
+    },
+    "optionSortColumnDate": {
+        "message": "Los más recientes primero"
+    },
+    "optionSortColumnAlphabetical": {
+        "message": "Alfabético"
+    },
+    "optionSortReverse": {
+        "message": "Invertido"
+    },
     "optionFontSize": {
         "message": "Tamaño de la fuente"
     },
     "optionIconSize": {
         "message": "Tamaño del icono"
-    },
-    "optionToolbarAsFolder": {
-        "message": "Mostrar la Barra de Marcadores como una carpeta."
     },
     "optionTitleBackground": {
         "message": "Fondo"

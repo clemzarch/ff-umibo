@@ -14,6 +14,21 @@
     "optionToolbarAsFolder": {
         "message": "将书签工具条显示为一个文件夹。"
     },
+    "optionTitleSort": {
+        "message": "排序顺序"
+    },
+    "optionSortColumnDefault": {
+        "message": "无（默认）"
+    },
+    "optionSortColumnDate": {
+        "message": "最近的第一次"
+    },
+    "optionSortColumnAlphabetical": {
+        "message": "按字母顺序排列"
+    },
+    "optionSortReverse": {
+        "message": "逆转"
+    },
     "optionTitleBackground": {
         "message": "背景介绍"
     },
