@@ -35,7 +35,7 @@ a {
 #tip_container {
 	visibility: hidden;
 	position: fixed;
-	bottom: 5px;
+	bottom: 0;
 	left: 0;
 	right: 0;
 	color: var(--faded-color);
@@ -47,19 +47,30 @@ a {
 	text-align: left;
 	font-weight: 600;
 }
+#tip_container section {
+	display: inline-block;
+	padding: 10px;
+    transition-duration: 0.5s;
+}
+#tip_container section:hover {
+    opacity: 0.2;
+}
 #tip_container section div {
 	display: inline-block;
 	margin: 10px;
 }
 #tip_container span {
 	display: inline-block;
-	background: var(--field);
-	margin: 0 6px 0 0;
-	border-radius: 3px;
+	background: linear-gradient(0deg, #fff, #ddd);
+	margin: 0 8px 0 0;
+	border-radius: 5px;
 	font-size: 20px;
-	text-align: center;
 	width: 30px;
 	line-height: 30px;
+	box-shadow: 0 3px 0 3px #ddd, 0 5px 3px 2px #333;
+	font-weight: 100;
+	color: #777;
+	border: 1px solid #fff;
 }
 
 .window {
