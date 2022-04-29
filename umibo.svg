@@ -1,1 +1,83 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"><path fill="context-fill" d="M11 11V9a1 1 0 0 1 1-1h1a1 1 0 0 1 1 1V5a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v6H1a1 1 0 0 0 0 2h7v-1a1 1 0 0 1 1-1zm4.5 1H13V9.5a.5.5 0 0 0-1 0V12H9.5a.5.5 0 0 0 0 1H12v2.5a.5.5 0 0 0 1 0V13h2.5a.5.5 0 0 0 0-1z"></path></svg>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   viewBox="0 0 79.375003 62.706269"
+   version="1.1"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns="http://www.w3.org/2000/svg"
+>
+  <defs
+     id="defs2">
+    <linearGradient
+       inkscape:collect="always"
+       id="linearGradient6033">
+      <stop
+         style="stop-color:#2fb0cf;stop-opacity:1;"
+         offset="0"
+         id="stop6029" />
+      <stop
+         style="stop-color:#2f45cf;stop-opacity:1"
+         offset="1"
+         id="stop6031" />
+    </linearGradient>
+    <marker
+       style="overflow:visible"
+       id="Arrow1Lend"
+       refX="0"
+       refY="0"
+       orient="auto"
+       inkscape:stockid="Arrow1Lend"
+       inkscape:isstock="true">
+      <path
+         transform="matrix(-0.8,0,0,-0.8,-10,0)"
+         style="fill:context-stroke;fill-rule:evenodd;stroke:context-stroke;stroke-width:1pt"
+         d="M 0,0 5,-5 -12.5,0 5,5 Z"
+         id="path3011" />
+    </marker>
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath2470">
+      <use
+         x="0"
+         y="0"
+         xlink:href="#g2466"
+         id="use2472"
+         transform="matrix(1.1703048,0,0,1.1703048,4.297124,-8.5221898)"
+         width="100%"
+         height="100%" />
+    </clipPath>
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient6033"
+       id="linearGradient6035"
+       x1="10.929459"
+       y1="74.577484"
+       x2="244.30554"
+       y2="284.80884"
+       gradientUnits="userSpaceOnUse" />
+  </defs>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <g
+       inkscape:label="Clip"
+       id="g2466"
+       transform="matrix(0.75990447,0,0,0.75990447,1.7589171,14.90686)" />
+    <g
+       id="g5997"
+       transform="matrix(1.0015189,0,0,1.011647,-0.09921627,-17.531269)">
+      <a
+         id="a5990"
+         transform="matrix(1.0043146,0,0,1.0043146,-5.6269692e-4,2.0123694)">
+        <path
+           id="path2882"
+           style="fill:url(#linearGradient6035);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0;stroke-miterlimit:4;stroke-dasharray:none"
+           d="M 69.527344,57.701172 C 48.848797,57.708044 27.380386,59.319037 20.398438,64.316406 8.5786943,74.621753 1.8992288,112.62617 1.7792969,125.19141 L 1.421875,162.58203 c 17.703763,-0.5368 35.719952,-0.81802 38.107422,-2.59375 4.798799,-3.5692 21.955318,-69.274912 27.935547,-69.341796 5.980229,-0.06688 24.601095,65.240186 29.478515,68.701176 4.877421,3.46098 72.668471,-0.52625 74.580081,5.14062 1.9116,5.66687 -54.44218,43.55742 -56.22656,49.26563 -1.78439,5.7082 22.95504,68.94837 18.15624,72.51757 -4.79879,3.5692 -58.248282,-38.31883 -64.228511,-38.25195 -4.721811,0.0528 -38.371146,26.84348 -54.755859,36.44336 6.076859,4.01633 13.67646,6.42383 21.939453,6.42383 H 262.5918 c 19.89627,0 35.91406,-13.81717 35.91406,-30.98047 V 134.61914 c 0,-17.16329 -16.0315,-30.30408 -35.91406,-30.98047 L 152.41602,99.890625 C 121.22637,95.309709 129.74907,66.596322 113.91992,60.712891 110.09536,59.291365 90.20589,57.694299 69.527344,57.701172 Z M 1.0917969,197.30859 0.49414062,259.90625 C 0.4336114,266.24783 2.6153396,272.12549 6.3808594,277.02539 10.454544,257.79558 23.86663,219.15114 22.396484,214.79297 21.649167,212.57757 11.909118,205.28916 1.0917969,197.30859 Z"
+           transform="scale(0.26458333)" />
+      </a>
+    </g>
+  </g>
+</svg>
