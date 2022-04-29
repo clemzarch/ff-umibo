@@ -88,7 +88,7 @@ function applyTheme () {
 		}
 
 		document.head.insertAdjacentHTML(
-			'beforeend',
+			'afterbegin',
 			'<style id="theme">:root{'
 			+'--bg: '+theme.colors.frame+';'
 			+'--field: '+theme.colors.toolbar+';'
