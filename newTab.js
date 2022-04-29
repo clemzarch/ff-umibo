@@ -359,8 +359,6 @@ function drawWindow(id, title, x, y, w, h, z, sortColumn = null, sortReverse = f
 			browser.bookmarks.create({
 				parentId: formData.get('origin'),
 				title: formData.get('folderName')
-			}).then(function() {
-				location.reload();
 			});
 		});
 	});
@@ -464,15 +462,11 @@ document.addEventListener('dragend', function() {
 	) {
 		chrome.bookmarks.get(dragon_target, function(e) { // check if we're already in the destination
 			if (e[0].parentId !== drop_target) {
-				chrome.bookmarks.move(dragon_target, {parentId: drop_target}).then(function() {
-					location.reload();
-				}); // moving between zones
+				chrome.bookmarks.move(dragon_target, {parentId: drop_target}); // moving between zones
 			}
 		});
 	} else if (dragon_target && delete_drop_target) { // dropping in vortex
-		browser.bookmarks.remove(dragon_target).then(function() {
-			location.reload();
-		});
+		browser.bookmarks.remove(dragon_target);
 	}
 
 	location.reload();
@@ -511,9 +505,7 @@ document.addEventListener('keydown', function (e) {
 				{
 					title: formData.get('folderName')
 				}
-			).then(function() {
-				location.reload();
-			});
+			);
 		});
 	}
 
@@ -521,3 +513,26 @@ document.addEventListener('keydown', function (e) {
 		location.reload();
 	}
 });
+
+// page is loaded in background, listen for storage changes
+if (document.visibilityState === 'hidden') {
+	chrome.storage.onChanged.addListener(reload);
+}
+
+// page is displayed or hidden
+document.addEventListener("visibilitychange", function() {
+	if (document.visibilityState === 'hidden') {
+		chrome.storage.onChanged.addListener(reload);
+	} else if (document.visibilityState === 'visible') {
+		chrome.storage.onChanged.removeListener(reload);
+	}
+})
+
+function reload() {
+	location.reload();
+}
+
+// listen for bookmark changes
+browser.bookmarks.onChanged.addListener(reload);
+browser.bookmarks.onMoved.addListener(reload);
+browser.bookmarks.onCreated.addListener(reload);
