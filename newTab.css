@@ -40,26 +40,40 @@ a {
 	right: 0;
 	color: var(--faded-color);
 	text-align: center;
-	z-index: -1;
 	font-size: 17px;
 }
 #tip_container header {
 	text-align: left;
 	font-weight: 600;
 }
+
+#tip_container section {
+	display: inline-block;
+	margin: 10px;
+	transition-duration: 0.2s;
+}
 #tip_container section div {
 	display: inline-block;
 	margin: 10px;
 }
+
+#tip_container section:hover {
+	opacity: 0.1;
+}
+
 #tip_container span {
 	display: inline-block;
-	background: var(--field);
+	background: linear-gradient(0deg, #fff, #bbb);
 	margin: 0 6px 0 0;
-	border-radius: 3px;
+	border-radius: 5px;
 	font-size: 20px;
 	text-align: center;
 	width: 30px;
 	line-height: 30px;
+	box-shadow: 0 3px 0 3px #bbb, 0 5px 3px 2px #222;
+	font-weight: 100;
+	color: #222;
+	border: 1px solid #fff;
 }
 
 .window {
@@ -74,6 +88,9 @@ a {
     border-radius: 10px 10px 0 0;
 	text-align:center;
 	line-height:32px;
+	overflow: hidden;
+    height: 32px;
+    padding: 0 30px;
 }
 
 .window .resize {
@@ -100,12 +117,14 @@ a {
 	border-radius: 6px;
 	line-height: 25px;
 	fill: currentColor;
+	position: absolute;
+    top: 0;
 }
 .window .border .create_button {
-	float: left;
+	left: 0;
 }
 .window .border .close_button {
-	float: right;
+	right: 0;
 }
 .window .border span:hover {
     background-color: var(--hi);

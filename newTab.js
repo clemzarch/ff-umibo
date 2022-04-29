@@ -62,7 +62,6 @@ chrome.storage.local.get(null, function(options) {
 			location.reload();
 		});
 	}
-	console.log(options);
 
 	registerFolder('menu________', options.sortColumn, options.sortReverse);
 	registerFolder('mobile______', options.sortColumn, options.sortReverse);
