@@ -110,24 +110,26 @@ a {
 }
 .window .border span {
     cursor: default;
-	width: 20px;
-	height: 20px;
-	padding: 2px;
-	margin: 4px;
-	border-radius: 6px;
-	line-height: 25px;
+	width: 24px;
+	height: 24px;
+	padding: 5px 4px 3px 4px;
 	fill: currentColor;
 	position: absolute;
-    top: 0;
+	top: 0;
 }
+.window .border span svg {
+	padding: 7px 6px 4px 6px;
+	border-radius: 5px;
+}
+.window .border span:hover svg {
+	background-color: var(--hi);
+}
+
 .window .border .create_button {
 	left: 0;
 }
 .window .border .close_button {
 	right: 0;
-}
-.window .border span:hover {
-    background-color: var(--hi);
 }
 
 .window main {
@@ -149,6 +151,7 @@ a {
 	margin: 15px;
 	border-radius: 5px;
 	height: 16px;
+	line-height: 16px;
 	vertical-align: middle;
 	box-shadow: 0 1px 1px var(--shadow);
 }

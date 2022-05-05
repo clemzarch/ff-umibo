@@ -10,9 +10,9 @@
 	"manifest_version": 2,
 	"version": "2.3",
 	"icons": {
-		"32": "umibo2.svg",
-		"64": "umibo2.svg",
-		"128": "umibo2.svg"
+		"32": "umibo.svg",
+		"64": "umibo.svg",
+		"128": "umibo.svg"
 	},
 	"chrome_url_overrides" : {
 		"newtab": "newTab.html"
