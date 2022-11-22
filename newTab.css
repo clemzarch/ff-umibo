@@ -101,7 +101,8 @@ a {
 }
 
 .window .dropzone {
-	display: none;
+	outline: 3px solid var(--hi-click);
+    border-radius: 10px;
 	position:absolute;
 	top:0;
 	left:0;
@@ -110,12 +111,12 @@ a {
 }
 .window .border span {
     cursor: default;
-	width: 24px;
-	height: 24px;
-	padding: 5px 4px 3px 4px;
+	width: 27px;
+	height: 25px;
+	padding: 8px 7px 3px 7px;
 	fill: currentColor;
 	position: absolute;
-	top: 0;
+	top: -3px;
 }
 .window .border span svg {
 	padding: 7px 6px 4px 6px;
@@ -126,10 +127,10 @@ a {
 }
 
 .window .border .create_button {
-	left: 0;
+	left: -3px;
 }
 .window .border .close_button {
-	right: 0;
+	right: -3px;
 }
 
 .window main {
@@ -223,7 +224,6 @@ a {
 	background: var(--field);
 	color: var(--hi-click);
 	line-height: 150px;
-	visibility: hidden;
 	left: 0;
 	right: 0;
 	z-index: 999999;

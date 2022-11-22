@@ -88,7 +88,7 @@ function applyTheme () {
 		}
 
 		document.head.insertAdjacentHTML(
-			'afterbegin',
+			'beforeend',
 			'<style id="theme">:root{'
 			+'--bg: '+theme.colors.frame+';'
 			+'--field: '+theme.colors.toolbar+';'
@@ -207,7 +207,7 @@ function drawWindow(id, title, x, y, w, h, z, sortColumn = null, sortReverse = f
 		+'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 2 16 16" width="12" height="12"><path d="M9.1 7.78l4.72-4.71a.63.63 0 00-.89-.89l-4.69 4.7h-.48l-4.7-4.7a.63.63 0 10-.88.89l4.69 4.68v.5l-4.69 4.68a.63.63 0 00.89.89l4.68-4.69h.5l4.68 4.69a.63.63 0 00.89 0 .63.63 0 000-.89L9.1 8.23v-.45z"/></svg>'
 		+'</span></div>'
 		+'<main style="height:'+h+'vh;width:'+w+'vw"></main><div class="resize"></div>'
-		+'<div class="dropzone" id="drop_'+id+'"></div></div>'
+		+'<div class="dropzone" id="drop_'+id+'" hidden></div></div>'
 	);
 
 	let win = document.getElementById('win_'+id);
@@ -323,6 +323,16 @@ function drawWindow(id, title, x, y, w, h, z, sortColumn = null, sortReverse = f
 		document.body.insertAdjacentHTML('beforeend', '<div id="secureDrag" style="cursor: nwse-resize"></div>');
 	});
 
+// dropzone
+	win.childNodes[3].addEventListener('dragenter', function(e) {
+		if (
+			e.target.id &&
+			(e.target.classList.contains('dropzone') || e.target.classList.contains('desktopFolder'))
+		) {
+			drop_target = e.target.id.replace('drop_', '');
+		}
+	});
+
 // create folder
 	win.childNodes[0].childNodes[0].addEventListener('mousedown', function(e) {
 		e.preventDefault();
@@ -340,9 +350,9 @@ function drawWindow(id, title, x, y, w, h, z, sortColumn = null, sortReverse = f
 			existingPanel.remove();
 		}
 
-		let label = browser.i18n.getMessage("newFolderLabel");
-		let submit = browser.i18n.getMessage("newFolderSubmit");
-		let placeholder = browser.i18n.getMessage("newFolderPlaceholder");
+		let label = chrome.i18n.getMessage("newFolderLabel");
+		let submit = chrome.i18n.getMessage("newFolderSubmit");
+		let placeholder = chrome.i18n.getMessage("newFolderPlaceholder");
 
 		let content = '<form id="createFolderForm">'
 			+ '<label>'+label+'<input name="folderName" placeholder="'+placeholder+'" type="text" required></label>'
@@ -356,7 +366,7 @@ function drawWindow(id, title, x, y, w, h, z, sortColumn = null, sortReverse = f
 			e.preventDefault();
 			let formData = new FormData(e.target);
 
-			browser.bookmarks.create({
+			chrome.bookmarks.create({
 				parentId: formData.get('origin'),
 				title: formData.get('folderName')
 			});
@@ -367,7 +377,7 @@ function drawWindow(id, title, x, y, w, h, z, sortColumn = null, sortReverse = f
 // translations
 ToTranslate = document.getElementsByTagName('data');
 for (let i = 0; i < ToTranslate.length; ++i) {
-	ToTranslate[i].innerHTML = browser.i18n.getMessage(ToTranslate[i].value);
+	ToTranslate[i].innerHTML = chrome.i18n.getMessage(ToTranslate[i].value);
 }
 
 document.body.addEventListener('mousemove', function(e) {
@@ -429,21 +439,11 @@ function dragonPrepare(id) {
 		// place dropzones
 		let Dropzones = document.getElementsByClassName('dropzone');
 		for (let i = 0; i < Dropzones.length; ++i) {
-			Dropzones[i].style.display = 'block';
-			Dropzones[i].style.outline = '3px solid var(--click)';
-
-			Dropzones[i].addEventListener('dragenter', function(e) {
-				if (
-					e.target.id &&
-					(e.target.classList.contains('dropzone') || e.target.classList.contains('desktopFolder'))
-				) {
-					drop_target = e.target.id.replace('drop_', '');
-				}
-			});
+			Dropzones[i].hidden = false;
 		}
 
 		// place delete zone
-		document.getElementById('delete_vortex').style.visibility = 'visible';
+		document.getElementById('delete_vortex').hidden = false;
 	});
 
 	target.addEventListener('mouseenter', function(e) {
@@ -466,10 +466,18 @@ document.addEventListener('dragend', function() {
 			}
 		});
 	} else if (dragon_target && delete_drop_target) { // dropping in vortex
-		browser.bookmarks.remove(dragon_target);
+		document.getElementById(dragon_target).remove();
+		chrome.bookmarks.remove(dragon_target);
 	}
 
-	location.reload();
+	// exit drag-n-drop mode
+	let Dropzones = document.getElementsByClassName('dropzone');
+	for (let i = 0; i < Dropzones.length; ++i) {
+		Dropzones[i].hidden = true;
+	}
+
+	// hide delete zone
+	document.getElementById('delete_vortex').hidden = true;
 });
 
 document.getElementById('options').addEventListener("mousedown", function() {
@@ -500,7 +508,7 @@ document.addEventListener('keydown', function (e) {
 			e.preventDefault();
 			let formData = new FormData(e.target);
 
-			browser.bookmarks.update(
+			chrome.bookmarks.update(
 				formData.get('origin'),
 				{
 					title: formData.get('folderName')
@@ -533,6 +541,6 @@ function reload() {
 }
 
 // listen for bookmark changes
-browser.bookmarks.onChanged.addListener(reload);
-browser.bookmarks.onMoved.addListener(reload);
-browser.bookmarks.onCreated.addListener(reload);
+chrome.bookmarks.onChanged.addListener(reload);
+chrome.bookmarks.onMoved.addListener(reload);
+chrome.bookmarks.onCreated.addListener(reload);

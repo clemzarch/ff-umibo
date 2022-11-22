@@ -1,13 +1,10 @@
 {
 	"name": "UMiBO",
-	"developer": {
-		"name": "Clément Zarch",
-		"url": "http://zarch.fr"
-	},
+	"author": "Clément Zarch",
 	"default_locale": "en",
 	"description": "__MSG_extensionDescription__",
 	"homepage_url": "https://github.com/clemzarch/ff-umibo",
-	"manifest_version": 2,
+	"manifest_version": 3,
 	"version": "2.3",
 	"icons": {
 		"32": "umibo.svg",
@@ -28,7 +25,7 @@
 	"options_ui": {
 		"page": "options.html"
 	},
-	"applications": {
+	"browser_specific_settings": {
 		"gecko": {
 			"id": "clessili@gmail.com"
 		}
