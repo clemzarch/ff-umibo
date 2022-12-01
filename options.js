@@ -1,4 +1,4 @@
-chrome.storage.local.get().then(function(options) {
+chrome.storage.local.get(null, function(options) {
 	if (Object.entries(options).length === 0) { // if no options yet
 		chrome.storage.local.set({
 			toolbar_as_folder: true,

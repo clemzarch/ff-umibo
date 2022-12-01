@@ -1,0 +1,83 @@
+{
+    "extensionDescription": {
+        "message": "Перетворює нову вкладку на віртуальний робочий стіл для керування закладками."
+    },
+    "optionShowTip": {
+        "message": "Показати підказки пошуку."
+    },
+    "optionFontSize": {
+        "message": "Розмір шрифту"
+    },
+    "optionIconSize": {
+        "message": "Розмір іконки"
+    },
+    "optionToolbarAsFolder": {
+        "message": "Відобразити панель закладок у вигляді папки."
+    },
+    "optionTitleSort": {
+        "message": "Порядок сортування"
+    },
+    "optionSortColumnDefault": {
+        "message": "Ні (за замовчуванням)"
+    },
+    "optionSortColumnDate": {
+        "message": "Останні перші"
+    },
+    "optionSortColumnAlphabetical": {
+        "message": "За алфавітом"
+    },
+    "optionSortReverse": {
+        "message": "Реверс"
+    },
+    "optionTitleBackground": {
+        "message": "Передумови"
+    },
+    "optionTitleCustomCSS": {
+        "message": "Кастомний CSS"
+    },
+    "BookmarksToolbar": {
+        "message": "Панель закладок"
+    },
+    "BookmarksMenu": {
+        "message": "Меню закладок"
+    },
+    "MobileBookmarks": {
+        "message": "Мобільні закладки"
+    },
+    "OtherBookmarks": {
+        "message": "Інші закладки"
+    },
+    "optionBgDefault": {
+        "message": "За замовчуванням"
+    },
+    "optionBgColor": {
+        "message": "Колір"
+    },
+    "optionBgImage": {
+        "message": "URL-адреса зображення"
+    },
+    "tipHistory": {
+        "message": "Історія"
+    },
+    "tipBookmarks": {
+        "message": "Закладки"
+    },
+    "tipTabs": {
+        "message": "Вкладки"
+    },
+    "tipSearch": {
+        "message": "Пошукові системи"
+    },
+    "newFolderLabel": {
+        "message": "Нова папка"
+    },
+    "newFolderPlaceholder": {
+        "message": "Ім'я"
+    },
+    "newFolderSubmit": {
+        "message": "Створити"
+    },
+    "deleteVortex": {
+        "message": "Видалити"
+    }
+}
