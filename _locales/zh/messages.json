@@ -5,6 +5,9 @@
     "optionShowTip": {
         "message": "显示搜索提示。"
     },
+    "optionCompact": {
+        "message": "紧凑型模式。"
+    },
     "optionFontSize": {
         "message": "字体大小"
     },

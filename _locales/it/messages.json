@@ -5,6 +5,9 @@
     "optionShowTip": {
         "message": "Mostra i suggerimenti per la ricerca."
     },
+    "optionCompact": {
+        "message": "Modalità compatta."
+    },
     "optionFontSize": {
         "message": "Dimensione del carattere"
     },

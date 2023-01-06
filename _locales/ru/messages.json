@@ -5,6 +5,9 @@
     "optionShowTip": {
         "message": "Показывать советы по поиску."
     },
+    "optionCompact": {
+        "message": "Компактный режим."
+    },
     "optionFontSize": {
         "message": "Размер шрифта"
     },

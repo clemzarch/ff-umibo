@@ -5,6 +5,9 @@
     "optionShowTip": {
         "message": "Afficher les raccourcis."
     },
+    "optionCompact": {
+        "message": "Mode compact."
+    },
     "optionToolbarAsFolder": {
         "message": "Afficher la Barre Personnelle sous forme de dossier."
     },

@@ -5,6 +5,9 @@
     "optionShowTip": {
         "message": "Suchtipps anzeigen."
     },
+    "optionCompact": {
+        "message": "Kompakt-Modus."
+    },
     "optionFontSize": {
         "message": "Schriftgröße"
     },

@@ -44,6 +44,10 @@ chrome.storage.local.get(null, function(options) {
 		moreCSS += 'img {height:' + options.icon + 'px; width: ' + options.icon + 'px} .window main .desktopLink {height: '+ (41 + parseInt(options.icon)) +'px}';
 	}
 
+	if (options.compact) {
+		moreCSS += '.window main .desktopLink {padding: 5px} .desktopFolder {margin: 10px;} .window main {grid-template-columns: repeat(auto-fill, minmax(100px, max-content));grid-template-rows: repeat(auto-fit, 75px);} .window main .desktopLink img {display: initial;margin-right: 4px;}';
+	}
+
 	document.head.insertAdjacentHTML('beforeend', '<style>'+ moreCSS + '</style>');
 
 	if (navigator.userAgent.indexOf('Mac OS X') !== -1) {

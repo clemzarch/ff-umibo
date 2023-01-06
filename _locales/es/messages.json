@@ -5,6 +5,9 @@
     "optionShowTip": {
         "message": "Mostrar consejos de búsqueda."
     },
+    "optionCompact": {
+        "message": "Modo compacto."
+    },
     "optionToolbarAsFolder": {
         "message": "Mostrar la Barra de Marcadores como una carpeta."
     },

@@ -5,6 +5,9 @@
     "optionShowTip": {
         "message": "Show search tips."
     },
+    "optionCompact": {
+        "message": "Compact mode."
+    },
     "optionFontSize": {
         "message": "Font Size"
     },

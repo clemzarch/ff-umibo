@@ -5,6 +5,9 @@
     "optionShowTip": {
         "message": "Keresési tippek megjelenítése."
     },
+    "optionCompact": {
+        "message": "Kompakt üzemmód."
+    },
     "optionFontSize": {
         "message": "Betűméret"
     },

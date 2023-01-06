@@ -5,6 +5,9 @@
     "optionShowTip": {
         "message": "Vis søgetips."
     },
+    "optionCompact": {
+        "message": "Kompakt tilstand."
+    },
     "optionFontSize": {
         "message": "Skriftstørrelse"
     },

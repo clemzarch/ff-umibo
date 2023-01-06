@@ -1,12 +1,15 @@
 {
     "extensionDescription": {
-        "message": " Yer işaretlerini yönetmek için yeni sekmenizi sanal masaüstüne dönüştürür."
+        "message": "Yer işaretlerini yönetmek için yeni sekmenizi sanal masaüstüne dönüştürür."
     },
     "optionShowTip": {
-        "message": " Arama ipuçlarını gösterin."
+        "message": "Arama ipuçlarını gösterin."
+    },
+    "optionCompact": {
+        "message": "Kompakt mod."
     },
     "optionFontSize": {
-        "message": " Yazı Tipi Boyutu"
+        "message": "Yazı Tipi Boyutu"
     },
     "optionIconSize": {
         "message": "Simge Boyutu"
