@@ -45,7 +45,7 @@ chrome.storage.local.get(null, function(options) {
 	}
 
 	if (options.compact) {
-		moreCSS += '.window main .desktopLink {padding:4px;height:16px;text-align:left;border-radius:0} .window main .desktopFolder {margin:2px;padding:2px 2px 2px 6px;height:16px} .window main {grid-template-columns:repeat(auto-fill, minmax(190px, max-content));grid-template-rows:repeat(auto-fit, 24px)} .window main .desktopLink img {display:initial;margin-right:4px}';
+		moreCSS += '.window main .desktopLink {padding:3px 6px;height:16px;text-align:left;border-radius:0;word-break:break-all} .window main .desktopFolder {margin:2px;padding:2px 2px 2px 6px;height:16px} .window main {grid-template-columns:repeat(auto-fill, minmax(190px, max-content));grid-template-rows:repeat(auto-fit, 24px)} .window main .desktopLink img {display:initial;margin-right:4px}';
 	}
 
 	document.head.insertAdjacentHTML('beforeend', '<style>'+ moreCSS + '</style>');
@@ -289,17 +289,17 @@ function drawWindow(id, title, x, y, w, h, z, sortColumn = null, sortReverse = f
 
 // raise
 	win.addEventListener('mousedown', function() {
-		if (closing) {
-			return;
-		}
-
 		let allWindows = document.getElementsByClassName('window');
-
 		for (let i = 0; i < allWindows.length; ++i) { // cycle through windows, lower the ones higher than our target
 			if (allWindows[i].style.zIndex > win.style.zIndex) {
 				allWindows[i].style.zIndex--;
 			}
 		}
+
+		if (closing) {
+			return;
+		}
+
 		win.style.zIndex = allWindows.length;
 		raise_target = win;
 	});
