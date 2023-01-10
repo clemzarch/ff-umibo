@@ -44,15 +44,15 @@ chrome.storage.local.get(null, function(options) {
 		moreCSS += 'img {height:' + options.icon + 'px; width: ' + options.icon + 'px} .window main .desktopLink {height: '+ (41 + parseInt(options.icon)) +'px}';
 	}
 
-	if (options.compact) {
-		moreCSS += '.window main .desktopLink {padding:3px 6px;height:16px;text-align:left;border-radius:0;word-break:break-all} .window main .desktopFolder {margin:2px;padding:2px 2px 2px 6px;height:16px} .window main {grid-template-columns:repeat(auto-fill, minmax(190px, max-content));grid-template-rows:repeat(auto-fit, 24px)} .window main .desktopLink img {display:initial;margin-right:4px}';
-	}
-
-	document.head.insertAdjacentHTML('beforeend', '<style>'+ moreCSS + '</style>');
-
 	if (navigator.userAgent.indexOf('Mac OS X') !== -1) {
 		document.body.classList.add("macOS");
 	}
+
+	if (options.compact) {
+		moreCSS += '.window main .desktopLink {padding:3px 6px;height:16px;text-align:left;border-radius:0;word-break:break-all;white-space: nowrap} .window main .desktopFolder {margin:2px;padding:2px 2px 2px 6px;height:16px} .window main {grid-template-columns:repeat(auto-fill, minmax(190px, max-content));grid-template-rows:repeat(auto-fit, 24px)} .window main .desktopLink img {display:initial;margin-right:4px}';
+	}
+
+	document.head.insertAdjacentHTML('beforeend', '<style>'+ moreCSS + '</style>');
 
 	if (Object.entries(options).length === 0) { // if no options yet
 		chrome.storage.local.set({
