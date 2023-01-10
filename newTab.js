@@ -49,7 +49,7 @@ chrome.storage.local.get(null, function(options) {
 	}
 
 	if (options.compact) {
-		moreCSS += '.window main .desktopLink {padding:3px 6px;height:16px;text-align:left;border-radius:0;word-break:break-all;white-space: nowrap} .window main .desktopFolder {margin:2px;padding:2px 2px 2px 6px;height:16px} .window main {grid-template-columns:repeat(auto-fill, minmax(190px, max-content));grid-template-rows:repeat(auto-fit, 24px)} .window main .desktopLink img {display:initial;margin-right:4px}';
+		moreCSS += '.window main .desktopLink {padding:3px 6px;height:16px;text-align:left;border-radius:0;white-space: nowrap} .window main .desktopFolder {margin:2px;padding:2px 2px 2px 6px;height:16px} .window main {grid-template-columns:repeat(auto-fill, minmax(190px, max-content));grid-template-rows:repeat(auto-fit, 24px)} .window main .desktopLink img {display:initial;margin-right:4px}';
 	}
 
 	document.head.insertAdjacentHTML('beforeend', '<style>'+ moreCSS + '</style>');
