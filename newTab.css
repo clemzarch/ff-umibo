@@ -188,9 +188,6 @@ a {
 	text-align: center;
 	padding: 10px;
 }
-.macOS .window main .desktopLink {
-    height: 54px;
-}
 .desktopLink:active {
 	background: var(--hi-click);
 }
