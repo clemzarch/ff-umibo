@@ -1,7 +1,7 @@
 let WINDOWS = [];
 
 chrome.storage.local.get(null, function(options) {
-	WINDOWS = options.w;
+	WINDOWS = options.w ?? [];
 
 	let i = 1;
 	for (let key in WINDOWS) {
