@@ -1,8 +1,13 @@
-chrome.storage.local.get(null, function(options) {
-	for (let key in options.w) {
-		let w = options.w[key];
+let WINDOWS = [];
 
-		drawWindow(key, w.title, w.x, w.y, w.w, w.h, 1, options.sortColumn, options.sortReverse);
+chrome.storage.local.get(null, function(options) {
+	WINDOWS = options.w;
+
+	let i = 1;
+	for (let key in WINDOWS) {
+		let w = WINDOWS[key];
+
+		drawWindow(key, w.title, w.x, w.y, w.w, w.h, i++, options.sortColumn, options.sortReverse);
 	}
 
 	let moreCSS = options.custom_css ?? '';
@@ -131,19 +136,14 @@ function registerFolder(folder, sortColumn = null, sortReverse = false) {
 				);
 			}
 
-			// save in local storage
-			chrome.storage.local.get('w', function(o) {
-				let arr_windows = o.w ?? [];
-
-				arr_windows[folderId] = {
-					title: folderTitle,
-					y: computedTop,
-					x: computedLeft,
-					h: computedHeight,
-					w: computedWidth
-				};
-				chrome.storage.local.set({'w': arr_windows});
-			});
+			WINDOWS[folderId] = {
+				title: folderTitle,
+				y: computedTop,
+				x: computedLeft,
+				h: computedHeight,
+				w: computedWidth
+			};
+			chrome.storage.local.set({'w': WINDOWS});
 		} else {
 //			this is buggy. str: open window, try reopening, then close, and reload. result: window's still there
 //			some storage race between the one that's clicked and the one that's brought to foreground?
@@ -309,13 +309,12 @@ function drawWindow(id, title, x, y, w, h, z, sortColumn = null, sortReverse = f
 		closing = true;
 		win.remove();
 
-		chrome.storage.local.get('w', function(o) {
-			delete o.w[id]; // fingers crossed
-			chrome.storage.local.set({'w': o.w }, function() {
+			delete WINDOWS[id];
+			chrome.storage.local.set({'w': WINDOWS }, function() {
 				closing = false;
 			});
+			document.body.insertAdjacentHTML('beforeend', '<div id="secureDrag"></div>');
 		});
-	});
 
 // resize
 	win.childNodes[2].addEventListener('mousedown', function(e) {
@@ -411,26 +410,22 @@ document.body.addEventListener('mouseup', function() { // save the new window po
 		win.childNodes[1].style.width = computedWidth + 'vw';
 		win.childNodes[1].style.height = computedHeight + 'vh';
 
-		chrome.storage.local.get('w', function(o) {
-			let arr_windows = o.w ?? [];
+		delete WINDOWS[win.getAttribute('index')];
+		WINDOWS[win.getAttribute('index')] = {
+			title:	win.childNodes[0].title,
+			x:		computedLeft,
+			y:		computedTop,
+			w:		computedWidth, // 0 is <border>, 1 is <main>, 2 is <resize>
+			h:		computedHeight
+		};
+		chrome.storage.local.set({'w': WINDOWS });
 
-			delete arr_windows[win.getAttribute('index')];
-			arr_windows[win.getAttribute('index')] = {
-				title:	win.childNodes[0].title,
-				x:		computedLeft,
-				y:		computedTop,
-				w:		computedWidth, // 0 is <border>, 1 is <main>, 2 is <resize>
-				h:		computedHeight
-			};
-			chrome.storage.local.set({'w': arr_windows });
-		});
 		move_target = null;
 		resize_target = null;
 		raise_target = null;
-
-		if (document.getElementById('secureDrag')) {
-			document.getElementById('secureDrag').outerHTML = '';
-		}
+	}
+	if (document.getElementById('secureDrag')) {
+		document.getElementById('secureDrag').outerHTML = '';
 	}
 });
 
