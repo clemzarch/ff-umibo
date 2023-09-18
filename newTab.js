@@ -31,6 +31,14 @@ chrome.storage.local.get(null, function(options) {
 		});
 	}
 
+	if (options.compact) {
+		document.body.classList.add('compact');
+	}
+
+	if (navigator.userAgent.indexOf('Mac OS X') !== -1) {
+		document.body.classList.add('macOS');
+	}
+
 	if (options.background === 'image') {
 		moreCSS += 'body {background: url(' + options.bg_url + ') repeat fixed center center / cover} body > .desktopLink, #tip_container data {color:#fff;text-shadow:0 0 3px #000}';
 	} else if (options.background === 'color') {
@@ -47,14 +55,6 @@ chrome.storage.local.get(null, function(options) {
 
 	if (options.icon && options.icon !== "16") {
 		moreCSS += 'img {height:' + options.icon + 'px; width: ' + options.icon + 'px} .window main .desktopLink {height: '+ (41 + parseInt(options.icon)) +'px}';
-	}
-
-	if (navigator.userAgent.indexOf('Mac OS X') !== -1) {
-		moreCSS += '.window main .desktopLink {height: 54px;}';
-	}
-
-	if (options.compact) {
-		moreCSS += '.window main .desktopLink {padding:3px 6px;height:16px;text-align:left;white-space: nowrap} .window main .desktopFolder {margin:2px;padding:2px 2px 2px 6px;height:16px} .window main {grid-template-columns:repeat(auto-fill, minmax(190px, max-content));grid-template-rows:repeat(auto-fit, 24px)} .window main .desktopLink img {display:initial;margin-right:4px}';
 	}
 
 	document.head.insertAdjacentHTML('beforeend', '<style>'+ moreCSS + '</style>');
