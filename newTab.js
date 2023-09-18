@@ -7,7 +7,7 @@ chrome.storage.local.get(null, function(options) {
 	for (let key in WINDOWS) {
 		let w = WINDOWS[key];
 
-		drawWindow(key, w.title, w.x, w.y, w.w, w.h, i++, options.sortColumn, options.sortReverse);
+		drawWindow(key, w.title, w.x, w.y, w.w, w.h, i++, options.sortColumn, options.sortReverse, false);
 	}
 
 	let moreCSS = options.custom_css ?? '';
@@ -121,20 +121,14 @@ function registerFolder(folder, sortColumn = null, sortReverse = false) {
 
 		if (existingWindow === null) {
 			let folderTitle = folder.target.innerHTML;
-			let len = document.getElementsByClassName('window').length;
+			let z = document.getElementsByClassName('window').length + 1;
 
 			let computedLeft = ((folder.clientX-200) * 100) / window.innerWidth;
 			let computedTop = ((folder.clientY+50) * 100) / window.innerHeight;
 			let computedWidth = 40000 / window.innerWidth;
 			let computedHeight = 30000 / window.innerHeight;
 
-			drawWindow(folderId, folderTitle, computedLeft, computedTop, computedWidth, computedHeight, len, sortColumn, sortReverse);
-			if (window.matchMedia("(prefers-reduced-motion: no-preference)").matches) {
-				document.getElementById('win_'+folderId).animate(
-					[{ transform: 'scale(0.2)' }, { transform: 'scale(1.1)' }, {}],
-					{ duration: 256 }
-				);
-			}
+			drawWindow(folderId, folderTitle, computedLeft, computedTop, computedWidth, computedHeight, z, sortColumn, sortReverse, true);
 
 			WINDOWS[folderId] = {
 				title: folderTitle,
@@ -173,7 +167,7 @@ function registerFolder(folder, sortColumn = null, sortReverse = false) {
 	});
 }
 
-function drawWindow(id, title, x, y, w, h, z, sortColumn = null, sortReverse = false) {
+function drawWindow(id, title, x, y, w, h, z, sortColumn = null, sortReverse = false, animate = false) {
 // check if window stuck
 	if (y < 0) {
 		y = 0;
@@ -198,23 +192,6 @@ function drawWindow(id, title, x, y, w, h, z, sortColumn = null, sortReverse = f
 	if (y > 97) {
 		y = 90;
 	}
-
-// draw
-	document.body.insertAdjacentHTML(
-		'beforeend',
-		'<div id="win_'+id+'" index="'+id+'" style="top:'+y+'%; left:'+x+'%;z-index:'+z+'" class="window">'
-		+'<div class="border" title="'+title+'">'
-		+'<span class="create_button" title="Create">'
-		+'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 2 16 16" width="12" height="12"><path d="M3 7H1.5l-.5.5V9l.5.5H3l.5-.5V7.5zM8.8 7H7.2l-.5.5V9l.5.5h1.5l.6-.5V7.5zM14.5 7H13l-.5.5V9l.5.5h1.5L15 9V7.5z"/></svg>'
-		+'</span>'
-		+title+'<span class="close_button" title="Close">'
-		+'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 2 16 16" width="12" height="12"><path d="M9.1 7.78l4.72-4.71a.63.63 0 00-.89-.89l-4.69 4.7h-.48l-4.7-4.7a.63.63 0 10-.88.89l4.69 4.68v.5l-4.69 4.68a.63.63 0 00.89.89l4.68-4.69h.5l4.68 4.69a.63.63 0 00.89 0 .63.63 0 000-.89L9.1 8.23v-.45z"/></svg>'
-		+'</span></div>'
-		+'<main style="height:'+h+'vh;width:'+w+'vw"></main><div class="resize"></div>'
-		+'<div class="dropzone" id="drop_'+id+'" hidden></div></div>'
-	);
-
-	let win = document.getElementById('win_'+id);
 
 // populate
 	chrome.bookmarks.getChildren(id, function(e) {
@@ -263,7 +240,29 @@ function drawWindow(id, title, x, y, w, h, z, sortColumn = null, sortReverse = f
 			}
 		}
 
-		win.childNodes[1].innerHTML = elements; // may be faster, or may not
+		// draw
+		document.body.insertAdjacentHTML(
+			'beforeend',
+			'<div id="win_'+id+'" index="'+id+'" style="top:'+y+'%; left:'+x+'%;z-index:'+z+'" class="window">'
+			+'<div class="border" title="'+title+'">'
+			+'<span class="create_button" title="Create">'
+			+'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 2 16 16" width="12" height="12"><path d="M3 7H1.5l-.5.5V9l.5.5H3l.5-.5V7.5zM8.8 7H7.2l-.5.5V9l.5.5h1.5l.6-.5V7.5zM14.5 7H13l-.5.5V9l.5.5h1.5L15 9V7.5z"/></svg>'
+			+'</span>'
+			+title+'<span class="close_button" title="Close">'
+			+'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 2 16 16" width="12" height="12"><path d="M9.1 7.78l4.72-4.71a.63.63 0 00-.89-.89l-4.69 4.7h-.48l-4.7-4.7a.63.63 0 10-.88.89l4.69 4.68v.5l-4.69 4.68a.63.63 0 00.89.89l4.68-4.69h.5l4.68 4.69a.63.63 0 00.89 0 .63.63 0 000-.89L9.1 8.23v-.45z"/></svg>'
+			+'</span></div>'
+			+'<main style="height:'+h+'vh;width:'+w+'vw">'+elements+'</main><div class="resize"></div>'
+			+'<div class="dropzone" id="drop_'+id+'" hidden></div></div>'
+		);
+
+		let win = document.getElementById('win_'+id);
+
+		if (animate === true && window.matchMedia("(prefers-reduced-motion: no-preference)").matches) {
+			win.animate(
+				[{ transform: 'scale(0.2)' }, { transform: 'scale(1.1)' }, {}],
+				{ duration: 256 }
+			);
+		}
 
 		for (let i = 0; i < foldersIds.length; i++) {
 			registerFolder(foldersIds[i], sortColumn, sortReverse);
@@ -273,41 +272,40 @@ function drawWindow(id, title, x, y, w, h, z, sortColumn = null, sortReverse = f
 		for (let i = 0; i < linksIds.length; i++) {
 			dragonPrepare(linksIds[i]);
 		}
-	});
 
-// move
-	win.childNodes[0].addEventListener('mousedown', function(e) {
-		if (!e.target.classList.contains('border')) {
-			return;
-		}
-
-		offsetX = e.pageX - win.offsetLeft;
-		offsetY = e.pageY - win.offsetTop;
-		move_target = win;
-		document.body.insertAdjacentHTML('beforeend', '<div id="secureDrag" style="cursor: grabbing"></div>');
-	});
-
-// raise
-	win.addEventListener('mousedown', function() {
-		let allWindows = document.getElementsByClassName('window');
-		for (let i = 0; i < allWindows.length; ++i) { // cycle through windows, lower the ones higher than our target
-			if (allWindows[i].style.zIndex > win.style.zIndex) {
-				allWindows[i].style.zIndex--;
+	// move
+		win.childNodes[0].addEventListener('mousedown', function(e) {
+			if (!e.target.classList.contains('border')) {
+				return;
 			}
-		}
 
-		if (closing) {
-			return;
-		}
+			offsetX = e.pageX - win.offsetLeft;
+			offsetY = e.pageY - win.offsetTop;
+			move_target = win;
+			document.body.insertAdjacentHTML('beforeend', '<div id="secureDrag" style="cursor: grabbing"></div>');
+		});
 
-		win.style.zIndex = allWindows.length;
-		raise_target = win;
-	});
+	// raise
+		win.addEventListener('mousedown', function() {
+			let allWindows = document.getElementsByClassName('window');
+			for (let i = 0; i < allWindows.length; ++i) { // cycle through windows, lower the ones higher than our target
+				if (allWindows[i].style.zIndex > win.style.zIndex) {
+					allWindows[i].style.zIndex--;
+				}
+			}
 
-// close
-	win.childNodes[0].childNodes[2].addEventListener('mousedown', function() {
-		closing = true;
-		win.remove();
+			if (closing) {
+				return;
+			}
+
+			win.style.zIndex = allWindows.length;
+			raise_target = win;
+		});
+
+	// close
+		win.childNodes[0].childNodes[2].addEventListener('mousedown', function() {
+			closing = true;
+			win.remove();
 
 			delete WINDOWS[id];
 			chrome.storage.local.set({'w': WINDOWS }, function() {
@@ -316,62 +314,63 @@ function drawWindow(id, title, x, y, w, h, z, sortColumn = null, sortReverse = f
 			document.body.insertAdjacentHTML('beforeend', '<div id="secureDrag"></div>');
 		});
 
-// resize
-	win.childNodes[2].addEventListener('mousedown', function(e) {
-		pX = e.pageX;
-		pY = e.pageY;
-		wH = win.childNodes[1].offsetHeight; //current height
-		wW = win.childNodes[1].offsetWidth; //current width
-		resize_target = win;
-		document.body.insertAdjacentHTML('beforeend', '<div id="secureDrag" style="cursor: nwse-resize"></div>');
-	});
+	// resize
+		win.childNodes[2].addEventListener('mousedown', function(e) {
+			pX = e.pageX;
+			pY = e.pageY;
+			wH = win.childNodes[1].offsetHeight; //current height
+			wW = win.childNodes[1].offsetWidth; //current width
+			resize_target = win;
+			document.body.insertAdjacentHTML('beforeend', '<div id="secureDrag" style="cursor: nwse-resize"></div>');
+		});
 
-// dropzone
-	win.childNodes[3].addEventListener('dragenter', function(e) {
-		if (
-			e.target.id &&
-			(e.target.classList.contains('dropzone') || e.target.classList.contains('desktopFolder'))
-		) {
-			drop_target = e.target.id.replace('drop_', '');
-		}
-	});
+	// dropzone
+		win.childNodes[3].addEventListener('dragenter', function(e) {
+			if (
+				e.target.id &&
+				(e.target.classList.contains('dropzone') || e.target.classList.contains('desktopFolder'))
+			) {
+				drop_target = e.target.id.replace('drop_', '');
+			}
+		});
 
-// create folder
-	win.childNodes[0].childNodes[0].addEventListener('mousedown', function(e) {
-		e.preventDefault();
-
-		let existingPanel = win.querySelector('#createFolderForm');
-
-		if (existingPanel) {
-			existingPanel.remove();
-			return;
-		}
-
-		existingPanel = document.getElementById('createFolderForm');
-
-		if (existingPanel) {
-			existingPanel.remove();
-		}
-
-		let label = chrome.i18n.getMessage("newFolderLabel");
-		let submit = chrome.i18n.getMessage("newFolderSubmit");
-		let placeholder = chrome.i18n.getMessage("newFolderPlaceholder");
-
-		let content = '<form id="createFolderForm">'
-			+ '<label>'+label+'<input name="folderName" placeholder="'+placeholder+'" type="text" required></label>'
-			+ '<input name="origin" type="hidden" value="'+id+'">'
-			+ '<input type="submit" value="'+submit+'"></form>';
-		win.insertAdjacentHTML('beforeend', content);
-
-		document.getElementById('createFolderForm').childNodes[0].childNodes[1].focus();
-
-		document.getElementById('createFolderForm').addEventListener('submit', function(e) {
+	// create folder
+		win.childNodes[0].childNodes[0].addEventListener('mousedown', function(e) {
 			e.preventDefault();
-			let formData = new FormData(e.target);
 
-			chrome.bookmarks.create({
-				parentId: formData.get('origin'),
-				title: formData.get('folderName')
+			let existingPanel = win.querySelector('#createFolderForm');
+
+			if (existingPanel) {
+				existingPanel.remove();
+				return;
+			}
+
+			existingPanel = document.getElementById('createFolderForm');
+
+			if (existingPanel) {
+				existingPanel.remove();
+			}
+
+			let label = chrome.i18n.getMessage("newFolderLabel");
+			let submit = chrome.i18n.getMessage("newFolderSubmit");
+			let placeholder = chrome.i18n.getMessage("newFolderPlaceholder");
+
+			let content = '<form id="createFolderForm">'
+				+ '<label>'+label+'<input name="folderName" placeholder="'+placeholder+'" type="text" required></label>'
+				+ '<input name="origin" type="hidden" value="'+id+'">'
+				+ '<input type="submit" value="'+submit+'"></form>';
+			win.insertAdjacentHTML('beforeend', content);
+
+			document.getElementById('createFolderForm').childNodes[0].childNodes[1].focus();
+
+			document.getElementById('createFolderForm').addEventListener('submit', function(e) {
+				e.preventDefault();
+				let formData = new FormData(e.target);
+
+				chrome.bookmarks.create({
+					parentId: formData.get('origin'),
+					title: formData.get('folderName')
+				});
 			});
 		});
 	});
