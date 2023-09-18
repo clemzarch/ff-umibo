@@ -526,6 +526,21 @@ document.addEventListener('keydown', function (e) {
 	}
 });
 
+document.addEventListener('keydown', function (e) {
+	if (e.key === 'Escape') {
+		last = Object.keys(WINDOWS).pop();
+
+		if (!last) {
+			return;
+		}
+
+		document.getElementById('win_'+last).remove();
+
+		delete WINDOWS[last];
+		chrome.storage.local.set({'w': WINDOWS });
+	}
+});
+
 // page is loaded in background, listen for storage changes
 if (document.visibilityState === 'hidden') {
 	chrome.storage.onChanged.addListener(reload);
