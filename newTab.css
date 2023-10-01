@@ -1,26 +1,26 @@
 :root {
-	--bg: #1c1b22;
-	--color: #f9f9fa;
-	--faded-color: #bbbbbb;
-	--hi: #383546;
-	--hi-click: #4d4769;
-	--field: #2b2a33;
-	--shadow: #00000066;
+	--bg: #f0f0f4;
+	--color: #333333;
+	--faded-color: #595a5b;
+	--hi: #dadae1;
+	--hi-click: #cfcfd8;
+	--field: #f9f9fb;
+	--shadow: #00000015;
 }
-@media (prefers-color-scheme: light) {
+@media (prefers-color-scheme: dark) {
 	:root {
-		--bg: #f0f0f4;
-		--color: #333333;
-		--faded-color: #595a5b;
-		--hi: #dadae1;
-		--hi-click: #cfcfd8;
-		--field: #f9f9fb;
-		--shadow: #00000015;
-	}
+    	--bg: #1c1b22;
+    	--color: #f9f9fa;
+    	--faded-color: #bbbbbb;
+    	--hi: #383546;
+    	--hi-click: #4d4769;
+    	--field: #2b2a33;
+    	--shadow: #00000066;
+    }
 }
 body {
 	font: menu;
-	user-select: none;
+	-moz-user-select: none;
 	background: var(--bg);
 	color: var(--color);
 	margin: 10px auto 0 auto;
@@ -30,6 +30,7 @@ body {
 a {
 	color: var(--color);
 }
+
 #tip_container {
 	visibility: hidden;
 	position: fixed;
@@ -39,146 +40,161 @@ a {
 	color: var(--faded-color);
 	text-align: center;
 	font-size: 17px;
-
-	header {
-		text-align: left;
-		font-weight: 600;
-	}
-	section {
-    	display: inline-block;
-    	margin: 10px;
-    	transition-duration: 0.2s;
-
-    	div {
-        	display: inline-block;
-        	margin: 10px;
-        }
-        &:hover {
-			opacity: 0.1;
-		}
-    }
-    span {
-    	display: inline-block;
-    	background: linear-gradient(0deg, #fff, #bbb);
-    	margin: 0 6px 0 0;
-    	border-radius: 5px;
-    	font-size: 20px;
-    	text-align: center;
-    	width: 30px;
-    	line-height: 30px;
-    	box-shadow: 0 3px 0 3px #bbb, 0 5px 3px 2px #222;
-    	font-weight: 100;
-    	color: #222;
-    	border: 1px solid #fff;
-    }
 }
+#tip_container header {
+	text-align: left;
+	font-weight: 600;
+}
+
+#tip_container section {
+	display: inline-block;
+	margin: 10px;
+	transition-duration: 0.2s;
+}
+#tip_container section div {
+	display: inline-block;
+	margin: 10px;
+}
+
+#tip_container section:hover {
+	opacity: 0.1;
+}
+
+#tip_container span {
+	display: inline-block;
+	background: linear-gradient(0deg, #fff, #bbb);
+	margin: 0 6px 0 0;
+	border-radius: 5px;
+	font-size: 20px;
+	text-align: center;
+	width: 30px;
+	line-height: 30px;
+	box-shadow: 0 3px 0 3px #bbb, 0 5px 3px 2px #222;
+	font-weight: 100;
+	color: #222;
+	border: 1px solid #fff;
+}
+
 .window {
 	position:absolute;
 	border-radius: 10px;
 	transform-origin: center -50px;
 	box-shadow: 0 0 0 1px #0000000f, 0 5px 15px var(--shadow);
-
-	.border {
-		background: var(--field);
-		cursor: grab;
-		border-radius: 10px 10px 0 0;
-		text-align:center;
-		line-height:32px;
-		overflow: hidden;
-		height: 32px;
-		padding: 0 30px;
-
-		span {
-            cursor: default;
-        	width: 27px;
-        	height: 25px;
-        	padding: 8px 7px 3px 7px;
-        	fill: currentColor;
-        	position: absolute;
-        	top: -3px;
-
-        	svg {
-            	padding: 7px 6px 4px 6px;
-            	border-radius: 5px;
-            }
-            &:hover svg {
-            	background-color: var(--hi);
-            }
-        }
-        .create_button {
-        	left: -3px;
-        }
-        .close_button {
-        	right: -3px;
-        }
-	}
-	.dropzone {
-		outline: 3px solid var(--hi-click);
-		border-radius: 10px;
-		position:absolute;
-		top:0;
-		left:0;
-		right:0;
-		bottom:0;
-	}
-	main {
-		font: icon;
-		overflow: auto;
-		min-width: 100%;
-		min-height: 100px;
-		display: grid;
-		grid-template-columns: repeat(auto-fill, minmax(110px, max-content));
-		grid-template-rows: repeat(auto-fit, 77px);
-		background: var(--bg);
-
-		.desktopFolder {
-        	overflow: hidden;
-        	height: 40px;
-        }
-        .desktopLink {
-        	overflow: hidden;
-        	height: 57px;
-        	word-break: break-word;
-        	text-align: center;
-        	padding: 10px 5px;
-
-        	img {
-            	display: block;
-            	margin: auto;
-            	image-rendering: optimizeSpeed;
-            }
-        }
-		#renameForm input {
-			padding: 0;
-			font: icon;
-		}
-	}
-	.resize {
-		background: var(--field);
-		height: 20px;
-		cursor: nwse-resize;
-		border-radius: 0 0 10px 10px;
-	}
-	#createFolderForm {
-    	position: absolute;
-    	top: 32px;
-    	left: 0;
-    	background: var(--field);
-    	right: 0;
-    	text-align: center;
-    	box-shadow: 0 10px 10px -5px var(--shadow);
-    	label {
-    		padding: 10px;
-
-    		input {
-            	padding: 5px;
-            	margin: 5px 0 5px 10px;
-            	max-width: 200px;
-            	width: -moz-available;
-            }
-    	}
-    }
 }
+.window .border {
+    background: var(--field);
+    cursor: grab;
+    border-radius: 10px 10px 0 0;
+	text-align:center;
+	line-height:32px;
+	overflow: hidden;
+    height: 32px;
+    padding: 0 30px;
+}
+
+.window .resize {
+    background: var(--field);
+	height: 20px;
+	cursor: nwse-resize;
+    border-radius: 0 0 10px 10px;
+}
+
+.window .dropzone {
+	outline: 3px solid var(--hi-click);
+    border-radius: 10px;
+	position:absolute;
+	top:0;
+	left:0;
+	right:0;
+	bottom:0;
+}
+.window .border span {
+    cursor: default;
+	width: 27px;
+	height: 25px;
+	padding: 8px 7px 3px 7px;
+	fill: currentColor;
+	position: absolute;
+	top: -3px;
+}
+.window .border span svg {
+	padding: 7px 6px 4px 6px;
+	border-radius: 5px;
+}
+.window .border span:hover svg {
+	background-color: var(--hi);
+}
+
+.window .border .create_button {
+	left: -3px;
+}
+.window .border .close_button {
+	right: -3px;
+}
+.window .dropzone {
+	outline: 3px solid var(--hi-click);
+	border-radius: 10px;
+	position:absolute;
+	top:0;
+	left:0;
+	right:0;
+	bottom:0;
+}
+.window main {
+	font: icon;
+	overflow: auto;
+	min-width: 100%;
+	min-height: 100px;
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(110px, max-content));
+	grid-template-rows: repeat(auto-fit, 77px);
+	background: var(--bg);
+}
+.window main .desktopFolder {
+	overflow: hidden;
+	height: 40px;
+}
+.window main .desktopLink {
+	overflow: hidden;
+	height: 57px;
+	word-break: break-word;
+	text-align: center;
+	padding: 10px 5px;
+}
+.window main .desktopLink img {
+	display: block;
+	margin: auto;
+	image-rendering: optimizeSpeed;
+}
+.window main #renameForm input {
+	padding: 0;
+	font: icon;
+}
+.window .resize {
+	background: var(--field);
+	height: 20px;
+	cursor: nwse-resize;
+	border-radius: 0 0 10px 10px;
+}
+#createFolderForm {
+	position: absolute;
+	top: 32px;
+	left: 0;
+	background: var(--field);
+	right: 0;
+	text-align: center;
+	box-shadow: 0 10px 10px -5px var(--shadow);
+}
+#createFolderForm label {
+	padding: 10px;
+}
+#createFolderForm label input {
+	padding: 5px;
+	margin: 5px 0 5px 10px;
+	max-width: 200px;
+	width: -moz-available;
+}
+
 .desktopFolder {
 	background: var(--field);
 	display: inline-block;
@@ -190,32 +206,32 @@ a {
 	line-height: 16px;
 	vertical-align: middle;
 	box-shadow: 0 1px 1px var(--shadow);
-
-	&:hover {
-		box-shadow: 0 0 0 5px var(--hi);
-	}
-	&:active {
-		box-shadow: 0 0 0 5px var(--hi-click);
-	}
 }
+.desktopFolder:hover {
+	box-shadow: 0 0 0 5px var(--hi);
+}
+.desktopFolder:active {
+	box-shadow: 0 0 0 5px var(--hi-click);
+}
+
 .desktopLink {
 	display: inline-block;
 	text-decoration: none;
 	padding: 15px;
 	border-radius: 5px;
-
-	img {
-    	margin-right: 4px;
-    	vertical-align: bottom;
-    	image-rendering: optimizeSpeed;
-    }
-    &:hover {
-		background: var(--hi);
-	}
-	&:active {
-     	background: var(--hi-click);
-	}
 }
+.desktopLink img {
+	margin-right: 4px;
+	vertical-align: bottom;
+	image-rendering: optimizeSpeed;
+}
+.desktopLink:hover {
+	background: var(--hi);
+}
+.desktopLink:active {
+	background: var(--hi-click);
+}
+
 #options {
 	text-align: center;
 	fill: var(--color);
@@ -243,49 +259,43 @@ a {
 	z-index: 999999;
 }
 
-.compact {
-	.window main {
-		grid-template-columns:repeat(auto-fill, minmax(190px, max-content));
-		grid-template-rows:repeat(auto-fit, 24px);
+.compact .window main {
+	grid-template-columns:repeat(auto-fill, minmax(190px, max-content));
+	grid-template-rows:repeat(auto-fit, 24px);
+}
+.compact .window .desktopLink {
+	padding:4px 0 4px 4px;
+	height:16px;
+	text-align:left;
+	white-space: nowrap;
+	border-radius:0;
 
-		.desktopLink {
-			padding:4px 0 4px 4px;
-			height:16px;
-			text-align:left;
-			white-space: nowrap;
-			border-radius:0;
-
-			img {
-            	display:initial;margin-right:4px
-			}
-		}
-
-		.desktopFolder {
-			margin:0;
-			border: 2px solid var(--bg);
-			box-shadow: none;
-			border-radius: 0;
-			padding:1px 0 2px 3px;
-			height:17px;
-
-			&:hover{
-				background: var(--hi);
-			}
-
-			&:active{
-             	background: var(--hi-click);
-			}
-		}
-	}
+}
+.compact .window .desktopLink img {
+	display:initial;margin-right:4px
+}
+.compact .window .desktopFolder {
+	margin:0;
+	border: 2px solid var(--bg);
+	box-shadow: none;
+	border-radius: 0;
+	padding:1px 0 2px 3px;
+	height:17px;
+}
+.compact .window .desktopFolder:hover{
+	background: var(--hi);
+}
+.compact .window .desktopFolder:active{
+	background: var(--hi-click);
 }
 
 .macOS {
 	.windows .main {
 		grid-template-rows: repeat(auto-fit, 74px);
+	}
 
-		.desktopLink {
-        	height: 54px;
-		}
+	.windows .main .desktopLink {
+		height: 54px;
 	}
 }
 

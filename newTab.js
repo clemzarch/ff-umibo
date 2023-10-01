@@ -1,7 +1,7 @@
 let WINDOWS = [];
 
 chrome.storage.local.get(null, function(options) {
-	WINDOWS = options.w ?? [];
+	WINDOWS = options.w ? options.w : [];
 
 	let i = 1;
 	for (let key in WINDOWS) {
@@ -10,7 +10,7 @@ chrome.storage.local.get(null, function(options) {
 		drawWindow(key, w.title, w.x, w.y, w.w, w.h, i++, options.sortColumn, options.sortReverse, false);
 	}
 
-	let moreCSS = options.custom_css ?? '';
+	let moreCSS = options.custom_css ? options.custom_css : '';
 
 	if (options.toolbar_as_folder) {
 		registerFolder('toolbar_____', options.sortColumn, options.sortReverse);
@@ -218,14 +218,14 @@ function drawWindow(id, title, x, y, w, h, z, sortColumn = null, sortReverse = f
 
 		for (let i = 0; i < e.length; ++i) {
 			let el = e[i];
-			if (el.type === 'bookmark') {
+			if (el.url) {
 				if (el.title === '') {
 					el.title = el.url;
 				}
 
 				elements += '<a class="desktopLink" id="'+el.id+'" title="'+el.title+'" href="'+el.url+'"><img loading="lazy" width="16px" height="16px" src="https://s2.googleusercontent.com/s2/favicons?domain_url='+el.url+'"/>'+el.title+'</a>';
 				linksIds.push(el.id);
-			} else if (el.type === 'folder') {
+			} else if (el.title) {
 				elements += '<div class="desktopFolder" id="'+el.id+'" title="'+el.title+'" draggable="true">'+el.title+'</div>';
 				foldersIds.push(el.id);
 			}
@@ -384,7 +384,7 @@ document.body.addEventListener('mousemove', function(e) {
 });
 
 document.body.addEventListener('mouseup', function() { // save the new window position and size, and put it on top of the pile
-	let win = move_target ?? resize_target ?? raise_target ?? null;
+	let win = move_target ? move_target : resize_target ? resize_target : raise_target ? raise_target : null;
 	if (win) {
 		// end of the drag-n-drop or resize, turn back the pixels into percentages.
 		// this resolves `browser frame resizing` and `UI scale changes` which would push the windows outside the frame.

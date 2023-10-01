@@ -3,8 +3,6 @@
 <meta charset="utf-8">
 <style>
 body {
-	color: #f9f9f9;
-	background: rgb(35,34,43);
 	font: menu;
 	font-size:15px;
 	padding: 10px;
@@ -13,14 +11,12 @@ label {
 	line-height: 35px;
 	margin: 7px;
 	padding: 7px;
-
-	&:hover {
-		border-radius: 7px;
-		background: #605d7745;
-	}
+}
+label:hover {
+	border-radius: 7px;
+	background: #eee;
 }
 textarea {
-	color: #fff;
 	background: none;
 	border:1px solid #8f8f9d;
 	border-radius: 4px;
@@ -35,7 +31,6 @@ textarea {
 	display: none;
 }
 #bg_url {
-	color: #fff;
 	background: none;
 	border: 1px solid #8f8f9d;
 	border-radius: 4px;
@@ -64,14 +59,13 @@ input[type="range"] {
     top: 10px;
 }
 
-@media (prefers-color-scheme: light) {
+@media (prefers-color-scheme: dark) {
 	textarea, #bg_url{
-		color: #000;
-		background: #eee;
+		color: #fff;
 	}
 	body {
-		color: #333333;
-		background: #ffffff;
+		color: #f9f9f9;
+		background: rgb(35,34,43);
 	}
 	label:hover {
 		background: #a4a4a43b;
